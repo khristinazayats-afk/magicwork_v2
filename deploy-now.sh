@@ -38,7 +38,15 @@ fi
 
 echo "=== STEP 5: Vercel Deploy ==="
 if [ -n "$VERCEL_TOKEN" ]; then
-  npx vercel --prod --yes --token "$VERCEL_TOKEN"
+  CLEAN_VERCEL_TOKEN="$(printf "%s" "$VERCEL_TOKEN" | tr -d ' ()')"
+  if [ -z "$CLEAN_VERCEL_TOKEN" ]; then
+    echo "❌ VERCEL_TOKEN was set but became empty after cleanup. Set it to the raw token (no spaces/parentheses)."
+    exit 1
+  fi
+  if [ "$CLEAN_VERCEL_TOKEN" != "$VERCEL_TOKEN" ]; then
+    echo "⚠️  Cleaned VERCEL_TOKEN (removed spaces/parentheses) for Vercel CLI compatibility."
+  fi
+  npx vercel --prod --yes --token "$CLEAN_VERCEL_TOKEN"
 else
   echo "⚠️  VERCEL_TOKEN is not set. Trying deploy with your local Vercel login..."
   npx vercel --prod --yes
