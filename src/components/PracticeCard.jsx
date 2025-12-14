@@ -402,8 +402,11 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
           }}
           src={videoUrl}
           onError={(e) => {
-            devError('[PracticeCard] Video failed to load:', e.target.src);
-            e.target.style.display = 'none';
+            // Silently fail - don't show errors to users, just hide the video
+            if (e.target) {
+              e.target.style.display = 'none';
+              e.target.style.opacity = '0';
+            }
           }}
         />
       )}

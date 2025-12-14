@@ -222,10 +222,9 @@ export function useContentSet(spaceName) {
           visuals: finalVisuals
         });
       } catch (err) {
-        devError('Error fetching content set:', err);
+        // Silently fail - don't log errors to console in production
         // Use mock data as fallback for supported spaces when API fails
         if (spaceName === 'Drift into Sleep' || spaceName === 'Slow Morning') {
-          devWarn(`Using fallback data due to API error for ${spaceName}`);
           const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
           
           if (spaceName === 'Slow Morning') {

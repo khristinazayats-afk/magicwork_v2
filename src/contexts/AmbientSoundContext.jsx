@@ -18,8 +18,12 @@ function createBowlsEngine() {
   let padBus = null; // continuous bowls bed
   /** @type {GainNode | null} */
   let strikeBus = null; // occasional accents (kept subtle)
+  /** @type {GainNode | null} */
+  let rainBus = null; // gentle rain texture layer
   /** @type {BiquadFilterNode | null} */
   let lowpass = null;
+  /** @type {AudioBufferSourceNode | null} */
+  let rainNoise = null;
 
   /** @type {number | null} */
   let timerId = null;
@@ -33,7 +37,7 @@ function createBowlsEngine() {
   const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 
   const ensure = () => {
-    if (ctx && master && bus && lowpass && padBus && strikeBus) return;
+    if (ctx && master && bus && lowpass && padBus && strikeBus && rainBus) return;
 
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) {
@@ -52,6 +56,11 @@ function createBowlsEngine() {
     strikeBus = ctx.createGain();
     strikeBus.gain.value = 0.5; // Higher gain for strikes to be clearly audible
     strikeBus.connect(bus);
+
+    // Rain texture bus - gentle filtered noise for rain-like texture
+    rainBus = ctx.createGain();
+    rainBus.gain.value = 0.15; // Subtle rain layer
+    rainBus.connect(bus);
 
     lowpass = ctx.createBiquadFilter();
     lowpass.type = 'lowpass';
@@ -113,9 +122,10 @@ function createBowlsEngine() {
     const bowl3 = padRoot * 2.0; // Octave
     const bowls = [bowl1, bowl2, bowl3];
     
+    // Much more subtle - gentle hum, not prominent
     const targets = mode === 'practice'
-      ? [0.14, 0.10, 0.08]
-      : [0.11, 0.08, 0.065];
+      ? [0.06, 0.045, 0.035]
+      : [0.05, 0.038, 0.03];
 
     // Create a realistic singing bowl voice with rich harmonics
     const createBowlVoice = (fundamental, target) => {
@@ -191,6 +201,73 @@ function createBowlsEngine() {
     lfo.start();
 
     padNodes = { bowlVoices, lfo, lfoToGains, lfoToFilter };
+  };
+
+  // Create gentle rain texture using filtered noise
+  const ensureRain = () => {
+    if (!ctx || !rainBus || rainNoise) return;
+
+    // Create a buffer of white noise
+    const bufferSize = ctx.sampleRate * 2; // 2 seconds of noise
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    
+    // Generate pink noise (more natural than white noise)
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+      data[i] *= 0.11; // Normalize
+      b6 = white * 0.115926;
+    }
+
+    // Create a looped buffer source
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.loop = true;
+
+    // Filter to sound like gentle rain (lowpass around 2000-3000 Hz)
+    const rainFilter = ctx.createBiquadFilter();
+    rainFilter.type = 'lowpass';
+    rainFilter.frequency.value = 2500;
+    rainFilter.Q.value = 0.5;
+
+    // Gain for subtle rain texture
+    const rainGain = ctx.createGain();
+    rainGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    rainGain.gain.linearRampToValueAtTime(mode === 'practice' ? 0.08 : 0.06, ctx.currentTime + 1.5);
+
+    // Connect: source -> filter -> gain -> rainBus
+    source.connect(rainFilter);
+    rainFilter.connect(rainGain);
+    rainGain.connect(rainBus);
+
+    source.start(0);
+    rainNoise = { source, filter: rainFilter, gain: rainGain };
+  };
+
+  const destroyRain = () => {
+    if (!rainNoise || !ctx) return;
+    try {
+      const now = ctx.currentTime;
+      if (rainNoise.gain) {
+        rainNoise.gain.gain.cancelScheduledValues(now);
+        rainNoise.gain.gain.linearRampToValueAtTime(0.0001, now + 0.3);
+      }
+      if (rainNoise.source) {
+        rainNoise.source.stop(now + 0.3);
+      }
+    } catch {
+      // ignore
+    } finally {
+      rainNoise = null;
+    }
   };
 
   const retunePad = () => {
@@ -320,7 +397,7 @@ function createBowlsEngine() {
         { ratio: 5.0, amp: 0.25 },
         { ratio: 6.0, amp: 0.15 }
       ];
-      const baseAmp = 0.25; // Much louder welcome strike so it's clearly audible
+      const baseAmp = 0.18; // Gentle welcome strike - not too loud
       const decay = rand(6.0, 9.0); // Longer ring-out
 
       for (let i = 0; i < partials.length; i += 1) {
@@ -346,8 +423,8 @@ function createBowlsEngine() {
     }
 
     // Continuous session bed with rich harmonics
-    // Higher gain so bowls are clearly audible
-    const targetGain = mode === 'practice' ? 0.12 : 0.10;
+    // Gentle, subtle gain - like a background hum with rain
+    const targetGain = mode === 'practice' ? 0.08 : 0.065;
     // Faster fade-in so users hear it immediately after first tap.
     setMasterGain(targetGain, 0.1);
 
@@ -368,6 +445,9 @@ function createBowlsEngine() {
       }
     }
 
+    // Start gentle rain texture
+    ensureRain();
+
     scheduleNext();
   };
 
@@ -378,16 +458,19 @@ function createBowlsEngine() {
     timerId = null;
     setMasterGain(0.0001, 0.2);
     destroyPad();
+    destroyRain();
   };
 
   const setMode = (nextMode) => {
     mode = nextMode === 'practice' ? 'practice' : 'menu';
     if (!ctx || isMuted) return;
-    const targetGain = mode === 'practice' ? 0.095 : 0.08;
+    const targetGain = mode === 'practice' ? 0.08 : 0.065;
     setMasterGain(targetGain);
     // Recreate pad with the new mode profile (targets/LFO)
     destroyPad();
+    destroyRain();
     ensurePad();
+    ensureRain();
     scheduleNext();
   };
 
