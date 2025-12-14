@@ -14,9 +14,12 @@ const devLog = isDev ? console.log.bind(console) : () => {};
 export default function Feed({ onBack }) {
   devLog('Feed: Component rendering');
   
-  // Use all spaces for scrollable feed, filtering out hidden ones
+  // Only show the 3 main spaces: Slow Morning, Gentle De-Stress, Drift into Sleep
   const [spaces] = useState(() => {
-    return (stationsData.stations || []).filter(station => !station.hidden);
+    const allowedSpaces = ['Slow Morning', 'Gentle De-Stress', 'Drift into Sleep'];
+    return (stationsData.stations || []).filter(station => 
+      allowedSpaces.includes(station.name)
+    );
   });
   
   const [showSettings, setShowSettings] = useState(false);

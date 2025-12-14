@@ -5,6 +5,7 @@
       "label": "SomaFM \u2013 Deep Space One",
       "guidance": "Today, curiosity leads.",
       "description": "Creative Intention",
+      "helpDescription": "Helps with: Starting your day with intention, reducing morning anxiety, and setting a calm tone for the hours ahead.",
       "instructions": [
         "Get settled. Soften your gaze.",
         "Inhale: invite curiosity.",
@@ -25,6 +26,7 @@
       "label": "SomaFM \u2013 Drone Zone",
       "guidance": "Hum softly to settle your system.",
       "description": "Soothing Hum",
+      "helpDescription": "Helps with: Reducing stress and tension, calming your nervous system, and finding moments of peace throughout your day.",
       "instructions": [
         "Inhale through the nose.",
         "Hum the exhale gently \u2014 feel chest vibration.",
@@ -155,6 +157,7 @@
       "label": "SomaFM \u2013 Sonic Universe",
       "guidance": "Imagine floating in soft color.",
       "description": "Dream Readiness Visualization",
+      "helpDescription": "Helps with: Falling asleep naturally, quieting racing thoughts, and preparing your mind and body for restful sleep.",
       "instructions": [
         "Close eyes. Inhale: imagine a soft hue.",
         "Exhale: let your body feel heavier.",

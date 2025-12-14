@@ -6,6 +6,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAmbientSound } from '../contexts/AmbientSoundContext';
 
+// Development-only logging helper
+const isDev = import.meta.env.DEV;
+const devWarn = isDev ? console.warn.bind(console) : () => {};
+const devError = console.error.bind(console); // keep errors in prod
+
 export function useLocalAudio() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -35,7 +40,7 @@ export function useLocalAudio() {
     };
 
     const handleError = (e) => {
-      console.error('[LocalAudio] Error:', {
+      devError('[LocalAudio] Error:', {
         error: audio.error,
         code: audio.error?.code,
         message: audio.error?.message,
@@ -62,7 +67,7 @@ export function useLocalAudio() {
    */
   const playStation = (station) => {
     if (!audioRef.current || !station?.localMusic?.file) {
-      console.warn('[LocalAudio] No audio file available for station:', station?.name);
+      devWarn('[LocalAudio] No audio file available for station:', station?.name);
       return;
     }
 
@@ -86,7 +91,7 @@ export function useLocalAudio() {
 
     // Play
     audio.play().catch(err => {
-      console.error('[LocalAudio] Play failed:', err);
+      devError('[LocalAudio] Play failed:', err);
       setIsPlaying(false);
     });
   };
@@ -114,7 +119,7 @@ export function useLocalAudio() {
         await audioRef.current.play();
         return true;
       } catch (err) {
-        console.error('[LocalAudio] Resume failed:', err);
+        devError('[LocalAudio] Resume failed:', err);
         return false;
       }
     }

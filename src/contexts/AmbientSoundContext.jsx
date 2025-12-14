@@ -320,7 +320,7 @@ function createBowlsEngine() {
         { ratio: 5.0, amp: 0.25 },
         { ratio: 6.0, amp: 0.15 }
       ];
-      const baseAmp = 0.15; // Louder welcome strike
+      const baseAmp = 0.25; // Much louder welcome strike so it's clearly audible
       const decay = rand(6.0, 9.0); // Longer ring-out
 
       for (let i = 0; i < partials.length; i += 1) {
@@ -346,9 +346,10 @@ function createBowlsEngine() {
     }
 
     // Continuous session bed with rich harmonics
-    const targetGain = mode === 'practice' ? 0.095 : 0.08;
+    // Higher gain so bowls are clearly audible
+    const targetGain = mode === 'practice' ? 0.12 : 0.10;
     // Faster fade-in so users hear it immediately after first tap.
-    setMasterGain(targetGain, 0.15);
+    setMasterGain(targetGain, 0.1);
 
     // Ensure continuous pad exists and fade its voices in gently.
     // Start the pad immediately (don't wait)

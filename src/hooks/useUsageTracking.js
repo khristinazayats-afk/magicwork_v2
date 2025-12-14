@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 
+// Development-only logging helper
+const isDev = import.meta.env.DEV;
+const devError = console.error.bind(console); // keep errors in prod
+
 const API_BASE = import.meta.env.DEV 
   ? (import.meta.env.VITE_API_BASE_URL || 'https://magicwork.vercel.app')
   : '';
@@ -34,7 +38,7 @@ export function useUsageTracking(spaceName) {
         setLiveCounts(counts);
       }
     } catch (error) {
-      console.error('Error fetching live counts:', error);
+      devError('Error fetching live counts:', error);
     } finally {
       setLoading(false);
     }
@@ -70,7 +74,7 @@ export function useUsageTracking(spaceName) {
       // Refresh live counts
       fetchLiveCounts();
     } catch (error) {
-      console.error('Error starting session:', error);
+      devError('Error starting session:', error);
     }
   };
 
@@ -87,7 +91,7 @@ export function useUsageTracking(spaceName) {
         })
       });
     } catch (error) {
-      console.error('Error updating heartbeat:', error);
+      devError('Error updating heartbeat:', error);
     }
   };
 
@@ -127,7 +131,7 @@ export function useUsageTracking(spaceName) {
       // Generate new session ID for next session
       sessionIdRef.current = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     } catch (error) {
-      console.error('Error completing session:', error);
+      devError('Error completing session:', error);
     }
   };
 
