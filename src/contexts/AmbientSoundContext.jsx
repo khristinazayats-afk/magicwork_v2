@@ -124,6 +124,16 @@ function createBowlsEngine() {
 
     const targetGain = mode === 'practice' ? 0.085 : 0.055;
     setMasterGain(targetGain);
+
+    // Play an immediate gentle strike so it feels "on" right away (no long initial silence).
+    if (ctx) {
+      const now = ctx.currentTime;
+      strike(now + 0.05);
+      if (mode === 'practice') {
+        strike(now + 1.0);
+      }
+    }
+
     scheduleNext();
   };
 
