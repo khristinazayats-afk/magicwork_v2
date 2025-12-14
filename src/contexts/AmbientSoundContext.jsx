@@ -55,9 +55,9 @@ function createBowlsEngine() {
 
     lowpass = ctx.createBiquadFilter();
     lowpass.type = 'lowpass';
-    // Slightly brighter so it's audible on small phone speakers
-    lowpass.frequency.value = 2400;
-    lowpass.Q.value = 0.7;
+    // Brighter to let harmonics through for rich singing bowl sound
+    lowpass.frequency.value = 3200;
+    lowpass.Q.value = 0.8;
 
     master = ctx.createGain();
     master.gain.value = 0.0001;
@@ -81,15 +81,18 @@ function createBowlsEngine() {
     if (!padNodes) return;
     try {
       const now = ctx ? ctx.currentTime : 0;
-      for (const v of padNodes.voices || []) {
+      for (const bowl of padNodes.bowlVoices || []) {
         try {
-          v?.gain?.gain?.cancelScheduledValues?.(now);
-          v?.gain?.gain?.setValueAtTime?.(0.0001, now);
+          // Fade out master gain
+          bowl?.masterGain?.gain?.cancelScheduledValues?.(now);
+          bowl?.masterGain?.gain?.setValueAtTime?.(0.0001, now);
         } catch {
           // ignore
         }
-        try { v?.osc1?.stop?.(now + 0.02); } catch { /* ignore */ }
-        try { v?.osc2?.stop?.(now + 0.02); } catch { /* ignore */ }
+        // Stop all harmonic oscillators for this bowl
+        for (const voice of bowl?.voices || []) {
+          try { voice?.osc?.stop?.(now + 0.02); } catch { /* ignore */ }
+        }
       }
       try { padNodes?.lfo?.stop?.(now + 0.02); } catch { /* ignore */ }
     } finally {
@@ -101,57 +104,83 @@ function createBowlsEngine() {
     if (!ctx || !padBus || padNodes) return;
 
     // Root drifts subtly over time for a "session" feel.
-    padRoot = rand(98, 122);
-    const freqs = [padRoot, padRoot * 1.5, padRoot * 2.0]; // root, fifth, octave
+    // Use authentic singing bowl frequencies (typical range: 110-220 Hz for fundamental)
+    padRoot = rand(110, 140);
+    // Create multiple bowls with authentic harmonic relationships
+    // Real singing bowls have rich overtones: fundamental, 2nd harmonic, 3rd, 4th, etc.
+    const bowl1 = padRoot; // Primary bowl
+    const bowl2 = padRoot * 1.618; // Golden ratio (common in singing bowls)
+    const bowl3 = padRoot * 2.0; // Octave
+    const bowls = [bowl1, bowl2, bowl3];
+    
     const targets = mode === 'practice'
-      ? [0.10, 0.07, 0.05]
-      : [0.08, 0.055, 0.04];
+      ? [0.14, 0.10, 0.08]
+      : [0.11, 0.08, 0.065];
 
-    const createVoice = (freq, target) => {
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-      const g = ctx.createGain();
+    // Create a realistic singing bowl voice with rich harmonics
+    const createBowlVoice = (fundamental, target) => {
+      const now = ctx.currentTime;
+      const voices = [];
+      const masterGain = ctx.createGain();
+      masterGain.gain.setValueAtTime(0.0001, now);
+      masterGain.connect(padBus);
 
-      osc1.type = 'sine';
-      osc2.type = 'triangle';
+      // Real singing bowls have these characteristic overtones
+      // Fundamental + harmonics create that rich, meditative sound
+      const harmonics = [
+        { ratio: 1.0, amp: 1.0 },      // Fundamental
+        { ratio: 2.0, amp: 0.6 },       // Octave
+        { ratio: 3.0, amp: 0.35 },     // Fifth above octave
+        { ratio: 4.0, amp: 0.2 },      // Double octave
+        { ratio: 5.0, amp: 0.12 },     // Major third
+        { ratio: 6.0, amp: 0.08 }      // Fifth
+      ];
 
-      osc1.frequency.setValueAtTime(freq, ctx.currentTime);
-      osc2.frequency.setValueAtTime(freq, ctx.currentTime);
-      osc1.detune.setValueAtTime(rand(-6, 6), ctx.currentTime);
-      osc2.detune.setValueAtTime(rand(-9, 9), ctx.currentTime);
+      for (const { ratio, amp } of harmonics) {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        // Use sine for pure tones, slight detune for natural variation
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(fundamental * ratio, now);
+        osc.detune.setValueAtTime(rand(-2, 2), now);
+        
+        // Each harmonic contributes to the rich bowl sound
+        gain.gain.setValueAtTime(0.0001, now);
+        
+        osc.connect(gain);
+        gain.connect(masterGain);
+        
+        osc.start();
+        voices.push({ osc, gain, ratio, amp });
+      }
 
-      g.gain.setValueAtTime(0.0001, ctx.currentTime);
-
-      osc1.connect(g);
-      osc2.connect(g);
-      g.connect(padBus);
-
-      osc1.start();
-      osc2.start();
-
-      return { osc1, osc2, gain: g, target, freq };
+      return { voices, masterGain, target, fundamental };
     };
 
-    const voices = freqs.map((f, i) => createVoice(f, targets[i]));
+    const bowlVoices = bowls.map((f, i) => createBowlVoice(f, targets[i]));
 
     // Gentle movement (breathing) via a slow LFO applied to voice gains + filter.
+    // This creates that meditative "breathing" quality like real bowls being sustained
     const lfo = ctx.createOscillator();
     lfo.type = 'sine';
-    lfo.frequency.setValueAtTime(mode === 'practice' ? 0.045 : 0.03, ctx.currentTime);
+    lfo.frequency.setValueAtTime(mode === 'practice' ? 0.04 : 0.028, ctx.currentTime);
 
     const lfoToGains = ctx.createGain();
-    lfoToGains.gain.setValueAtTime(mode === 'practice' ? 0.010 : 0.008, ctx.currentTime);
+    lfoToGains.gain.setValueAtTime(mode === 'practice' ? 0.012 : 0.009, ctx.currentTime);
     lfo.connect(lfoToGains);
-    for (const v of voices) {
+    for (const bowl of bowlVoices) {
       try {
-        lfoToGains.connect(v.gain.gain);
+        // Apply LFO to the master gain of each bowl for gentle breathing effect
+        lfoToGains.connect(bowl.masterGain.gain);
       } catch {
         // ignore
       }
     }
 
+    // Subtle filter movement adds to the meditative quality
     const lfoToFilter = ctx.createGain();
-    lfoToFilter.gain.setValueAtTime(mode === 'practice' ? 380 : 280, ctx.currentTime);
+    lfoToFilter.gain.setValueAtTime(mode === 'practice' ? 420 : 320, ctx.currentTime);
     lfo.connect(lfoToFilter);
     try {
       lfoToFilter.connect(lowpass.frequency);
@@ -161,7 +190,7 @@ function createBowlsEngine() {
 
     lfo.start();
 
-    padNodes = { voices, lfo, lfoToGains, lfoToFilter };
+    padNodes = { bowlVoices, lfo, lfoToGains, lfoToFilter };
   };
 
   const retunePad = () => {
@@ -169,23 +198,29 @@ function createBowlsEngine() {
     const now = ctx.currentTime;
 
     // Small drift step (keeps it "session-like" and not repetitive)
-    padRoot = clamp(padRoot * rand(0.94, 1.06), 90, 135);
-    const freqs = [padRoot, padRoot * 1.5, padRoot * 2.0];
+    padRoot = clamp(padRoot * rand(0.94, 1.06), 110, 140);
+    const bowl1 = padRoot;
+    const bowl2 = padRoot * 1.618; // Golden ratio
+    const bowl3 = padRoot * 2.0; // Octave
+    const newFundamentals = [bowl1, bowl2, bowl3];
 
-    for (let i = 0; i < padNodes.voices.length; i += 1) {
-      const v = padNodes.voices[i];
-      const f = freqs[i] || freqs[freqs.length - 1];
-      try {
-        v.osc1.frequency.cancelScheduledValues(now);
-        v.osc2.frequency.cancelScheduledValues(now);
-
-        v.osc1.frequency.setValueAtTime(v.osc1.frequency.value, now);
-        v.osc2.frequency.setValueAtTime(v.osc2.frequency.value, now);
-
-        v.osc1.frequency.linearRampToValueAtTime(f, now + 7.0);
-        v.osc2.frequency.linearRampToValueAtTime(f, now + 7.0);
-      } catch {
-        // ignore
+    for (let i = 0; i < padNodes.bowlVoices.length; i += 1) {
+      const bowl = padNodes.bowlVoices[i];
+      const newFundamental = newFundamentals[i] || newFundamentals[newFundamentals.length - 1];
+      
+      // Retune all harmonics of this bowl
+      const harmonics = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+      for (let j = 0; j < bowl.voices.length && j < harmonics.length; j += 1) {
+        const voice = bowl.voices[j];
+        const ratio = harmonics[j];
+        const newFreq = newFundamental * ratio;
+        try {
+          voice.osc.frequency.cancelScheduledValues(now);
+          voice.osc.frequency.setValueAtTime(voice.osc.frequency.value, now);
+          voice.osc.frequency.linearRampToValueAtTime(newFreq, now + 7.0);
+        } catch {
+          // ignore
+        }
       }
     }
   };
@@ -193,32 +228,45 @@ function createBowlsEngine() {
   const strike = (when) => {
     if (!ctx || !strikeBus) return;
 
-    // A soft, bowl-like inharmonic stack
-    const base = rand(180, 320);
-    const partials = [1.0, 2.01, 2.99, 4.23];
+    // Authentic singing bowl strike with rich harmonics
+    // Real bowls have a fundamental around 110-220 Hz with rich overtones
+    const base = rand(120, 200);
+    // Real singing bowl harmonics (inharmonic partials create that characteristic "singing" quality)
+    const partials = [
+      { ratio: 1.0, amp: 1.0 },      // Fundamental
+      { ratio: 2.0, amp: 0.7 },      // Octave
+      { ratio: 3.0, amp: 0.5 },      // Fifth above octave
+      { ratio: 4.0, amp: 0.3 },      // Double octave
+      { ratio: 5.0, amp: 0.2 },      // Major third
+      { ratio: 6.0, amp: 0.15 }      // Fifth
+    ];
+    
     // Keep accents subtle; the continuous pad is the main experience.
-    const baseAmp = mode === 'practice' ? 0.075 : 0.035;
-    const decay = mode === 'practice' ? rand(4.2, 6.8) : rand(3.6, 6.0);
+    const baseAmp = mode === 'practice' ? 0.08 : 0.04;
+    // Longer decay for that meditative ring-out
+    const decay = mode === 'practice' ? rand(5.5, 8.5) : rand(4.5, 7.0);
 
     for (let i = 0; i < partials.length; i += 1) {
-      const ratio = partials[i];
+      const { ratio, amp } = partials[i];
       const osc = ctx.createOscillator();
       const g = ctx.createGain();
 
       osc.type = 'sine';
       osc.frequency.setValueAtTime(base * ratio, when);
-      osc.detune.setValueAtTime(rand(-7, 7), when);
+      // Slight detune for natural variation
+      osc.detune.setValueAtTime(rand(-3, 3), when);
 
-      const peak = baseAmp / (i + 1);
+      const peak = baseAmp * amp;
+      // Quick attack, long natural decay
       g.gain.setValueAtTime(0.0001, when);
-      g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), when + 0.02);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), when + 0.015);
       g.gain.exponentialRampToValueAtTime(0.0001, when + decay);
 
       osc.connect(g);
       g.connect(strikeBus);
 
       osc.start(when);
-      osc.stop(when + decay + 0.2);
+      osc.stop(when + decay + 0.3);
     }
   };
 
@@ -256,8 +304,8 @@ function createBowlsEngine() {
       await ctx.resume();
     }
 
-    // Continuous session bed: slightly lower master gain than strike-only mode
-    const targetGain = mode === 'practice' ? 0.085 : 0.07;
+    // Continuous session bed with rich harmonics
+    const targetGain = mode === 'practice' ? 0.095 : 0.08;
     // Faster fade-in so users hear it immediately after first tap.
     setMasterGain(targetGain, 0.15);
 
@@ -265,11 +313,12 @@ function createBowlsEngine() {
     ensurePad();
     if (padNodes && ctx) {
       const now = ctx.currentTime;
-      for (const v of padNodes.voices) {
+      for (const bowl of padNodes.bowlVoices) {
         try {
-          v.gain.gain.cancelScheduledValues(now);
-          v.gain.gain.setValueAtTime(Math.max(0.0001, v.gain.gain.value || 0.0001), now);
-          v.gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, v.target), now + 1.2);
+          // Fade in the master gain for each bowl
+          bowl.masterGain.gain.cancelScheduledValues(now);
+          bowl.masterGain.gain.setValueAtTime(Math.max(0.0001, bowl.masterGain.gain.value || 0.0001), now);
+          bowl.masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, bowl.target), now + 1.2);
         } catch {
           // ignore
         }
@@ -291,7 +340,7 @@ function createBowlsEngine() {
   const setMode = (nextMode) => {
     mode = nextMode === 'practice' ? 'practice' : 'menu';
     if (!ctx || isMuted) return;
-    const targetGain = mode === 'practice' ? 0.085 : 0.07;
+    const targetGain = mode === 'practice' ? 0.095 : 0.08;
     setMasterGain(targetGain);
     // Recreate pad with the new mode profile (targets/LFO)
     destroyPad();
