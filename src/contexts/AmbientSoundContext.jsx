@@ -39,7 +39,8 @@ function createBowlsEngine() {
 
     lowpass = ctx.createBiquadFilter();
     lowpass.type = 'lowpass';
-    lowpass.frequency.value = 1100;
+    // Slightly brighter so it's audible on small phone speakers
+    lowpass.frequency.value = 2400;
     lowpass.Q.value = 0.7;
 
     master = ctx.createGain();
@@ -51,13 +52,13 @@ function createBowlsEngine() {
     master.connect(ctx.destination);
   };
 
-  const setMasterGain = (nextGain) => {
+  const setMasterGain = (nextGain, rampSeconds = 0.6) => {
     if (!ctx || !master) return;
     const now = ctx.currentTime;
     const current = Math.max(0.0001, Number(master.gain.value) || 0.0001);
     master.gain.cancelScheduledValues(now);
     master.gain.setValueAtTime(current, now);
-    master.gain.linearRampToValueAtTime(Math.max(0.0001, nextGain), now + 0.6);
+    master.gain.linearRampToValueAtTime(Math.max(0.0001, nextGain), now + Math.max(0.01, rampSeconds));
   };
 
   const strike = (when) => {
@@ -66,7 +67,7 @@ function createBowlsEngine() {
     // A soft, bowl-like inharmonic stack
     const base = rand(180, 320);
     const partials = [1.0, 2.01, 2.99, 4.23];
-    const baseAmp = mode === 'practice' ? 0.36 : 0.26;
+    const baseAmp = mode === 'practice' ? 0.40 : 0.32;
     const decay = mode === 'practice' ? rand(4.2, 6.8) : rand(3.6, 6.0);
 
     for (let i = 0; i < partials.length; i += 1) {
@@ -97,7 +98,7 @@ function createBowlsEngine() {
 
     if (!ctx || isMuted) return;
 
-    const delayMs = mode === 'practice' ? rand(5000, 9000) : rand(9000, 16000);
+    const delayMs = mode === 'practice' ? rand(4500, 7500) : rand(7000, 12000);
     timerId = window.setTimeout(() => {
       if (!ctx || isMuted) return;
       const now = ctx.currentTime;
@@ -122,13 +123,15 @@ function createBowlsEngine() {
       await ctx.resume();
     }
 
-    const targetGain = mode === 'practice' ? 0.085 : 0.055;
-    setMasterGain(targetGain);
+    const targetGain = mode === 'practice' ? 0.11 : 0.085;
+    // Faster fade-in so users hear it immediately after first tap.
+    setMasterGain(targetGain, 0.15);
 
     // Play an immediate gentle strike so it feels "on" right away (no long initial silence).
     if (ctx) {
       const now = ctx.currentTime;
-      strike(now + 0.05);
+      // Wait until the quick fade-in has lifted the gain
+      strike(now + 0.22);
       if (mode === 'practice') {
         strike(now + 1.0);
       }
@@ -142,13 +145,13 @@ function createBowlsEngine() {
     isMuted = true;
     if (timerId) window.clearTimeout(timerId);
     timerId = null;
-    setMasterGain(0.0001);
+    setMasterGain(0.0001, 0.2);
   };
 
   const setMode = (nextMode) => {
     mode = nextMode === 'practice' ? 'practice' : 'menu';
     if (!ctx || isMuted) return;
-    const targetGain = mode === 'practice' ? 0.085 : 0.055;
+    const targetGain = mode === 'practice' ? 0.11 : 0.085;
     setMasterGain(targetGain);
     scheduleNext();
   };
@@ -174,6 +177,7 @@ function createBowlsEngine() {
 
 export function AmbientSoundProvider({ children }) {
   const engineRef = useRef(null);
+  const startInFlightRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
@@ -187,13 +191,26 @@ export function AmbientSoundProvider({ children }) {
   const startAmbient = useCallback(
     async (nextMode = 'menu') => {
       try {
+        // Deduplicate overlapping start calls (pointerdown + onClick, etc.)
+        if (startInFlightRef.current) {
+          return await startInFlightRef.current;
+        }
+
         const engine = ensureEngine();
         setHasStarted(true);
-        await engine.start(nextMode);
-        setIsPlaying(true);
-        return true;
+
+        startInFlightRef.current = (async () => {
+          await engine.start(nextMode);
+          setIsPlaying(true);
+          return true;
+        })();
+
+        const result = await startInFlightRef.current;
+        startInFlightRef.current = null;
+        return result;
       } catch (e) {
         devWarn('[AmbientSound] Failed to start bowls audio:', e);
+        startInFlightRef.current = null;
         setIsPlaying(false);
         return false;
       }
@@ -229,6 +246,30 @@ export function AmbientSoundProvider({ children }) {
       engineRef.current = null;
     };
   }, []);
+
+  // Autoplay policies differ across browsers. This guarantees bowls start on the first
+  // user gesture anywhere (even if they bypass the splash flow or refresh mid-app).
+  useEffect(() => {
+    if (hasStarted) return;
+
+    let cancelled = false;
+    const unlock = () => {
+      if (cancelled) return;
+      // Best-effort: start menu bowls on first interaction
+      startAmbient('menu');
+    };
+
+    window.addEventListener('pointerdown', unlock, { passive: true, once: true });
+    window.addEventListener('touchend', unlock, { passive: true, once: true });
+    window.addEventListener('keydown', unlock, { once: true });
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('touchend', unlock);
+      window.removeEventListener('keydown', unlock);
+    };
+  }, [hasStarted, startAmbient]);
 
   const value = useMemo(
     () => ({
