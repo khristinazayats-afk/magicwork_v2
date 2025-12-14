@@ -20,6 +20,7 @@ import SimpleVideoTest from './components/SimpleVideoTest';
 import VibeBadgesTest from './components/VibeBadgesTest';
 import ContentAssetsTest from './components/ContentAssetsTest';
 import AllContentAssetsTest from './components/AllContentAssetsTest';
+import { useAmbientSound } from './contexts/AmbientSoundContext';
 
 // Lazy load Feed to avoid loading Tone.js before user interaction
 // const Feed = lazy(() => import('./components/Feed'));
@@ -32,6 +33,7 @@ function App() {
   devLog('[App] Component rendering');
   const [started, setStarted] = useState(false);
   const [sawSteps, setSawSteps] = useState(false);
+  const { startAmbient, setAmbientMode } = useAmbientSound();
   
   useEffect(() => {
     devLog('[App] State changed:', { started, sawSteps });
@@ -63,6 +65,9 @@ function App() {
   }
 
   const handleStart = () => {
+    // Start the calming background bowls loop once we have a user interaction.
+    setAmbientMode('menu');
+    startAmbient('menu');
     setStarted(true);
   };
 

@@ -104,8 +104,13 @@ export function FullScreenPracticeView({
               <div className="space-y-4">
                 {timeRemaining !== null && (
                   <div className="text-center">
-                    <div className="font-hanken text-white text-2xl md:text-3xl font-bold mb-2">
-                      {Math.max(0, Math.floor(timeRemaining))} seconds remaining
+                    <div className="font-hanken text-white text-4xl md:text-5xl font-bold tracking-wide mb-1">
+                      {typeof formatTime === 'function'
+                        ? formatTime(timeRemaining)
+                        : `${Math.max(0, Math.floor(timeRemaining))}s`}
+                    </div>
+                    <div className="font-hanken text-white text-xs md:text-sm font-semibold opacity-80">
+                      remaining
                     </div>
                   </div>
                 )}

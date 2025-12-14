@@ -115,6 +115,7 @@ export default function PracticeJoinedTabs({
           onPlayPause={onPlayPause}
           audioRef={audioRef}
           participantCount={participantCount}
+          filter={filter}
           onToggleFavorite={handleFavoriteToggle}
           onExpandedViewChange={(isExpanded) => {
             setShowFullScreenCounter(isExpanded);

@@ -4,11 +4,13 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { useAmbientSound } from '../contexts/AmbientSoundContext';
 
 export function useLocalAudio() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackInfo, setCurrentTrackInfo] = useState(null);
+  const { pauseAmbient, startAmbient, setAmbientMode } = useAmbientSound();
 
   // Cleanup on unmount
   useEffect(() => {
@@ -64,6 +66,9 @@ export function useLocalAudio() {
       return;
     }
 
+    // Prevent overlapping sounds: stop the ambient bowls while station audio plays.
+    pauseAmbient();
+
     const audio = audioRef.current;
     const music = station.localMusic;
 
@@ -93,6 +98,9 @@ export function useLocalAudio() {
     if (audioRef.current) {
       audioRef.current.pause();
     }
+    // Bring back the calm bowls ambiance when station audio stops.
+    setAmbientMode('menu');
+    startAmbient('menu');
   };
 
   /**
@@ -101,6 +109,8 @@ export function useLocalAudio() {
   const resume = async () => {
     if (audioRef.current && audioRef.current.paused) {
       try {
+        // Prevent overlap: bowls off while resuming station audio.
+        pauseAmbient();
         await audioRef.current.play();
         return true;
       } catch (err) {

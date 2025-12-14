@@ -20,6 +20,8 @@ export function PracticeCard({
   getLiveCount,
   previewVideoRefs
 }) {
+  const liveCount = typeof getLiveCount === 'function' ? (getLiveCount(index) || 0) : 0;
+
   return (
     <div
       key={item.id}
@@ -130,30 +132,45 @@ export function PracticeCard({
           </button>
         </div>
 
-        {/* Card Title */}
+        {/* Top-left info (moved + grouped so it never overlaps/hides) */}
         {item.hasVideo && (
-          <div className="absolute top-4 left-4 z-20 max-w-[60%]">
-            <span className="font-hanken text-white text-base md:text-lg font-bold" style={{ 
-              textShadow: '0 2px 8px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.7)',
-              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))'
-            }}>
-              {item.title || `Video ${item.videoNumber || index + 1}`}
-            </span>
-          </div>
-        )}
+          <div className="absolute left-4 z-20 max-w-[72%]" style={{ top: 24 }}>
+            <div
+              className="inline-flex flex-col gap-1 px-3 py-2 rounded-2xl"
+              style={{
+                background: 'rgba(0, 0, 0, 0.35)',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
+              }}
+            >
+              <div
+                className="font-hanken text-white text-base md:text-lg font-bold leading-tight"
+                style={{
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7)',
+                }}
+              >
+                {item.title || `Video ${item.videoNumber || index + 1}`}
+              </div>
 
-        {/* Live User Count */}
-        {!isInPracticeMode && (
-          <div className="flex items-center gap-2 mb-auto pt-2">
-            <div className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-opacity-40" style={{ animationDuration: '2.5s' }}></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-opacity-80"></span>
+              {!isInPracticeMode && (
+                <div className="flex items-center gap-2">
+                  <div className="relative flex h-2 w-2">
+                    <span
+                      className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white bg-opacity-40"
+                      style={{ animationDuration: '2.5s' }}
+                    />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white bg-opacity-80" />
+                  </div>
+                  <div
+                    className="font-hanken text-white text-xs font-semibold"
+                    style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.75), 0 1px 2px rgba(0, 0, 0, 0.5)' }}
+                  >
+                    {liveCount} {liveCount === 1 ? 'person is' : 'people are'} practicing now
+                  </div>
+                </div>
+              )}
             </div>
-            <span className="font-hanken text-white text-xs font-semibold" style={{ 
-              textShadow: '0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.5)'
-            }}>
-              {getLiveCount(index) || 0} {getLiveCount(index) === 1 ? 'person is' : 'people are'} practicing now
-            </span>
           </div>
         )}
 

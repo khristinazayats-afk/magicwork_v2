@@ -7,8 +7,10 @@ import { loadFavorites, toggleFavorite } from '../../utils/practiceFavorites';
 import TimerVoiceSelectionModal from '../TimerVoiceSelectionModal';
 import CompletionMessageScreen from '../CompletionMessageScreen';
 import { getCompletionMessageByDuration } from '../../constants/completionMessages';
+import { getVoiceAudioOption } from '../../constants/voiceAudioOptions';
 import { PracticeCard } from './PracticeCard';
 import { FullScreenPracticeView } from './FullScreenPracticeView';
+import { useAmbientSound } from '../../contexts/AmbientSoundContext';
 
 // Development-only logging helper
 const isDev = import.meta.env.DEV;
@@ -19,12 +21,14 @@ const devError = console.error.bind(console); // keep errors in prod
 export default function PracticesTab({
   station,
   participantCount, // currently used by parent UI; kept for compatibility
+  filter = 'All',
   onToggleFavorite,
   onComplete,
   onExpandedViewChange
 }) {
   const spaceName = station?.name || '';
   const isBreatheToRelax = spaceName === 'Breathe to Relax';
+  const { startAmbient, pauseAmbient, setAmbientMode } = useAmbientSound();
 
   // Content & per-card metadata
   const { contentSet, loading: assetsLoading } = useContentSet(spaceName || null);
@@ -35,6 +39,7 @@ export default function PracticesTab({
   const tuneAudioRef = useRef(null);
   const expandedVideoRef = useRef(null);
   const previewVideoRefs = useRef({});
+  const speechEnabledRef = useRef(false);
 
   // UI state
   const [favorites, setFavorites] = useState(() => loadFavorites());
@@ -108,14 +113,82 @@ export default function PracticesTab({
   );
 
   // Audio selection (current behavior): use contentSet audio if available; otherwise station.localMusic only for card 0.
-  const getAudioSource = useCallback(
-    (cardIndex = 0) => {
-      if (contentSet?.audio?.cdn_url) return contentSet.audio.cdn_url;
-      if (cardIndex === 0 && station?.localMusic?.file) return station.localMusic.file;
-      if (cardIndex === 0 && isBreatheToRelax && CANVA_ASSETS?.BREATHE_AUDIO) return CANVA_ASSETS.BREATHE_AUDIO;
-      return null;
+  const getPracticeAudioUrl = useCallback(
+    (voiceAudioId, cardIndex = 0) => {
+      const option = getVoiceAudioOption(voiceAudioId);
+
+      // These options use the bowls engine (WebAudio) instead of an <audio> file.
+      if (option?.id === 'meditation-bells' || option?.id === 'ambient-only') return null;
+
+      // Guided voices: keep a gentle ambient bed underneath the guidance (nature by default).
+      if (option?.type === 'guided') {
+        return station?.localMusic?.file || contentSet?.audio?.cdn_url || null;
+      }
+
+      // Ambient options
+      if (option?.id === 'nature-sounds') {
+        return station?.localMusic?.file || contentSet?.audio?.cdn_url || null;
+      }
+
+      // Fallback
+      return contentSet?.audio?.cdn_url || station?.localMusic?.file || null;
     },
-    [contentSet?.audio?.cdn_url, station?.localMusic?.file, isBreatheToRelax]
+    [station?.localMusic?.file, contentSet?.audio?.cdn_url]
+  );
+
+  const stopVoiceGuidance = useCallback(() => {
+    try {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    } catch (e) {
+      // ignore
+    }
+    speechEnabledRef.current = false;
+  }, []);
+
+  const startVoiceGuidance = useCallback(
+    (voiceAudioId) => {
+      const option = getVoiceAudioOption(voiceAudioId);
+      if (option?.type !== 'guided') return;
+      if (typeof window === 'undefined' || !window.speechSynthesis) return;
+
+      const synth = window.speechSynthesis;
+      try {
+        synth.cancel();
+      } catch (e) {
+        // ignore
+      }
+
+      // Pick a deterministic voice (best effort). If voices aren't loaded yet, browser default will be used.
+      const voices = synth.getVoices ? synth.getVoices() : [];
+      const english = Array.isArray(voices)
+        ? voices.filter((v) => (v?.lang || '').toLowerCase().startsWith('en'))
+        : [];
+      const pool = english.length > 0 ? english : Array.isArray(voices) ? voices : [];
+
+      const preferredIndex =
+        voiceAudioId === 'warm-male' ? 1 : voiceAudioId === 'neutral-calm' ? 2 : 0;
+      const pickedVoice = pool.length > 0 ? pool[preferredIndex % pool.length] : null;
+
+      const lines = [];
+      if (station?.guidance) lines.push(station.guidance);
+      const instructions = Array.isArray(station?.instructions) ? station.instructions : [];
+      if (instructions[0]) lines.push(instructions[0]);
+      if (instructions[1]) lines.push(instructions[1]);
+
+      for (const text of lines) {
+        const u = new SpeechSynthesisUtterance(text);
+        if (pickedVoice) u.voice = pickedVoice;
+        u.rate = 0.92;
+        u.pitch = 1.0;
+        u.volume = 0.9;
+        synth.speak(u);
+      }
+
+      speechEnabledRef.current = true;
+    },
+    [station]
   );
 
   const items = useMemo(() => {
@@ -136,6 +209,7 @@ export default function PracticesTab({
       const videoUrl = getVideoUrl(idx);
 
       return {
+        cardIndex: idx,
         id,
         title,
         description,
@@ -162,10 +236,11 @@ export default function PracticesTab({
   );
 
   const stopPlayback = useCallback(() => {
+    stopVoiceGuidance();
     if (tuneAudioRef.current) tuneAudioRef.current.pause();
     if (expandedVideoRef.current) expandedVideoRef.current.pause();
     setIsTunePlaying(false);
-  }, []);
+  }, [stopVoiceGuidance]);
 
   const handleCardClick = useCallback(
     (cardIndex) => {
@@ -186,8 +261,13 @@ export default function PracticesTab({
       const cardIndex = selectedCardForPractice;
       if (cardIndex === null) return;
 
+      stopVoiceGuidance();
+
       const videoUrl = getVideoUrl(cardIndex);
-      const audioUrl = getAudioSource(cardIndex);
+      const voiceOption = getVoiceAudioOption(voiceAudioId);
+      const usesBowls =
+        voiceOption?.id === 'meditation-bells' || voiceOption?.id === 'ambient-only';
+      const audioUrl = usesBowls ? null : getPracticeAudioUrl(voiceAudioId, cardIndex);
       const durationSeconds = durationMinutes ? durationMinutes * 60 : null;
 
       setShowTimerModal(false);
@@ -209,7 +289,7 @@ export default function PracticesTab({
         item?.video_asset_id || null,
         item?.audio_asset_id || null,
         videoUrl,
-        audioUrl,
+        usesBowls ? 'webaudio:bowls' : audioUrl,
         durationMinutes || null,
         voiceAudioId || null
       );
@@ -217,19 +297,49 @@ export default function PracticesTab({
       // Start playback
       setIsTunePlaying(true);
 
+      // Sound layer rules:
+      // - Menus: bowls loop (ambient)
+      // - Practice: bowls OFF unless user explicitly chooses a bowls/bells option
+      if (usesBowls) {
+        // Transition bowls into a slightly more present "practice" profile
+        pauseAmbient();
+        await startAmbient('practice');
+      } else {
+        // Ensure bowls are off while playing a selected practice sound
+        pauseAmbient();
+      }
+
       if (tuneAudioRef.current) {
-        if (audioUrl) {
+        // If bowls are the selected "sound", we don't play an <audio> file.
+        if (!usesBowls && audioUrl) {
+          tuneAudioRef.current.loop = true;
+          tuneAudioRef.current.volume = voiceOption?.type === 'guided' ? 0.25 : 0.75;
           tuneAudioRef.current.src = audioUrl;
-        } else {
-          tuneAudioRef.current.removeAttribute('src');
-        }
-        tuneAudioRef.current.load();
-        if (audioUrl) {
+          tuneAudioRef.current.load();
           tuneAudioRef.current.play().catch((err) => devError('[PracticesTab] Audio play failed:', err));
+        } else {
+          tuneAudioRef.current.pause();
+          tuneAudioRef.current.removeAttribute('src');
+          tuneAudioRef.current.load();
         }
       }
+
+      // If they selected a guided voice, speak gentle guidance (best effort)
+      if (voiceOption?.type === 'guided') {
+        startVoiceGuidance(voiceAudioId);
+      }
     },
-    [selectedCardForPractice, getVideoUrl, getAudioSource, items, startSession]
+    [
+      selectedCardForPractice,
+      getVideoUrl,
+      getPracticeAudioUrl,
+      items,
+      startSession,
+      pauseAmbient,
+      startAmbient,
+      stopVoiceGuidance,
+      startVoiceGuidance
+    ]
   );
 
   const handlePracticeComplete = useCallback(
@@ -241,6 +351,10 @@ export default function PracticesTab({
       setIsInPracticeMode(false);
       setShowFullScreen(false);
 
+      // Return to the calm bowls loop across menus
+      setAmbientMode('menu');
+      await startAmbient('menu');
+
       const message = getCompletionMessageByDuration(durationSeconds);
       setCompletionMessage(message);
       setShowCompletionMessage(true);
@@ -248,7 +362,12 @@ export default function PracticesTab({
       // Track completion
       const item = items[cardIndex];
       const videoUrl = getVideoUrl(cardIndex);
-      const audioUrl = getAudioSource(cardIndex);
+      const voiceOption = getVoiceAudioOption(voiceAudioSelected);
+      const usesBowls =
+        voiceOption?.id === 'meditation-bells' || voiceOption?.id === 'ambient-only';
+      const audioUrl = usesBowls
+        ? 'webaudio:bowls'
+        : getPracticeAudioUrl(voiceAudioSelected, cardIndex);
 
       await completeSession(
         cardIndex,
@@ -286,12 +405,14 @@ export default function PracticesTab({
       stopPlayback,
       items,
       getVideoUrl,
-      getAudioSource,
+      getPracticeAudioUrl,
       completeSession,
       practiceDuration,
       voiceAudioSelected,
       onComplete,
-      spaceName
+      spaceName,
+      startAmbient,
+      setAmbientMode
     ]
   );
 
@@ -304,8 +425,13 @@ export default function PracticesTab({
         const next = !prev;
         const audioEl = tuneAudioRef.current;
         const videoEl = expandedVideoRef.current;
+        const isBowlsPractice =
+          voiceAudioSelected === 'meditation-bells' || voiceAudioSelected === 'ambient-only';
 
         if (next) {
+          if (isBowlsPractice) {
+            startAmbient('practice');
+          }
           if (audioEl && audioEl.src) {
             audioEl.play().catch((err) => devError('[PracticesTab] Audio resume failed:', err));
           }
@@ -313,6 +439,10 @@ export default function PracticesTab({
             videoEl.play().catch(() => {});
           }
         } else {
+          stopVoiceGuidance();
+          if (isBowlsPractice) {
+            pauseAmbient();
+          }
           if (audioEl) audioEl.pause();
           if (videoEl) videoEl.pause();
         }
@@ -320,7 +450,7 @@ export default function PracticesTab({
         return next;
       });
     },
-    [selectedCardIndex]
+    [selectedCardIndex, voiceAudioSelected, startAmbient, pauseAmbient, stopVoiceGuidance]
   );
 
   // Countdown timer
@@ -335,7 +465,7 @@ export default function PracticesTab({
     }
 
     const t = setTimeout(() => {
-      setTimeRemaining((prev) => (prev === null ? null : prev - 1));
+      setTimeRemaining((prev) => (prev === null ? null : Math.max(0, prev - 1)));
     }, 1000);
 
     return () => clearTimeout(t);
@@ -424,10 +554,6 @@ export default function PracticesTab({
           setAudioDuration(duration);
           setAudioProgress(duration > 0 ? (current / duration) * 100 : 0);
         }}
-        onEnded={() => {
-          // If audio ends (non-loop), keep UI consistent
-          setIsTunePlaying(false);
-        }}
         onError={(e) => {
           devError('[PracticesTab] Audio error:', e);
         }}
@@ -445,13 +571,34 @@ export default function PracticesTab({
             }}
           >
             <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
-              {items.map((item, index) => (
+              {(() => {
+                const visibleItems =
+                  filter === 'Favorited'
+                    ? items.filter((it) => favorites.has(it.id))
+                    : items;
+
+                if (visibleItems.length === 0) {
+                  return (
+                    <div className="text-center py-10">
+                      <div className="font-hanken text-[#1e2d2e] font-semibold text-lg">
+                        No favorites yet
+                      </div>
+                      <div className="font-hanken text-[#1e2d2e]/70 text-sm mt-1">
+                        Tap the heart on any card to save it.
+                      </div>
+                    </div>
+                  );
+                }
+
+                return visibleItems.map((item) => {
+                  const cardIndex = item.cardIndex;
+                  return (
                 <PracticeCard
                   key={item.id}
                   item={item}
-                  index={index}
-                  isSelected={selectedCardIndex === index}
-                  isPlaying={isTunePlaying && selectedCardIndex === index}
+                  index={cardIndex}
+                  isSelected={selectedCardIndex === cardIndex}
+                  isPlaying={isTunePlaying && selectedCardIndex === cardIndex}
                   isInPracticeMode={isInPracticeMode}
                   assetsLoading={assetsLoading}
                   contentSet={contentSet}
@@ -466,7 +613,9 @@ export default function PracticesTab({
                   getLiveCount={getLiveCount}
                   previewVideoRefs={previewVideoRefs}
                 />
-              ))}
+                  );
+                });
+              })()}
             </div>
           </div>
         }

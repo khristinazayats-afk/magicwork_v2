@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import ErrorBoundary from './components/ErrorBoundary'
+import { AmbientSoundProvider } from './contexts/AmbientSoundContext'
 import './index.css'
 
 // Development-only logging helper
@@ -118,7 +119,9 @@ if (!rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <ErrorBoundary>
-        <App />
+        <AmbientSoundProvider>
+          <App />
+        </AmbientSoundProvider>
       </ErrorBoundary>
     </React.StrictMode>,
   );

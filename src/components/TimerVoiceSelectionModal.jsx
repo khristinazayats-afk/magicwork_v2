@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { VOICE_AUDIO_OPTIONS, getDefaultVoiceAudio } from '../constants/voiceAudioOptions';
 
@@ -12,22 +12,30 @@ export default function TimerVoiceSelectionModal({
   onStart, 
   cardTitle 
 }) {
-  const [selectedDuration, setSelectedDuration] = useState(null); // in minutes
+  // `undefined` = not chosen yet, `null` = no time limit, number = minutes
+  const [selectedDuration, setSelectedDuration] = useState(undefined);
   const [selectedVoice, setSelectedVoice] = useState(getDefaultVoiceAudio().id);
   const [showVoiceSelection, setShowVoiceSelection] = useState(false);
 
   const durationOptions = [5, 10, 15, 20, 30];
 
+  useEffect(() => {
+    if (!isOpen) return;
+    // Reset per-open so the modal always starts clean for the next card
+    setSelectedDuration(undefined);
+    setSelectedVoice(getDefaultVoiceAudio().id);
+    setShowVoiceSelection(false);
+  }, [isOpen]);
+
   const handleStart = () => {
-    if (selectedDuration === null) {
-      // If no duration selected, show voice selection
+    if (selectedDuration === undefined) {
+      // If no duration selected yet, move to voice selection
       setShowVoiceSelection(true);
       return;
     }
 
-    // Start practice with selected duration and voice
     onStart({
-      durationMinutes: selectedDuration,
+      durationMinutes: selectedDuration, // number | null
       voiceAudioId: selectedVoice
     });
   };
@@ -86,7 +94,7 @@ export default function TimerVoiceSelectionModal({
 
               <motion.button
                 onClick={() => {
-                  setSelectedDuration(null);
+                  setSelectedDuration(null); // no time limit
                   setShowVoiceSelection(true);
                 }}
                 whileTap={{ scale: 0.95 }}
