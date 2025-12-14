@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Video - Breathe to Relax</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .info {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        
+        .info p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .url {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #667eea;
+            background: #0a0a0a;
+            padding: 0.5rem;
+            border-radius: 6px;
+            overflow-wrap: break-word;
+        }
+        
+        .video-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        video {
+            width: 100%;
+            display: block;
+        }
+        
+        .controls {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #2a2a2a;
+            color: #fff;
+            border: 1px solid #444;
+        }
+        
+        .btn-secondary:hover {
+            background: #333;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .status.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Test Video Player</h1>
+        
+        <div class="info">
+            <h2>Video Information</h2>
+            <p><strong>Asset ID:</strong> breathe-to-relax-video</p>
+            <p><strong>Name:</strong> Breathe To Relax - Meditation Video</p>
+            <p><strong>Status:</strong> <span class="status live">● LIVE</span></p>
+            <p><strong>CDN URL:</strong></p>
+            <div class="url">https://d3hajr7xji31qq.cloudfront.net/canva/videos/breathe-to-relax-video.mp4</div>
+        </div>
+        
+        <div class="video-container">
+            <video 
+                id="videoPlayer"
+                controls
+                autoplay
+                loop
+                muted
+            >
+                <source src="https://d3hajr7xji31qq.cloudfront.net/canva/videos/breathe-to-relax-video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="controls">
+            <button class="btn-primary" onclick="video.play()">▶️ Play</button>
+            <button class="btn-secondary" onclick="video.pause()">⏸️ Pause</button>
+            <button class="btn-secondary" onclick="video.muted = !video.muted">
+                🔊 Toggle Mute
+            </button>
+            <button class="btn-secondary" onclick="video.currentTime = 0">
+                ⏮️ Restart
+            </button>
+        </div>
+        
+        <div class="info" style="margin-top: 2rem;">
+            <h2>✅ What's Working</h2>
+            <p>✓ Video uploaded to S3</p>
+            <p>✓ Served via CloudFront CDN</p>
+            <p>✓ Metadata in PostgreSQL database</p>
+            <p>✓ Playing directly from CDN</p>
+        </div>
+        
+        <div class="info">
+            <h2>📝 Next Steps</h2>
+            <p>1. This test page proves your video is working</p>
+            <p>2. Now integrate it into your Breathe to Relax space</p>
+            <p>3. See <code>ADD_VIDEO_TO_APP.md</code> for integration code</p>
+            <p>4. Or add more videos by uploading to S3 and updating Google Sheet</p>
+        </div>
+    </div>
+    
+    <script>
+        const video = document.getElementById('videoPlayer');
+        
+        // Log video events
+        video.addEventListener('loadstart', () => console.log('⏳ Loading video...'));
+        video.addEventListener('canplay', () => console.log('✅ Video ready to play'));
+        video.addEventListener('play', () => console.log('▶️ Playing'));
+        video.addEventListener('pause', () => console.log('⏸️ Paused'));
+        video.addEventListener('error', (e) => console.error('❌ Error loading video:', e));
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

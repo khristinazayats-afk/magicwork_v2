@@ -1,0 +1,416 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fonts */
+@font-face {
+  font-family: 'Actay Wide';
+  src: url('/assets/Fonts/ActayWide-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hanken Grotesk';
+  src: url('/assets/Fonts/HankenGrotesk-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  body {
+    @apply overflow-hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: contain;
+    overscroll-behavior-x: none;
+    background-color: #fcf8f2;
+    font-size: 16px;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Prevent mobile browser address bar from causing layout shifts */
+    height: 100vh;
+    height: 100dvh;
+    /* Prevent double-tap zoom on mobile */
+    touch-action: manipulation;
+    /* Prevent text selection on mobile */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior: none;
+  }
+  
+  #root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Hide scrollbars globally */
+  * {
+    -ms-overflow-style: none !important;
+  }
+
+  /* Firefox */
+  @supports (scrollbar-width: none) {
+    * {
+      scrollbar-width: none !important;
+    }
+  }
+
+  /* Chrome, Safari, and newer Edge */
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  *::-webkit-scrollbar-track {
+    display: none !important;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    display: none !important;
+  }
+
+  *::-webkit-scrollbar-corner {
+    display: none !important;
+  }
+}
+
+/* css.lint.unknownAtRules: "ignore" */
+/* css.lint.validProperties: "ignore" */
+
+@layer utilities {
+  /* Mobile-optimized touch targets - minimum 44x44px */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  
+  /* Prevent double-tap zoom on buttons */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .snap-container {
+    scroll-snap-type: y mandatory;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox only - WebKit browsers use ::-webkit-scrollbar below */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    /* Additional fixes for white artifacts */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    will-change: scroll-position;
+    /* Eliminate any visual artifacts */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    /* Prevent pull-to-refresh */
+    overscroll-behavior-y: contain;
+  }
+  
+  /* Firefox */
+  @supports (scrollbar-width: none) {
+    .snap-container {
+      scrollbar-width: none;
+    }
+  }
+  
+  /* Chrome, Safari, and newer Edge - comprehensive scrollbar hiding */
+  .snap-container::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
+  
+  .snap-container::-webkit-scrollbar-track {
+    display: none !important;
+    background: transparent !important;
+  }
+  
+  .snap-container::-webkit-scrollbar-thumb {
+    display: none !important;
+    background: transparent !important;
+  }
+
+  /* Breathe to Relax animated gradient background */
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .snap-container::-webkit-scrollbar-corner {
+    display: none !important;
+    background: transparent !important;
+  }
+  
+  /* Hide any scroll indicators */
+  .snap-container::-webkit-scrollbar-button {
+    display: none !important;
+  }
+  
+  .snap-container::-webkit-scrollbar-resizer {
+    display: none !important;
+  }
+  
+  .snap-item {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    /* Prevent visual artifacts during scroll */
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  .animate-scroll-text {
+    animation: scrollText 8s ease-in-out infinite;
+  }
+
+  @keyframes scrollText {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-20px);
+    }
+    75% {
+      transform: translateX(-20px);
+    }
+  }
+
+  .animate-scroll-music {
+    animation: scrollMusic 12s ease-in-out infinite;
+  }
+
+  @keyframes scrollMusic {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(40px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  /* Noise overlay to prevent gradient banding */
+  .noise-overlay {
+    position: relative;
+  }
+
+  .noise-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    mix-blend-mode: overlay;
+  }
+
+  .full-viewport {
+    /* Fallback for older browsers */
+    height: 100vh;
+    min-height: 100vh;
+  }
+
+  /* Safari/iOS fix for viewport height */
+  @supports (-webkit-touch-callout: none) {
+    .full-viewport {
+      height: -webkit-fill-available;
+      min-height: -webkit-fill-available;
+    }
+  }
+
+  /* Use small viewport height for mobile (excludes browser UI) */
+  @supports (height: 100svh) {
+    .full-viewport {
+      height: 100svh;
+      min-height: 100svh;
+    }
+  }
+
+  /* Use dynamic viewport height (preferred, adapts to browser UI) */
+  @supports (height: 100dvh) {
+    .full-viewport {
+      height: 100dvh;
+      min-height: 100dvh;
+    }
+  }
+
+  /* Ensure consistent behavior on desktop - use standard vh */
+  @media (min-width: 768px) {
+    .full-viewport {
+      height: 100vh;
+      min-height: 100vh;
+    }
+    
+    /* Override Safari fix on desktop */
+    @supports (-webkit-touch-callout: none) {
+      .full-viewport {
+        height: 100vh;
+        min-height: 100vh;
+      }
+    }
+  }
+
+  /* Consistent CTA button positioning - all buttons align at same height */
+  .cta-bottom {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(72px, 16vh, 132px));
+  }
+
+  @supports (height: 100dvh) {
+    .cta-bottom {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(72px, 16dvh, 132px));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .cta-bottom {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(96px, 14vh, 160px));
+    }
+  }
+
+  @supports (height: 100dvh) {
+    @media (min-width: 768px) {
+      .cta-bottom {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(96px, 14dvh, 160px));
+      }
+    }
+  }
+
+  /* CTA button positioning when joined - higher on mobile to ensure all 3 buttons are visible */
+  .cta-bottom-joined {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(120px, 20vh, 180px));
+  }
+
+  @supports (height: 100dvh) {
+    .cta-bottom-joined {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(120px, 20dvh, 180px));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .cta-bottom-joined {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(96px, 14vh, 160px));
+    }
+  }
+
+  @supports (height: 100dvh) {
+    @media (min-width: 768px) {
+      .cta-bottom-joined {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(96px, 14dvh, 160px));
+      }
+    }
+  }
+
+  /* Participant counter positioned above CTA buttons */
+  .participant-counter-above {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(72px, 16vh, 132px) + 120px);
+  }
+
+  @supports (height: 100dvh) {
+    .participant-counter-above {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(72px, 16dvh, 132px) + 120px);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .participant-counter-above {
+      bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(96px, 14vh, 160px) + 120px);
+    }
+  }
+
+  @supports (height: 100dvh) {
+    @media (min-width: 768px) {
+      .participant-counter-above {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(96px, 14dvh, 160px) + 120px);
+      }
+    }
+  }
+
+  /* SwipeHint positioned exactly in middle between description and participant counter */
+  .swipe-hint-middle {
+    /* 
+     * Description ends at: 50% (center) + half line-height (~14px for text-lg) + mb-6 (24px) 
+     * Participant counter starts at: 100% - (cta-bottom offset + button height 56px + gap 12px)
+     * Exact middle calculation:
+     * - Description end: 50% + 38px
+     * - Participant start: 100% - (clamp(72px, 16vh, 132px) + 68px)
+     * - Middle: (description_end + participant_start) / 2
+     */
+    top: calc((50% + 38px + (100% - clamp(72px, 16vh, 132px) - 68px)) / 2);
+    transform: translateY(-50%);
+  }
+
+  @supports (height: 100dvh) {
+    .swipe-hint-middle {
+      top: calc((50% + 38px + (100% - clamp(72px, 16dvh, 132px) - 68px)) / 2);
+      transform: translateY(-50%);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .swipe-hint-middle {
+      /* Desktop: cta-bottom is at clamp(96px, 14vh, 160px) from bottom */
+      top: calc((50% + 38px + (100% - clamp(96px, 14vh, 160px) - 68px)) / 2);
+      transform: translateY(-50%);
+    }
+  }
+
+  @supports (height: 100dvh) {
+    @media (min-width: 768px) {
+      .swipe-hint-middle {
+        top: calc((50% + 38px + (100% - clamp(96px, 14dvh, 160px) - 68px)) / 2);
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+
+

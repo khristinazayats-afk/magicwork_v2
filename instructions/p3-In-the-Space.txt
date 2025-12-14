@@ -1,0 +1,65 @@
+When the user presses "Join":
+
+- Current UI with top header 3 tabs, background logic
+- Tunes, Practices, Shares tabs UI has same animated icons as is implemended now
+- Background of the space inside is a gradient related to the selected space
+- User will have access to three tabs:
+
+1. Tunes
+user will open this tab with a suggested tune of the day in each space
+  selection of differnt tracks stored in s3, locally or streamed
+  user can favourite a track and have access to their favourited tracks 
+  user can decide to join the track 
+  user can see how many people are currentyl listening to the track and are present in the moment
+  user can choose to listen to another track if they scroll down
+
+Playing the Tune, and being preesnt should feel rewarding, and contribute to the "Light" metric and streaks (read more in gamification later)
+
+Tune card of the day (sticky) shall contain:
+- tune info (song name, artist - similarly to how it appears on regular card)
+- button to press play and pause
+- counter example 00:14
+- xx present here
+- tip: Every full minute you stay present with this tune adds 1 Light to your streak.
+
+Tune cards should be similar to the tune card of the day, where user can either chose random tune or have access to their favourited tunes
+
+2. Practice
+
+user will have access to the practice relevant for this space
+user should see what is todays practice and how many peoeple are practicing it
+user should be rewarded for the practices they have completed and the "light" they have shared by practicing 
+
+Practice card of the day (sticky) shall contain:
+- instructions to the practice of the day (MVP just text right now, not opening new window)
+- xx present here
+- How long the practice will take place
+- tip: Complete today’s practice to gather Light and keep your nervous system streak glowing.
+- counter example 00:14 how much time was practices
+- ability to finish the practice and share how they feel
+
+3. Shares
+
+Users shoud be able to see today's reflection invitation or share what is on their mind as long as it's with kindlness
+User should be able to share their answer 
+User should be able to share anonymosuly or publicly as is now
+User should be rerardd for the shared thoughts and supporting other people's shares in a form of acknowledging someone's light
+
+Tune card of the day (sticky) shall contain:
+- Question of the day 
+- How many have reflected and shared their light (so pressed on someones answer for couple of seconds)
+- tip: Offer a kind reflection or acknowledge another to send Light back into the space.
+
+Questions in Shares depending on the day of the week
+Space	Mon	Tue	Wed	Thu	Fri	Sat	Sun
+Slow Morning	What's one thing you want to welcome this week?	What are you sipping or savoring today?	What's one cozy thing around you?	Who or what helps you start softly?	What's your morning mood in one word?	What's one thing you want to welcome today?	What are you grateful to wake up to?
+Gentle De-Stress	What part of you needs kindness right now?	What helped you slow down today?	What made you smile lately for no reason?	Who or what brings you calm?	What are you proud to have let go of?	How are you resting today?	What feels lighter as the week ends?
+Take a Walk	What do you want to notice as you move?	What kind of walk do you need today?	Where will your feet take you?	What pace feels right for you?	What's something you'd like to leave behind on this walk?	What could surprise you outside?	What's calling you outdoors?
+Draw Your Feels	What color fits your mood today and why?	What emotion wants a color today?	What shape feels like today's vibe?	What would you like to express freely?	What tiny thing inspired you?	What does creativity mean for you today?	What story do you want to draw?
+Move and Cool	What kind of energy do you want to move?	What part of you feels strong?	What needs to be released today?	What's one word for your movement mood?	What energy do you want to shake off?	What's your pace today — gentle or strong?	Where in your body do you want ease?
+Tap to Ground	What's something real you can touch?	What's real under your feet?	What feels steady or safe right now?	What's one thing that calms your body?	What helps you feel okay, even a little?	What feels warm or comforting today?	What's one gentle thing you're grateful for?
+Breathe to Relax	What does your next deep breath need?	What helps your breath soften?	What do you feel grateful for right now?	What brings you peace today?	What feels calm inside you?	What are you ready to release as you exhale?	What will you breathe in for the week ahead?
+Get in the Flow State	What do you want to give your full attention to?	What does being in flow mean to you today?	What keeps you focused with ease?	What would make time disappear today?	What made time fly today?	What's lighting your curiosity now?	What brings out your creativity?
+Drift into Sleep	What moment of today felt soft?	What are you grateful to release?	What's one sweet thought before sleep?	What dream do you want to meet?	Who or what brings you comfort?	What soft thought do you want to hold?	What feels peaceful right now?
+
+Tune, Practice, Share of the day cards should not have completely transparent background and be similar to other cards in those tabs in terms of UI 

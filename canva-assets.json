@@ -1,0 +1,64 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-27T00:00:00Z",
+  "cdnBaseUrl": "https://d3hajr7xji31qq.cloudfront.net",
+  "assets": [
+    {
+      "id": "breathe-to-relax-video",
+      "canvaDesignId": "DAG5zEkmdtg",
+      "title": "Neutral Soft Meditative Mobile Video",
+      "description": "Meditative background video for Breathe to Relax space",
+      "format": "mp4",
+      "quality": "1080p",
+      "size": "335x595",
+      "s3Key": "canva/videos/breathe-to-relax-video.mp4",
+      "cdnUrl": "https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/canva/videos/breathe-to-relax-video.mp4",
+      "localFallback": "/assets/canva/videos/breathe-to-relax-bg.mp4",
+      "usedIn": ["BreatheToRelax.PracticeOfDay"],
+      "editUrl": "https://www.canva.com/d/puTk9iP7KIj90WO"
+    },
+    {
+      "id": "embrace-journey-card",
+      "canvaDesignId": "DAG5m8gyXuo",
+      "title": "Instagram Post - Embrace your natural journey",
+      "description": "Social sharing card for practice completion",
+      "format": "png",
+      "quality": "300dpi",
+      "size": "400x500",
+      "s3Key": "canva/images/embrace-journey.png",
+      "cdnUrl": "https://your-cdn.cloudfront.net/canva/images/embrace-journey.png",
+      "localFallback": "/assets/canva/images/embrace-journey.png",
+      "usedIn": ["PracticeComplete.ShareCard"],
+      "editUrl": "https://www.canva.com/d/6FuDkLc9dHxwQDI"
+    },
+    {
+      "id": "mobile-video-bg",
+      "canvaDesignId": "DAG5m6PdwGw",
+      "title": "Mobile Video Design",
+      "description": "Alternative mobile background video",
+      "format": "mp4",
+      "quality": "1080p",
+      "size": "335x596",
+      "s3Key": "canva/videos/mobile-bg.mp4",
+      "cdnUrl": "https://your-cdn.cloudfront.net/canva/videos/mobile-bg.mp4",
+      "localFallback": "/assets/canva/videos/mobile-bg.mp4",
+      "usedIn": ["SplashScreen", "Feed.Background"],
+      "editUrl": "https://www.canva.com/d/aOGTkYRpU0kH-C0"
+    },
+    {
+      "id": "email-template",
+      "canvaDesignId": "DAG48HIoozA",
+      "title": "Email Design",
+      "description": "Newsletter and notification template",
+      "format": "jpg",
+      "quality": "150dpi",
+      "size": "376x532",
+      "s3Key": "canva/images/email-template.jpg",
+      "cdnUrl": "https://your-cdn.cloudfront.net/canva/images/email-template.jpg",
+      "localFallback": "/assets/canva/images/email-template.jpg",
+      "usedIn": ["EmailCampaigns"],
+      "editUrl": "https://www.canva.com/d/0tZlCt5TzGxf02q"
+    }
+  ]
+}
+

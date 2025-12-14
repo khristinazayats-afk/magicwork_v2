@@ -1,0 +1,46 @@
+🪞**User state:** Restless, looking for grounding or fun ideas on what to do instead of scrolling.
+
+**Scene feel:** User can scroll through 9 spaces that appear as “portals” with smooth gradients transitions
+🪴 *Goal:* Feel invited, not overloaded. Picking a space feels like entering a room, not choosing from a menu.
+
+**UI / UX**
+
+- User lands for the first time, there is blurred screen tip:
+    - “There’s a space waiting for you. *Scroll to find the one that fits your moment.”*
+- **Interactions**
+    - User scrolls out of the hint by scrolling up or down - the first feed space appears - Slow Morning
+    - User can scroll vertically through **9 calm spaces** (e.g. *Slow Morning*, *Gentle De-Stress*, *Take a Walk*…) “indefinitely”.
+- Each card shows:
+    - Subheadline example: “A space to begin the day slowly, side by side.”
+    - A warm, pulsing dot: “153 humans here.”
+- Scroll: seamless transitions (no abrupt jumps).
+  - "Join" button that opens immersive experience view
+
+Header:
+- Top bar includes streak count (e.g., "3/30 days of calm") and hamburger menu on the left 
+- Hamburger menu opens profile, rewards, and settings and is opened directly on the page and is easy to tap out
+
+Space	Description
+Slow Morning	A space to begin the day slowly, side by side. 
+Gentle De-Stress	A space to come back to center, together.
+Take a Walk	A quiet space for mindful steps.
+Draw Your Feels	A creative space where emotions flow by hand.
+Move and Cool	A space to release energy and find ease.
+Tap to Ground	A grounding space to reconnect with your body.
+Breathe to Relax	A space for slow breaths and unwinding.
+Get in the Flow State	A space to focus on what matters.
+Drift into Sleep	A space to slow down and drift off together.
+
+
+
+# Feed and For You Section (P2)
+
+
+
+When the user presses "Join":
+- They enter a calm immersive screen
+- Background transitions to gradient related to the selected space
+- Top header has three tabs:
+  1. For You — current section, active
+  2. Tunes — coming soon
+  3. Practices — coming soon

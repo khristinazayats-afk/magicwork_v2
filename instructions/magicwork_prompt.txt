@@ -1,0 +1,99 @@
+
+Project Name: magicwork
+Tagline: Anxiety off. Presence on.
+Goal: Deliver shared calm through immersive sound and connection.
+
+🧘‍♀️ Concept Overview
+
+Build a minimalist, mobile-first web app that replaces anxious scrolling with moments of shared calm.
+
+Users scroll through 9 daily sound-based practices, each a “portal” of ambient calm.
+They can join a practice, listen for a few minutes, and sense collective presence through a live counter (“145 humans here”).
+
+🩵 Tone: soft, grounding, slightly mystical
+🌅 Design: spacious, minimal, sunrise-inspired palette
+
+
+# magicwork — Project Context
+
+Tagline: Anxiety off. Presence on.
+Goal: Deliver shared calm through immersive, sound-based micro practices.
+
+
+🎨 Color System — Diffusion Gradients
+
+Use soft radial gradients between sunrise tones, inspired by brand guidelines:
+
+Practices	Gradient	Emotion
+1–3	#ffaf42 → #94d1c4	Warm grounding
+4–6	#94d1c4 → #fcf8f2	Centered calm
+7–9	#bdb2cd → #94d1c4	Expansive reflection
+
+
+🧰 Tech Stack
+
+Next.js + React + Tailwind + Framer Motion
+
+Fonts: Hanken Grotesk (text/UI), Actay Wide (headlines)
+
+Colors:
+
+Dark Green #1e2d2e
+
+Beige #fcf8f2
+
+Mint #94d1c4
+
+Orange #ffaf42
+
+Lavender #bdb2cd
+
+Buttons: rounded-full, 56 px height, white text, subtle shadow
+
+Animations: smooth, subtle easing
+
+Sound: local or S3-hosted .mp3
+
+No SVG imports (use internal magicwork logo)
+
+Hosting: Vercel
+
+TYPOGRAPHY
+- Wordmark: Hanken Grotesk (semibold or medium), tracking-tight.
+- Tagline: Actay Wide Regular (not bold). If Actay Wide not available, load via @font-face or use a close fallback (e.g., "system-ui" temporarily) but keep class hooks for easy swap.
+- Sizes (on ~390px width): wordmark ~26–28px; tagline ~18–20px; tighten line-height (leading-tight).
+
+BRAND COLORS
+- #1e2d2e (dark green), #fcf8f2 (beige), #94d1c4 (mint), #ffaf42 (orange), #bdb2cd (lavender).
+- Logo + text color: dark green #1e2d2e for strong contrast on mint.
+
+ANIMATION (Framer Motion)
+- On mount:
+  • Blocks fade in together (duration 0.4s).
+  • Logo group: fade-in + rise 8px (0.5–0.6s).
+  • Tagline appears 200ms after logo with a soft fade (0.35–0.4s).
+- Respect prefers-reduced-motion: if true, render static (no motion).
+
+INTERACTION
+- Optional “Entrar” button (rounded-2xl, dark green background, beige text) under tagline; subtle shadow-sm; tap area ≥ 44px high.
+- Auto-continue to the feed after 2.5s if no action.
+- On tap or after timeout, crossfade to /feed (keep splash silent).
+
+ACCESSIBILITY
+- Sufficient color contrast (tagline/wordmark on mint).
+- aria-labels for the button; semantic heading for the wordmark.
+- Safe area insets: use padding-top/bottom env(safe-area-inset-*).
+
+Respect prefers-reduced-motion
+
+Ensure AA contrast
+
+Min button height 44 px
+
+Localization-ready (English + Spanish)
+
+🪞 Design Feel
+
+Minimal, fluid, and emotionally intelligent.
+Each swipe feels like a breath — a rhythm of color, sound, and calm.
+

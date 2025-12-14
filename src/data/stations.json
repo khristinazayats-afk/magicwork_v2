@@ -1,0 +1,173 @@
+{
+  "stations": [
+    {
+      "name": "Slow Morning",
+      "label": "SomaFM \u2013 Deep Space One",
+      "guidance": "Today, curiosity leads.",
+      "description": "Creative Intention",
+      "instructions": [
+        "Get settled. Soften your gaze.",
+        "Inhale: invite curiosity.",
+        "Exhale: release perfection.",
+        "Name one playful intention for today.",
+        "Breathe with it for three cycles."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Gentle De-Stress",
+      "label": "SomaFM \u2013 Drone Zone",
+      "guidance": "Hum softly to settle your system.",
+      "description": "Soothing Hum",
+      "instructions": [
+        "Inhale through the nose.",
+        "Hum the exhale gently \u2014 feel chest vibration.",
+        "Repeat 5 times; shoulders soften.",
+        "Pause. Notice the quiet."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Take a Walk",
+      "label": "SomaFM \u2013 Mission Control",
+      "guidance": "No goal, only noticing.",
+      "description": "Wander Aimlessly",
+      "instructions": [
+        "Begin walking slowly.",
+        "Let breath set the rhythm of steps.",
+        "Notice something small; name it kindly.",
+        "Let your path choose itself for a minute."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Draw Your Feels",
+      "label": "SomaFM \u2013 Fluid (Lofi)",
+      "guidance": "Let the pen think for you.",
+      "description": "Free-Write Flow",
+      "instructions": [
+        "Set a 2-minute timer.",
+        "Write without stopping or editing.",
+        "When stuck, write: 'I'm noticing\u2026'",
+        "Circle one sentence that feels alive."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Move and Cool",
+      "label": "SomaFM \u2013 Beat Blender",
+      "guidance": "Move as if no one's watching.",
+      "description": "Dance Without Witness",
+      "instructions": [
+        "Stand. Soften knees.",
+        "Let breath move your shoulders, hips.",
+        "Follow any impulse for 60\u201390s.",
+        "End with a long exhale and stillness."
+      ],
+      "localMusic": {
+        "file": "/Feed_mp3/embrace-364091.mp3",
+        "artist": "Evgeny Bardyuzha",
+        "title": "Embrace",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Tap to Ground",
+      "label": "Ambient Sleeping Pill",
+      "guidance": "Shapes before thoughts.",
+      "description": "Intuitive Doodle",
+      "instructions": [
+        "Draw continuous lines for one minute.",
+        "Add curves where breath softens.",
+        "Pause. Notice the mood the shapes carry."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Breathe to Relax",
+      "label": "SomaFM \u2013 Space Station Soma",
+      "guidance": "Feel breath like ocean tide.",
+      "description": "Wave Breath",
+      "instructions": [
+        "Inhale 4 \u2014 belly rises.",
+        "Exhale 6 \u2014 soften jaw.",
+        "Repeat 10 cycles. Stay gentle."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Get in the Flow State",
+      "label": "SomaFM \u2013 Groove Salad",
+      "guidance": "Let silliness be medicine.",
+      "description": "Lion's Breath (Playful)",
+      "instructions": [
+        "Inhale through nose.",
+        "Exhale through mouth, tongue out, 'haaa'.",
+        "Repeat 3\u20135 times. Smile is welcome."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    },
+    {
+      "name": "Drift into Sleep",
+      "label": "SomaFM \u2013 Sonic Universe",
+      "guidance": "Imagine floating in soft color.",
+      "description": "Dream Readiness Visualization",
+      "instructions": [
+        "Close eyes. Inhale: imagine a soft hue.",
+        "Exhale: let your body feel heavier.",
+        "Repeat with two more hues.",
+        "Rest in the color that feels safest."
+      ],
+      "localMusic": {
+        "file": "/assets/ambient-spring-forest-15846.mp3",
+        "artist": "Ambient Sounds",
+        "title": "Spring Forest",
+        "source": "Pixabay",
+        "loop": true
+      }
+    }
+  ]
+}

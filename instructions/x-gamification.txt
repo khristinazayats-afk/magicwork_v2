@@ -1,0 +1,279 @@
+You are updating the **magicwork** app’s reward system.
+
+The previous “Aura” system is removed.
+
+We now use **Vibe States represented by animals** to reflect a user’s weekly nervous-system condition.
+
+This prompt defines the **entire Vibe System**, its **UI**, and the **content** you must use across:
+
+1. Main Feed sticky header
+2. Results screen (after practice)
+3. Profile / History (hamburger menu > profile)
+4. Weekly summary (In the profile, on top)
+5. Badge assets (emoji placeholders for now, where aura now appears)
+6. Microcopy + Benefit explanations
+
+Your job:
+
+Produce **UI/UX specifications** and **content layouts** for all these areas.
+
+Use magicwork brand language:
+
+calm, warm, modern, quiet, friendly, premium.
+
+---
+
+# 🌟 **THE 10 VIBES (Final Names, Content, Effort, Benefits)**
+
+Use exactly these 10 Vibes everywhere in the app.
+
+For each:
+
+- Vibe Name
+- Weekly Effort Required
+- Nervous System Benefit
+- Microcopy (short poetic line)
+
+---
+
+In the sticky headed in the main feed we will display:
+
+Replace: YOUR AURA THIS WEEK with YOUR VIBE THIS WEEK (ALSO not necessarily one line: so 
+
+YOUR VIBE
+
+THIS WEEK) 
+
+next to it emoji of the animal, where we have aura now
+
+Emerging Light > i.e. **Sleepy Otter**
+
+1/7 days of shared presence
+
+126 mindful minutes
+
+Microcopy: i.e. A gentle beginning is still a beginning.
+
+Link to read more, so that user is redirected to the Profile section (new screen) where they can see their weekly summary with what this “reward” or animal vibe means for them
+
+## **1. Sleepy Otter**
+
+**Effort:** 1–5 min • 1 day
+
+**Benefit:** “Even tiny pauses reduce nervous system noise.”
+
+**Microcopy:** “A gentle beginning is still a beginning.”
+
+## **2. Unbothered Tortoise**
+
+**Effort:** 5–10 min • 1–2 days
+
+**Benefit:** “Slow, steady presence calms the vagus nerve.”
+
+**Microcopy:** “Slow is powerful.”
+
+## **3. Calm Polar Bear**
+
+**Effort:** 10–20 min • 2–3 days
+
+**Benefit:** “Your baseline stress response is cooling.”
+
+**Microcopy:** “You found deep chill in the middle of your week.”
+
+## **4. Chilled Capybara**
+
+**Effort:** 15–25 min • 3 days
+
+**Benefit:** “Your body is relaxing into a safe rhythm.”
+
+**Microcopy:** “Soft ease is settling in.”
+
+## **5. Serene Quokka**
+
+**Effort:** 20–35 min • 3–4 days • 2-day streak
+
+**Benefit:** “Tiny joyful pauses improved emotional clarity.”
+
+**Microcopy:** “Little joys are reshaping your inner world.”
+
+## **6. Resourceful Owl**
+
+**Effort:** 30–45 min • 4–5 days
+
+**Benefit:** “Your breath and mind are finding structure.”
+
+**Microcopy:** “Clarity comes quietly.”
+
+## **7. Resilient Deer**
+
+**Effort:** 40–60 min • 5 days • 3-day streak
+
+**Benefit:** “You recover from stress more gracefully.”
+
+**Microcopy:** “Your calm moves with elegance.”
+
+## **8. Cool Koala**
+
+**Effort:** 55–75 min • 5–6 days • 4-day streak
+
+**Benefit:** “Calm is becoming easier to access and sustain.”
+
+**Microcopy:** “You’re regulated without even trying.”
+
+## **9. Zenned Panda**
+
+**Effort:** 75–90 min • 6 days • 5-day streak
+
+**Benefit:** “Your system is entering restorative calm.”
+
+**Microcopy:** “You’re living inside a long, soft exhale.”
+
+## **10. Collected Alpaca (Top State)**
+
+**Effort:** 90+ min • 6–7 days • 6–7 day streak
+
+**Benefit:** “Your nervous system is regulated and harmonious.”
+
+**Microcopy:** “You’ve built something steady inside yourself.”
+
+---
+
+# 🐾 **EMOJI / ICONS (Placeholder for now)**
+
+Use simple emojis during demo:
+
+- Sleepy Otter → 🦦
+- Unbothered Tortoise → 🐢
+- Calm Polar Bear → 🐻‍❄️
+- Chilled Capybara → 🦫 or 🐹 (placeholder)
+- Serene Quokka → 🐹 (closest match)
+- Resourceful Owl → 🦉
+- Resilient Deer → 🦌
+- Cool Koala → 🐨
+- Zenned Panda → 🐼
+- Collected Alpaca → 🦙
+
+# **RESULTS SCREEN — “BEAUTIFUL” BOX (AFTER PRACTICE)**
+
+Keep **Beautiful** as the box title.
+
+Replace aura section with:
+
+### **New Section: Vibe Recognition**
+
+**Line 1:**
+
+**You are vibing today as**
+
+**Line 2:**
+
+Badge (emoji) + vibe name
+
+Example:
+
+🐹 **Serene Quokka**
+
+### **New: Community Line**
+
+Show how many users share this vibe today:
+
+- “47 humans are vibing this energy today.”
+
+### **Nervous-System Benefit:**
+
+Short line from table:
+
+- “Tiny joyful pauses improved emotional clarity.”
+
+### **Keep existing practice stats:**
+
+- minutes
+- streak
+- any session metadata
+
+This screen becomes the warm, rewarding moment after practice.
+
+Here user should be able to read what how this amount of minuted benefitted their nervous system and i.e. reduced cortizol levels. 
+
+Any feel good text here is amazing. 
+
+1-2 paragraphs, should be expandible and not boring.
+
+---
+
+# **PROFILE / HISTORY — WEEKLY VIBE HISTORY**
+
+Create a clean, scrollable history UI.
+
+### **For each month:**
+
+Show:
+
+- Total mindful minutes
+- Average days practiced per week
+- Weekly vibes with badges:
+
+Example:
+
+**September**
+
+142 minutes • avg 4 days/week
+
+Week 1 — 🐢 Unbothered Tortoise
+
+Week 2 — 🐹 Serene Quokka
+
+Week 3 — 🐨 Cool Koala
+
+Week 4 — 🦙 Collected Alpaca
+
+### **Goal:**
+
+Let users visually understand their emotional & nervous-system journey over time.
+
+---
+
+# **WEEKLY SUMMARY SCREEN**
+
+At end of each week (or accessible any time):
+
+### **Banner:**
+
+**Your vibe this week: Collected Alpaca**
+
+### **Weekly Totals:**
+
+“91 mindful minutes • 6 days • 5-day streak”
+
+### **Benefit:**
+
+“A beautifully regulated nervous system.”
+
+### **Mini Timeline:**
+
+(icons + vibes for each day)
+
+### **Encouragement:**
+
+“You showed up for yourself with consistency and care.”
+
+---
+
+# 🎯 **WHAT YOU MUST PRODUCE**
+
+Generate **UX/UI specifications** (not code) for:
+
+- Main Feed sticky header
+- Results screen vibe section
+- Profile/History vibe overview
+- Weekly summary screen
+- Badge visual concepts
+- Copy blocks (title, vibe name, benefit, microcopy)
+- Layout details + spacing suggestions
+- Any necessary annotations
+
+Follow the visual direction of magicwork:
+
+minimal, calm, warm, organic, non-childish, premium.
+
+If you need clarification, ask before generating.

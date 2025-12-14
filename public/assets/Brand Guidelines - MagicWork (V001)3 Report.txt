@@ -1,0 +1,332 @@
+Package Report
+
+-----------------------------------------------------------------------------
+Document:
+Name: Brand Guidelines - MagicWork (V001)3.pdf
+Color Mode: RGB color
+Color Profile: none
+Ruler Units: pixels
+Artboard Dimensions: 963.7793 px x 542.125 px
+Show Images in Outline Mode: OFF
+Highlight Substituted Fonts: OFF
+Highlight Substituted Glyphs: OFF
+Preserve Text Editability
+Simulate Colored Paper: OFF
+
+-----------------------------------------------------------------------------
+Spot Color Objects:
+
+-----------------------------------------------------------------------------
+Missing Fonts:NONE
+
+-----------------------------------------------------------------------------
+Protected Fonts that were not packaged:NONE
+
+-----------------------------------------------------------------------------
+Fonts:
+Actay Wide Bold (OTF)
+Hanken Grotesk Regular (TrueType)
+Hanken Grotesk Medium (TrueType)
+Hanken Grotesk SemiBold (TrueType)
+Hanken Grotesk Bold (TrueType)
+SFT Schrifted Sans TRIAL Var Regular (OTF)
+Herculanum (TrueType)
+Arial (OTF)
+
+-----------------------------------------------------------------------------
+Embedded Fonts:
+NONE
+
+-----------------------------------------------------------------------------
+Missing Links:
+NONE
+
+-----------------------------------------------------------------------------
+Linked Images:
+
+/Users/saraezzat/Downloads/suad-kamardeen-khewjy5l4Zo-unsplash2.psd
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 17578K, 3000 by 2000 pixels
+Dimensions: 1147.582 by 765.054 points 
+Resolution: 188.222 by 188.222 pixels per inch
+
+
+/Users/saraezzat/Desktop/Mockups/2 Iphone/MD460_Free_Iphone_14_Pro_Mockup/Free_Iphone_14_Pro_Mockup_5.psd
+Type: Transparent RGB
+Bits per Pixel: 32
+Channels: 4
+Size: 26367K, 3000 by 2250 pixels
+Dimensions: 657.588 by 493.191 points 
+Resolution: 328.473 by 328.473 pixels per inch
+
+
+/Users/saraezzat/Downloads/iOS Icon Mockup.psd
+Type: Transparent RGB
+Bits per Pixel: 32
+Channels: 4
+Size: 17187K, 2200 by 2000 pixels
+Dimensions: 572.139 by 520.126 points 
+Resolution: 276.856 by 276.856 pixels per inch
+
+
+/Users/saraezzat/Downloads/Cotton Totebag Mockup/Cotton Totebag Mockup.psd
+Type: Transparent RGB
+Bits per Pixel: 32
+Channels: 4
+Size: 81990K, 5250 by 3998 pixels
+Dimensions: 372.114 by 283.374 points 
+Resolution: 1015.817 by 1015.817 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_732351787.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 64800K, 5760 by 3840 pixels
+Dimensions: 589.171 by 392.781 points 
+Resolution: 703.904 by 703.904 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_2259609113.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 77519K, 4200 by 6300 pixels
+Dimensions: 759.446 by 1139.168 points 
+Resolution: 398.185 by 398.185 pixels per inch
+
+
+/Users/saraezzat/Downloads/milad-fakurian-UiiHVEyxtyA-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 70312K, 6000 by 4000 pixels
+Dimensions: 737.282 by 491.521 points 
+Resolution: 585.936 by 585.936 pixels per inch
+
+
+/Users/saraezzat/Downloads/tabitha-turner-53SEwBWSg2E-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 67604K, 4160 by 5547 pixels
+Dimensions: 357.744 by 477.021 points 
+Resolution: 837.246 by 837.246 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_2259609113.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 77519K, 4200 by 6300 pixels
+Dimensions: 164.718 by 247.077 points 
+Resolution: 1835.865 by 1835.865 pixels per inch
+
+
+/Users/saraezzat/Downloads/aedrian-HGkkz8G9ewg-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 70312K, 4000 by 6000 pixels
+Dimensions: 113.792 by 170.688 points 
+Resolution: 2530.94 by 2530.94 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_2147755969.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 132990K, 8252 by 5501 pixels
+Dimensions: 157.996 by 105.324 points 
+Resolution: 3760.512 by 3760.512 pixels per inch
+
+
+/Users/saraezzat/Downloads/stock-photo-lovely-couple-spending-quality-time-together-774498016-transformed.jpeg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 4692K, 1001 by 1600 pixels
+Dimensions: 231.22 by 369.583 points 
+Resolution: 311.703 by 311.703 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_2094203017.psd
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 118455K, 7224 by 5597 pixels
+Dimensions: 329.924 by 255.618 points 
+Resolution: 1576.51 by 1576.51 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_732351787.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 64800K, 5760 by 3840 pixels
+Dimensions: 155.578 by 103.719 points 
+Resolution: 2665.669 by 2665.669 pixels per inch
+
+
+/Users/saraezzat/Downloads/tabitha-turner-53SEwBWSg2E-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 67604K, 4160 by 5547 pixels
+Dimensions: 106.206 by 141.616 points 
+Resolution: 2820.189 by 2820.189 pixels per inch
+
+
+/Users/saraezzat/Downloads/stock-photo-top-view-stylish-couple-sitting-on-floor-barefoot-holding-hands-human-legs-in-jeans-coffee-break-1081338383-transformed.jpeg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 4838K, 1500 by 1101 pixels
+Dimensions: 302.894 by 222.324 points 
+Resolution: 356.56 by 356.56 pixels per inch
+
+
+/Users/saraezzat/Downloads/aedrian-HGkkz8G9ewg-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 70312K, 4000 by 6000 pixels
+Dimensions: 202.016 by 303.024 points 
+Resolution: 1425.631 by 1425.631 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_732351787.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 64800K, 5760 by 3840 pixels
+Dimensions: 229.697 by 153.131 points 
+Resolution: 1805.512 by 1805.512 pixels per inch
+
+
+/Users/saraezzat/Downloads/chris-nguyen-lbmrrNgq2lo-unsplash 2.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 20093K, 2268 by 3024 pixels
+Dimensions: 246.377 by 328.503 points 
+Resolution: 662.788 by 662.788 pixels per inch
+
+
+/Users/saraezzat/Downloads/suad-kamardeen-khewjy5l4Zo-unsplash2.psd
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 17578K, 3000 by 2000 pixels
+Dimensions: 443.651 by 295.767 points 
+Resolution: 486.869 by 486.869 pixels per inch
+
+
+/Users/saraezzat/Downloads/suad-kamardeen-khewjy5l4Zo-unsplash2.psd
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 17578K, 3000 by 2000 pixels
+Dimensions: 516 by 368.16 points 
+Resolution: 418.605 by 391.134 pixels per inch
+
+
+/Users/saraezzat/Downloads/iPhone-14-Close-up-Mockup/magic iPhone 14 Close-up Mockup.psd
+Type: Transparent RGB
+Bits per Pixel: 32
+Channels: 4
+Size: 15625K, 2000 by 2000 pixels
+Dimensions: 593.248 by 593.248 points 
+Resolution: 242.732 by 242.732 pixels per inch
+
+
+/Users/saraezzat/Downloads/priscilla-du-preez-aPa843frIzI-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 55793K, 3563 by 5345 pixels
+Dimensions: 341.639 by 512.506 points 
+Resolution: 750.898 by 750.898 pixels per inch
+
+
+/Users/saraezzat/Downloads/austin-kehmeier-lyiKExA4zQA-unsplash (1).jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 73500K, 4480 by 5600 pixels
+Dimensions: 378.543 by 473.178 points 
+Resolution: 852.11 by 852.11 pixels per inch
+
+
+/Users/saraezzat/Downloads/midas-hofstra-tidSLv-UaNs-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 34951K, 3456 by 3452 pixels
+Dimensions: 474.768 by 474.219 points 
+Resolution: 524.113 by 524.113 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_2259609113.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 77519K, 4200 by 6300 pixels
+Dimensions: 372.709 by 559.063 points 
+Resolution: 811.357 by 811.357 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_2259609113.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 77519K, 4200 by 6300 pixels
+Dimensions: 251.29 by 376.935 points 
+Resolution: 1203.391 by 1203.391 pixels per inch
+
+
+/Users/saraezzat/Downloads/milad-fakurian-UiiHVEyxtyA-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 70312K, 6000 by 4000 pixels
+Dimensions: 757.767 by 505.178 points 
+Resolution: 570.096 by 570.096 pixels per inch
+
+
+/Users/saraezzat/Downloads/chris-nguyen-lbmrrNgq2lo-unsplash.jpg
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 20093K, 2268 by 3024 pixels
+Dimensions: 702.133 by 936.178 points 
+Resolution: 232.571 by 232.571 pixels per inch
+
+
+/Users/saraezzat/Desktop/Mockups/3 Macbook_Ipad/MacBook on Table Mockup/MacBook on Table Mockup.psd
+Type: Transparent RGB
+Bits per Pixel: 32
+Channels: 4
+Size: 23437K, 3000 by 2000 pixels
+Dimensions: 1261.403 by 840.935 points 
+Resolution: 171.238 by 171.238 pixels per inch
+
+
+/Users/saraezzat/Downloads/android-phone-in-hand-mockup/android phone in hand mockup.psd
+Type: Transparent RGB
+Bits per Pixel: 32
+Channels: 4
+Size: 78125K, 4000 by 5000 pixels
+Dimensions: 963.779 by 1204.724 points 
+Resolution: 298.824 by 298.824 pixels per inch
+
+
+/Users/saraezzat/Downloads/shutterstock_2094203017.psd
+Type: RGB
+Bits per Pixel: 24
+Channels: 3
+Size: 118455K, 7224 by 5597 pixels
+Dimensions: 669.93 by 519.047 points 
+Resolution: 776.392 by 776.392 pixels per inch

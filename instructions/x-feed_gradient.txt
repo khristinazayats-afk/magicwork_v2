@@ -1,0 +1,10 @@
+Screen Name	0%	30%	70%	100%
+Slow Morning	94D1C4 mint 	FFAF42 orange	FFAF42 orange	BDB2CD purple
+Gentle De-Stress	BDB2CD purple	FFAF42 orange	FFAF42 orange	94D1C4 mint 
+Take a Walk	94D1C4 mint 	FFAF42 orange	FFAF42 orange	BDB2CD purple
+Journal Your Feels	BDB2CD purple	94D1C4 mint 	94D1C4 mint 	FFAF42 orange
+Move and Cool	FFAF42 orange	94D1C4 mint 	94D1C4 mint 	BDB2CD purple
+Draw to Ground	BDB2CD purple	94D1C4 mint 	94D1C4 mint 	FFAF42 orange
+Breathe to Relax	FFAF42 orange	BDB2CD purple	BDB2CD purple	94D1C4 mint 
+Breathe to Get Active	94D1C4 mint 	BDB2CD purple	BDB2CD purple	FFAF42 orange
+Drift into Sleep	FFAF42 orange	BDB2CD purple	BDB2CD purple	94D1C4 mint 

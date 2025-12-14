@@ -1,0 +1,16 @@
+# Exclude unused API functions from deployment
+# Keep only essential functions that are actively used
+
+# Exclude these unused/development-only functions
+api/export-canva.js
+api/pixabay-lookup.js
+api/audio-metadata.js
+api/feed.js
+api/ingest.js
+api/presign.js
+
+# Keep these essential functions:
+# - api/events.js (used by usePostEvent)
+# - api/progress.js (used by useProgress)
+# - api/content-assets.js (used by useContentSet)
+# - api/content-sets.js (may be used)

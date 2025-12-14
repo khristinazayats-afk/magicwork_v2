@@ -1,0 +1,237 @@
+
+Context:
+
+Next.js/React app.
+
+JSON already at /public/data/stations.json.
+
+We need a resilient audio player (HLS + MP3) with fallback mirrors, a 3-minute timer, and a tiny summary screen.
+
+Do this exactly:
+
+Install dependency
+
+npm i hls.js
+
+
+Create file: src/lib/fetchStations.js
+
+export async function fetchStations() {
+  const res = await fetch('/data/stations.json', { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to load stations.json');
+  return res.json(); // -> { stations: [...] }
+}
+
+
+Create file: src/hooks/useAudioStream.js
+
+import { useEffect, useRef, useState } from 'react';
+import Hls from 'hls.js';
+
+export function useAudioStream() {
+  const audioRef = useRef(null);
+  const hlsRef = useRef(null);
+  const [playingUrl, setPlayingUrl] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => () => { if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; } }, []);
+
+  const playFromList = async (urls = []) => {
+    if (!audioRef.current) return;
+
+    if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; }
+    audioRef.current.pause();
+    audioRef.current.removeAttribute('src');
+    audioRef.current.load();
+
+    for (const url of urls) {
+      try {
+        if (url.endsWith('.m3u8')) {
+          if (Hls.isSupported()) {
+            const hls = new Hls();
+            hlsRef.current = hls;
+            hls.loadSource(url);
+            hls.attachMedia(audioRef.current);
+            await new Promise((resolve, reject) => {
+              hls.on(Hls.Events.MANIFEST_PARSED, resolve);
+              hls.on(Hls.Events.ERROR, (_, data) => reject(data));
+            });
+            await audioRef.current.play();
+          } else {
+            audioRef.current.src = url; // Safari/iOS
+            await audioRef.current.play();
+          }
+        } else {
+          audioRef.current.src = url;
+          await audioRef.current.play();
+        }
+        setPlayingUrl(url);
+        setIsPlaying(true);
+        return url;
+      } catch (_) {
+        // try next mirror
+      }
+    }
+    setIsPlaying(false);
+    setPlayingUrl(null);
+    throw new Error('All stream mirrors failed');
+  };
+
+  const pause = () => { if (audioRef.current) { audioRef.current.pause(); setIsPlaying(false); } };
+
+  return { audioRef, playFromList, pause, isPlaying, playingUrl };
+}
+
+
+Update/Create: src/Feed.jsx
+
+import { useEffect, useState } from 'react';
+import { fetchStations } from '@/lib/fetchStations';
+import PracticeCard from '@/PracticeCard';
+
+export default function Feed() {
+  const [stations, setStations] = useState([]);
+
+  useEffect(() => { fetchStations().then(d => setStations(d.stations)).catch(console.error); }, []);
+
+  return (
+    <main style={{padding:16}}>
+      {stations.map((s) => (<PracticeCard key={s.name} station={s} />))}
+    </main>
+  );
+}
+
+
+Update: src/PracticeCard.jsx (wire join → play → timer → finish)
+
+import { useEffect, useMemo, useState } from 'react';
+import { useAudioStream } from '@/hooks/useAudioStream';
+
+const DEFAULT_MIN = 3;
+
+const cues = {
+  'Gentle De-Stress': 'Drop your shoulders. Breathe out slowly.',
+  'Slow Morning': 'Notice three things you’re grateful for.',
+  'Take a Walk': 'Count ten soft steps in silence.',
+  'Draw Your Feels': 'Pick a color. One continuous line.',
+  'Move and Cool': 'Sway side to side with your breath.',
+  'Tap to Ground': 'Press both feet into the floor.',
+  'Breathe to Relax': 'Inhale 4, exhale 6.',
+  'Breathe to Get Active': 'Ten brisk breaths, then rest.',
+  'Drift into Sleep': 'Count from 30 down to 0.'
+};
+
+export default function PracticeCard({ station }) {
+  const { audioRef, playFromList, pause, isPlaying, playingUrl } = useAudioStream();
+  const [joined, setJoined] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(DEFAULT_MIN * 60);
+  const [heartsSent, setHeartsSent] = useState(0);
+  const [showSummary, setShowSummary] = useState(false);
+
+  const mm = String(Math.floor(secondsLeft / 60)).padStart(2,'0');
+  const ss = String(secondsLeft % 60).padStart(2,'0');
+
+  useEffect(() => {
+    let t;
+    if (joined && isPlaying && secondsLeft > 0) {
+      t = setInterval(() => setSecondsLeft(s => (s>0? s-1 : 0)), 1000);
+    }
+    if (secondsLeft === 0 && joined) {
+      pause();
+      setShowSummary(true);
+      setJoined(false);
+    }
+    return () => clearInterval(t);
+  }, [joined, isPlaying, secondsLeft, pause]);
+
+  const handleJoin = async () => {
+    try {
+      await playFromList(station.streams);
+      setSecondsLeft(DEFAULT_MIN * 60);
+      setShowSummary(false);
+      setJoined(true);
+    } catch {
+      alert(`Could not start ${station.name}. Try another.`);
+    }
+  };
+
+  const handleFinish = () => {
+    pause();
+    setJoined(false);
+    setShowSummary(true);
+  };
+
+  const sendHeart = () => {
+    // placeholder for haptics/increment
+    setHeartsSent(h => h + 1);
+    // navigator.vibrate?.(30); // uncomment if you want a tiny haptic on Android
+  };
+
+  const cue = useMemo(() => cues[station.name] ?? 'Be here, softly.', [station.name]);
+
+  return (
+    <section style={{margin:'16px 0', padding:20, borderRadius:16, background:'#fcf8f2'}}>
+      <h3 style={{margin:0}}>{station.name}</h3>
+      <div style={{opacity:.7, marginBottom:8}}>{station.label}</div>
+
+      {!joined && !showSummary && (
+        <button onClick={handleJoin} style={btn}>Join</button>
+      )}
+
+      {joined && (
+        <>
+          <div style={{fontSize:36, margin:'12px 0'}}>{mm}:{ss}</div>
+          <div style={{marginBottom:12}}>{cue}</div>
+          <div style={{display:'flex', gap:8}}>
+            <button onClick={pause} style={btnGhost}>{isPlaying ? 'Pause' : 'Paused'}</button>
+            <button onClick={handleFinish} style={btn}>Finish</button>
+            <button onClick={sendHeart} style={btnOutline}>Send 💗</button>
+          </div>
+        </>
+      )}
+
+      {showSummary && (
+        <div style={{marginTop:12}}>
+          <h4 style={{margin:'8px 0'}}>“Your presence mattered today”</h4>
+          <ul style={{lineHeight:'1.8'}}>
+            <li>Mins of calm (this session): {Math.ceil((DEFAULT_MIN*60 - secondsLeft)/60)}</li>
+            <li>💗 taps sent: {heartsSent}</li>
+          </ul>
+          <div style={{display:'flex', gap:8}}>
+            <button onClick={handleJoin} style={btn}>Rejoin</button>
+          </div>
+        </div>
+      )}
+
+      <audio ref={audioRef} preload="auto" />
+      {playingUrl && <div style={{opacity:.5, marginTop:6}}>Now playing: {playingUrl}</div>}
+    </section>
+  );
+}
+
+const btn = { padding:'12px 20px', borderRadius:999, border:'none', background:'#1e2d2e', color:'#fff' };
+const btnGhost = { ...btn, background:'transparent', color:'#1e2d2e', border:'1px solid #1e2d2e' };
+const btnOutline = { ...btn, background:'transparent', color:'#ffaf42', border:'2px solid #ffaf42' };
+
+
+Ensure import aliases work (@/…). If missing, update your jsconfig.json or tsconfig.json:
+
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] }
+  }
+}
+
+
+Run app and test each card:
+
+Join → stream should start (HLS and MP3 supported).
+
+Timer counts down from 03:00.
+
+Finish → summary appears.
+
+Send 💗 increments counter (later: wire to backend or Pusher if you want realtime).
+
+Done. Please apply all changes, fix imports if paths differ, and keep styles minimal (I’ll refine with your design tokens next).

@@ -1,0 +1,33 @@
+🪴 *Goal: Gently welcome the user and spark curiosity about what *magicwork* can do for them.
+
+- 🪞**User state**  
+    **New User:** Curious, slightly overstimulated from typical scrolling habits — exploring what *magicwork* offers.
+    **Returning User:** Restless, seeking a quick sense of calm or sense of togetherness.    
+- 📱Screen 1:  Splash screen / Homescreen
+    
+    **Screen elements:**
+    - **Logo:** *magicwork* Logo: B&W_Logo Design - MagicWork (V001)-03.png
+    - **Headline:** *Join the magic of calm*
+    - **Subheadline:** *Replace anxious scrolling with simple practices that steady your mind*
+    - **CTA:** Mint circle (pulsing) with arrow → **“Tap to begin”**
+- 📱 **Screen 2: What to Expect**
+    **Title:** *What to expect inside*    
+   **9 CALM SPACES**
+Enter and stay where it resonates most.
+**SWEET DAILY LITTLE CHALLENGES**
+Share your thoughts, or simply your presence.
+**NERVOUS SYSTEM, STRONG**
+*Build awareness through breath, stillness, and creativity.*
+**CTA:** **“Let’s begin”**
+    **CTA:** **“Let’s begin”**
+
+
+    DELIVERABLES
+- `components/SplashScreen.tsx` (React + Tailwind + Framer Motion)
+- `app/page.tsx` renders `<SplashScreen />` and navigates to `/feed` on CTA or timeout.
+
+CODE NOTES
+- Equal thirds with Tailwind: `h-screen grid grid-rows-3`.
+- Center mint content: wrap middle cell with `relative` + `flex items-center justify-center`.
+- Keep layout at 60fps (no layout shift); no external CSS other than Tailwind.
+- Mobile-first: ensure all spacing and type scales are tuned for 390×844 first.
