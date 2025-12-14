@@ -50,7 +50,7 @@ function createBowlsEngine() {
     padBus.connect(bus);
 
     strikeBus = ctx.createGain();
-    strikeBus.gain.value = 0.2;
+    strikeBus.gain.value = 0.5; // Higher gain for strikes to be clearly audible
     strikeBus.connect(bus);
 
     lowpass = ctx.createBiquadFilter();
@@ -304,21 +304,63 @@ function createBowlsEngine() {
       await ctx.resume();
     }
 
+    const now = ctx.currentTime;
+
+    // IMMEDIATE: Play a clear strike sound right away (this is the "tap to begin" sound)
+    // Make it louder and more prominent for the first interaction
+    if (strikeBus && ctx) {
+      const welcomeStrike = now + 0.05; // Very slight delay to ensure context is ready
+      // Use a more prominent strike for the welcome sound
+      const base = rand(140, 180); // Lower, more resonant for welcome
+      const partials = [
+        { ratio: 1.0, amp: 1.0 },
+        { ratio: 2.0, amp: 0.8 },
+        { ratio: 3.0, amp: 0.6 },
+        { ratio: 4.0, amp: 0.4 },
+        { ratio: 5.0, amp: 0.25 },
+        { ratio: 6.0, amp: 0.15 }
+      ];
+      const baseAmp = 0.15; // Louder welcome strike
+      const decay = rand(6.0, 9.0); // Longer ring-out
+
+      for (let i = 0; i < partials.length; i += 1) {
+        const { ratio, amp } = partials[i];
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(base * ratio, welcomeStrike);
+        osc.detune.setValueAtTime(rand(-2, 2), welcomeStrike);
+
+        const peak = baseAmp * amp;
+        g.gain.setValueAtTime(0.0001, welcomeStrike);
+        g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), welcomeStrike + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, welcomeStrike + decay);
+
+        osc.connect(g);
+        g.connect(strikeBus);
+
+        osc.start(welcomeStrike);
+        osc.stop(welcomeStrike + decay + 0.3);
+      }
+    }
+
     // Continuous session bed with rich harmonics
     const targetGain = mode === 'practice' ? 0.095 : 0.08;
     // Faster fade-in so users hear it immediately after first tap.
     setMasterGain(targetGain, 0.15);
 
     // Ensure continuous pad exists and fade its voices in gently.
+    // Start the pad immediately (don't wait)
     ensurePad();
     if (padNodes && ctx) {
-      const now = ctx.currentTime;
       for (const bowl of padNodes.bowlVoices) {
         try {
-          // Fade in the master gain for each bowl
+          // Fade in the master gain for each bowl - start immediately after strike
           bowl.masterGain.gain.cancelScheduledValues(now);
           bowl.masterGain.gain.setValueAtTime(Math.max(0.0001, bowl.masterGain.gain.value || 0.0001), now);
-          bowl.masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, bowl.target), now + 1.2);
+          // Faster fade-in so continuous tone starts right after strike
+          bowl.masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, bowl.target), now + 0.8);
         } catch {
           // ignore
         }
