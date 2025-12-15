@@ -176,7 +176,7 @@ export default function PracticesTab({
   }, []);
 
   const startVoiceGuidance = useCallback(
-    (voiceAudioId) => {
+    async (voiceAudioId) => {
       const option = getVoiceAudioOption(voiceAudioId);
       if (option?.type !== 'guided') return;
       if (typeof window === 'undefined' || !window.speechSynthesis) return;
@@ -199,6 +199,54 @@ export default function PracticesTab({
         voiceAudioId === 'warm-male' ? 1 : voiceAudioId === 'neutral-calm' ? 2 : 0;
       const pickedVoice = pool.length > 0 ? pool[preferredIndex % pool.length] : null;
 
+      // Handle AI-generated meditation guidance
+      if (option?.isAI && selectedCardIndex !== null && practiceDuration !== null) {
+        try {
+          const card = items[selectedCardIndex];
+          const durationMinutes = Math.floor(practiceDuration / 60);
+          
+          const API_BASE = import.meta.env.DEV 
+            ? (import.meta.env.VITE_API_BASE_URL || 'https://magicwork-six.vercel.app')
+            : '';
+          
+          const response = await fetch(`${API_BASE}/api/ai-meditation-guidance`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              space_name: spaceName,
+              card_title: card?.title || 'Practice',
+              duration_minutes: durationMinutes,
+              voice_type: voiceAudioId === 'warm-male' ? 'warm-male' : 'soft-female'
+            })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.script?.segments) {
+              // Schedule each segment at its designated time
+              const startTime = Date.now();
+              data.script.segments.forEach((segment) => {
+                const delay = segment.time * 1000; // Convert to milliseconds
+                setTimeout(() => {
+                  const u = new SpeechSynthesisUtterance(segment.text);
+                  if (pickedVoice) u.voice = pickedVoice;
+                  u.rate = 0.85; // Slower, more meditative pace
+                  u.pitch = 1.0;
+                  u.volume = 0.7; // Softer volume for meditation
+                  synth.speak(u);
+                }, delay);
+              });
+              speechEnabledRef.current = true;
+              return;
+            }
+          }
+        } catch (error) {
+          devError('[PracticesTab] Error fetching AI guidance:', error);
+          // Fall through to default guidance
+        }
+      }
+
+      // Default guidance (non-AI or fallback)
       const lines = [];
       if (station?.guidance) lines.push(station.guidance);
       const instructions = Array.isArray(station?.instructions) ? station.instructions : [];
@@ -216,7 +264,7 @@ export default function PracticesTab({
 
       speechEnabledRef.current = true;
     },
-    [station]
+    [station, selectedCardIndex, practiceDuration, items, spaceName]
   );
 
   const items = useMemo(() => {
