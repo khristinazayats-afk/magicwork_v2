@@ -114,7 +114,8 @@ function createBowlsEngine() {
 
     // Root drifts subtly over time for a "session" feel.
     // Use authentic singing bowl frequencies (typical range: 110-220 Hz for fundamental)
-    padRoot = rand(110, 140);
+    // Slightly higher for that "singing" quality when running mallet around rim
+    padRoot = rand(120, 160);
     // Create multiple bowls with authentic harmonic relationships
     // Real singing bowls have rich overtones: fundamental, 2nd harmonic, 3rd, 4th, etc.
     const bowl1 = padRoot; // Primary bowl
@@ -135,27 +136,30 @@ function createBowlsEngine() {
       masterGain.gain.setValueAtTime(0.0001, now);
       masterGain.connect(padBus);
 
-      // Real singing bowls have these characteristic overtones
-      // Fundamental + harmonics create that rich, meditative sound
+      // Real singing bowls when running a mallet around the rim create:
+      // - Rich, continuous harmonics
+      // - Slight inharmonicity (detuning) for that warm, "singing" quality
+      // - Gentle amplitude modulation (the LFO creates this)
       const harmonics = [
-        { ratio: 1.0, amp: 1.0 },      // Fundamental
-        { ratio: 2.0, amp: 0.6 },       // Octave
-        { ratio: 3.0, amp: 0.35 },     // Fifth above octave
-        { ratio: 4.0, amp: 0.2 },      // Double octave
-        { ratio: 5.0, amp: 0.12 },     // Major third
-        { ratio: 6.0, amp: 0.08 }      // Fifth
+        { ratio: 1.0, amp: 1.0, detune: 0 },        // Fundamental - strongest
+        { ratio: 2.0, amp: 0.65, detune: 0.3 },     // Octave - clear
+        { ratio: 3.0, amp: 0.4, detune: 0.6 },      // Fifth - rich
+        { ratio: 4.0, amp: 0.25, detune: 0.9 },     // Double octave
+        { ratio: 5.0, amp: 0.15, detune: 1.2 },     // Major third
+        { ratio: 6.0, amp: 0.1, detune: 1.5 }       // Fifth
       ];
 
-      for (const { ratio, amp } of harmonics) {
+      for (const { ratio, amp, detune } of harmonics) {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         
-        // Use sine for pure tones, slight detune for natural variation
+        // Use sine for pure tones, slight detune for that warm, natural "singing" quality
+        // This mimics the slight variations when running a mallet around the rim
         osc.type = 'sine';
         osc.frequency.setValueAtTime(fundamental * ratio, now);
-        osc.detune.setValueAtTime(rand(-2, 2), now);
+        osc.detune.setValueAtTime(detune + rand(-0.5, 0.5), now); // Slight detune = warmer, more natural
         
-        // Each harmonic contributes to the rich bowl sound
+        // Each harmonic contributes to the rich, continuous bowl "singing" sound
         gain.gain.setValueAtTime(0.0001, now);
         
         osc.connect(gain);
@@ -171,10 +175,11 @@ function createBowlsEngine() {
     const bowlVoices = bowls.map((f, i) => createBowlVoice(f, targets[i]));
 
     // Gentle movement (breathing) via a slow LFO applied to voice gains + filter.
-    // This creates that meditative "breathing" quality like real bowls being sustained
+    // This mimics the natural variation when running a mallet around the rim
+    // Creates that meditative "singing" quality - the sound ebbs and flows naturally
     const lfo = ctx.createOscillator();
     lfo.type = 'sine';
-    lfo.frequency.setValueAtTime(mode === 'practice' ? 0.04 : 0.028, ctx.currentTime);
+    lfo.frequency.setValueAtTime(mode === 'practice' ? 0.035 : 0.025, ctx.currentTime); // Slightly slower for more meditative feel
 
     const lfoToGains = ctx.createGain();
     lfoToGains.gain.setValueAtTime(mode === 'practice' ? 0.012 : 0.009, ctx.currentTime);
@@ -383,37 +388,42 @@ function createBowlsEngine() {
 
     const now = ctx.currentTime;
 
-    // PROMINENT WELCOME STRIKE: Like a bell ringing to open the door to peace
-    // This strike should be clear, resonant, and feel like entering a sacred space
+    // TIBETAN SINGING BOWL STRIKE: Warm, bell-like, resonant
+    // This strike opens the door to the peaceful environment
     if (strikeBus && ctx) {
-      const welcomeStrike = now + 0.05; // Very slight delay to ensure context is ready
-      // Use a lower, more resonant frequency for that "entering a temple" feeling
-      const base = rand(110, 150); // Lower = more meditative and grounding
+      const welcomeStrike = now + 0.02; // Immediate response to button click
+      // Tibetan singing bowls typically range 110-220 Hz - use mid-range for warmth
+      const base = rand(130, 180); // Warm, resonant frequency
+      
+      // Tibetan bowls have rich, complex harmonics with slight inharmonicity
+      // This creates that warm, bell-like "singing" quality
       const partials = [
-        { ratio: 1.0, amp: 1.0 },      // Fundamental - strong
-        { ratio: 2.0, amp: 0.85 },     // Octave - clear
-        { ratio: 3.0, amp: 0.7 },      // Fifth - rich
-        { ratio: 4.0, amp: 0.5 },      // Double octave
-        { ratio: 5.0, amp: 0.35 },     // Major third
-        { ratio: 6.0, amp: 0.25 }      // Fifth
+        { ratio: 1.0, amp: 1.0, detune: 0 },        // Fundamental - strongest
+        { ratio: 2.0, amp: 0.75, detune: 0.5 },     // Octave - slightly detuned for warmth
+        { ratio: 3.0, amp: 0.55, detune: 1.0 },     // Fifth - rich
+        { ratio: 4.0, amp: 0.35, detune: 1.5 },     // Double octave
+        { ratio: 5.0, amp: 0.22, detune: 2.0 },     // Major third
+        { ratio: 6.0, amp: 0.15, detune: 2.5 }      // Fifth
       ];
-      // Louder, more prominent strike - this is the "door opening" moment
-      const baseAmp = 0.28; // Clear and present, but not jarring
-      const decay = rand(7.0, 10.0); // Long, meditative ring-out
+      
+      // Warm, present strike - not harsh, but clear and inviting
+      const baseAmp = 0.32; // Slightly louder for that "entering" feeling
+      const decay = rand(8.0, 12.0); // Long, warm ring-out like a real bowl
 
       for (let i = 0; i < partials.length; i += 1) {
-        const { ratio, amp } = partials[i];
+        const { ratio, amp, detune } = partials[i];
         const osc = ctx.createOscillator();
         const g = ctx.createGain();
 
+        // Use sine for pure tones, but add slight detune for that warm, natural bowl sound
         osc.type = 'sine';
         osc.frequency.setValueAtTime(base * ratio, welcomeStrike);
-        osc.detune.setValueAtTime(rand(-1.5, 1.5), welcomeStrike); // Less detune = purer tone
+        osc.detune.setValueAtTime(detune, welcomeStrike); // Slight detune = warmer, more natural
 
         const peak = baseAmp * amp;
-        // Quick attack for clear strike, then long decay
+        // Slightly slower attack for warmth (not too sharp), then long, warm decay
         g.gain.setValueAtTime(0.0001, welcomeStrike);
-        g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), welcomeStrike + 0.008);
+        g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), welcomeStrike + 0.015); // Slightly slower attack
         g.gain.exponentialRampToValueAtTime(0.0001, welcomeStrike + decay);
 
         osc.connect(g);
