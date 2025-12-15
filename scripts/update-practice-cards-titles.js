@@ -3,8 +3,19 @@
  * This script updates all 3 spaces' cards with correct titles matching their videos
  */
 
-const { Pool } = require('pg');
-require('dotenv').config({ path: '.env.local' });
+import pg from 'pg';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const { Client } = pg;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables from .env.local in project root
+dotenv.config({ path: join(__dirname, '..', '.env.local') });
+dotenv.config(); // Also load from default .env if it exists
 
 const POSTGRES_URL = process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL;
 
@@ -13,12 +24,16 @@ if (!POSTGRES_URL) {
   process.exit(1);
 }
 
-const pool = new Pool({
+// Use Client instead of Pool for migrations (like run-migrations-direct.js)
+const clientConfig = {
   connectionString: POSTGRES_URL,
-  ssl: {
-    rejectUnauthorized: false // For Supabase
+  ssl: process.env.NODE_ENV === 'production' ? {
+    rejectUnauthorized: false
+  } : {
+    rejectUnauthorized: false,
+    require: true
   }
-});
+};
 
 const spaces = ['Slow Morning', 'Gentle De-Stress', 'Drift into Sleep'];
 
@@ -46,7 +61,8 @@ const cardData = [
 ];
 
 async function updateCards() {
-  const client = await pool.connect();
+  const client = new Client(clientConfig);
+  await client.connect();
   
   try {
     console.log('🔄 Updating practice cards in Supabase...\n');
@@ -85,8 +101,7 @@ async function updateCards() {
     console.error('❌ Error updating practice cards:', error);
     throw error;
   } finally {
-    client.release();
-    await pool.end();
+    await client.end();
   }
 }
 
