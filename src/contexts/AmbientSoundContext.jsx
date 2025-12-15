@@ -388,45 +388,52 @@ function createBowlsEngine() {
 
     const now = ctx.currentTime;
 
-    // TIBETAN SINGING BOWL STRIKE: Warm, bell-like, resonant
+    // TIBETAN SINGING BOWL STRIKE: Muted bell sound (like a soft, warm bell)
     // This strike opens the door to the peaceful environment
     if (strikeBus && ctx) {
       const welcomeStrike = now + 0.02; // Immediate response to button click
-      // Tibetan singing bowls typically range 110-220 Hz - use mid-range for warmth
-      const base = rand(130, 180); // Warm, resonant frequency
+      // Muted bells are lower and softer - use lower frequency range
+      const base = rand(100, 140); // Lower = more muted, bell-like (not horn-like)
       
-      // Tibetan bowls have rich, complex harmonics with slight inharmonicity
-      // This creates that warm, bell-like "singing" quality
+      // Muted bells have fewer high harmonics - focus on fundamental and lower overtones
+      // This creates that soft, muted bell quality (not sharp like a horn)
       const partials = [
         { ratio: 1.0, amp: 1.0, detune: 0 },        // Fundamental - strongest
-        { ratio: 2.0, amp: 0.75, detune: 0.5 },     // Octave - slightly detuned for warmth
-        { ratio: 3.0, amp: 0.55, detune: 1.0 },     // Fifth - rich
-        { ratio: 4.0, amp: 0.35, detune: 1.5 },     // Double octave
-        { ratio: 5.0, amp: 0.22, detune: 2.0 },     // Major third
-        { ratio: 6.0, amp: 0.15, detune: 2.5 }      // Fifth
+        { ratio: 2.0, amp: 0.5, detune: 0.3 },      // Octave - reduced for muted quality
+        { ratio: 3.0, amp: 0.25, detune: 0.6 },     // Fifth - much quieter
+        { ratio: 4.0, amp: 0.12, detune: 0.9 }      // Double octave - very quiet (muted)
+        // Removed higher harmonics - muted bells don't have strong high frequencies
       ];
       
-      // Warm, present strike - not harsh, but clear and inviting
-      const baseAmp = 0.32; // Slightly louder for that "entering" feeling
-      const decay = rand(8.0, 12.0); // Long, warm ring-out like a real bowl
+      // Muted = softer, quieter strike
+      const baseAmp = 0.22; // Quieter for muted bell sound (not loud like a horn)
+      const decay = rand(10.0, 14.0); // Longer, softer decay for muted bell
 
       for (let i = 0; i < partials.length; i += 1) {
         const { ratio, amp, detune } = partials[i];
         const osc = ctx.createOscillator();
         const g = ctx.createGain();
+        
+        // Add a lowpass filter to each partial for that muted quality
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 2000; // Cut high frequencies - muted bells are darker
+        filter.Q.value = 0.5;
 
-        // Use sine for pure tones, but add slight detune for that warm, natural bowl sound
+        // Use sine for pure tones, slight detune for warmth
         osc.type = 'sine';
         osc.frequency.setValueAtTime(base * ratio, welcomeStrike);
-        osc.detune.setValueAtTime(detune, welcomeStrike); // Slight detune = warmer, more natural
+        osc.detune.setValueAtTime(detune, welcomeStrike);
 
         const peak = baseAmp * amp;
-        // Slightly slower attack for warmth (not too sharp), then long, warm decay
+        // Much slower, softer attack for muted bell (not sharp like a horn)
         g.gain.setValueAtTime(0.0001, welcomeStrike);
-        g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), welcomeStrike + 0.015); // Slightly slower attack
+        g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), welcomeStrike + 0.04); // Slower attack = softer, muted
         g.gain.exponentialRampToValueAtTime(0.0001, welcomeStrike + decay);
 
-        osc.connect(g);
+        // Route: osc -> filter -> gain -> strikeBus
+        osc.connect(filter);
+        filter.connect(g);
         g.connect(strikeBus);
 
         osc.start(welcomeStrike);

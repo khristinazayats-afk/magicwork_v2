@@ -79,7 +79,7 @@ export default function PracticesTab({
   }, []);
 
   // Video selection: assign different relaxing videos to each card
-  // Each card gets a unique video for variety
+  // Each card gets a unique video for variety - ensures all 4 cards have different videos
   const getVideoUrl = useCallback(
     (cardIndex = 0) => {
       if (assetsLoading) return null;
@@ -87,7 +87,7 @@ export default function PracticesTab({
       const visuals = contentSet?.visuals || [];
       const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
       
-      // Map of relaxing video types for each card index
+      // Map of relaxing video types for each card index (same for all spaces)
       const videoTypes = [
         'clouds',      // Card 0: Gentle clouds
         'rain',        // Card 1: Gentle rain
@@ -108,19 +108,26 @@ export default function PracticesTab({
         if (themedVideo?.cdn_url) return themedVideo.cdn_url;
         
         // If no themed video, use card index to pick from available videos
+        // This ensures each card gets a different video even if themes don't match
         const idx = Math.min(Math.max(0, cardIndex), visuals.length - 1);
         const picked = visuals[idx];
         if (picked?.cdn_url) return picked.cdn_url;
 
-        // Fallback to any available video
-        const any = visuals.find((v) => v?.cdn_url);
-        if (any?.cdn_url) return any.cdn_url;
+        // Fallback: cycle through available videos to ensure variety
+        const availableVideos = visuals.filter((v) => v?.cdn_url);
+        if (availableVideos.length > 0) {
+          const videoIdx = cardIndex % availableVideos.length;
+          return availableVideos[videoIdx].cdn_url;
+        }
       }
 
-      // Fallback to contentSet visual
-      if (contentSet?.visual?.cdn_url) return contentSet.visual.cdn_url;
+      // Fallback to contentSet visual (only if we have visuals but none matched)
+      if (contentSet?.visual?.cdn_url && visuals.length === 0) {
+        return contentSet.visual.cdn_url;
+      }
 
       // Last resort: use S3 fallback videos based on card index
+      // This ensures ALL cards get different videos even if API fails
       const fallbackVideos = {
         0: `${s3BaseUrl}/videos/canva/clouds.mp4`,
         1: `${s3BaseUrl}/videos/canva/rain.mp4`,
