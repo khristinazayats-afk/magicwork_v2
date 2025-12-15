@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import ErrorBoundary from './components/ErrorBoundary'
 import { AmbientSoundProvider } from './contexts/AmbientSoundContext'
+import { Analytics } from '@vercel/analytics/react'
 import './index.css'
 
 // Development-only logging helper
@@ -121,6 +122,7 @@ if (!rootElement) {
       <ErrorBoundary>
         <AmbientSoundProvider>
           <App />
+          <Analytics />
         </AmbientSoundProvider>
       </ErrorBoundary>
     </React.StrictMode>,
