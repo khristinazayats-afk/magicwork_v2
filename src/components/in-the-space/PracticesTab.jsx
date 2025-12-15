@@ -78,36 +78,57 @@ export default function PracticesTab({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }, []);
 
-  // Video selection (stable, simple): prefer contentSet.visuals; fallback to contentSet.visual; fallback to clouds.
+  // Video selection: assign different relaxing videos to each card
+  // Each card gets a unique video for variety
   const getVideoUrl = useCallback(
     (cardIndex = 0) => {
       if (assetsLoading) return null;
 
       const visuals = contentSet?.visuals || [];
+      const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+      
+      // Map of relaxing video types for each card index
+      const videoTypes = [
+        'clouds',      // Card 0: Gentle clouds
+        'rain',        // Card 1: Gentle rain
+        'waves',       // Card 2: Ocean waves
+        'forest'       // Card 3: Forest/nature
+      ];
+      
+      const videoType = videoTypes[cardIndex] || 'clouds';
+      
       if (visuals.length > 0) {
-        // Card 0 prefers clouds if present
-        if (cardIndex === 0) {
-          const clouds = visuals.find(
-            (v) =>
-              v?.s3_key?.includes('clouds.mp4') ||
-              v?.cdn_url?.includes('clouds.mp4') ||
-              (v?.name || '').toLowerCase().includes('cloud')
-          );
-          if (clouds?.cdn_url) return clouds.cdn_url;
-        }
-
+        // Try to find a video matching the card's theme
+        const themedVideo = visuals.find(
+          (v) =>
+            v?.s3_key?.toLowerCase().includes(videoType) ||
+            v?.cdn_url?.toLowerCase().includes(videoType) ||
+            (v?.name || '').toLowerCase().includes(videoType)
+        );
+        if (themedVideo?.cdn_url) return themedVideo.cdn_url;
+        
+        // If no themed video, use card index to pick from available videos
         const idx = Math.min(Math.max(0, cardIndex), visuals.length - 1);
         const picked = visuals[idx];
         if (picked?.cdn_url) return picked.cdn_url;
 
+        // Fallback to any available video
         const any = visuals.find((v) => v?.cdn_url);
         if (any?.cdn_url) return any.cdn_url;
       }
 
+      // Fallback to contentSet visual
       if (contentSet?.visual?.cdn_url) return contentSet.visual.cdn_url;
 
-      // Last resort
-      return 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4';
+      // Last resort: use S3 fallback videos based on card index
+      const fallbackVideos = {
+        0: `${s3BaseUrl}/videos/canva/clouds.mp4`,
+        1: `${s3BaseUrl}/videos/canva/rain.mp4`,
+        2: `${s3BaseUrl}/videos/canva/waves.mp4`,
+        3: `${s3BaseUrl}/videos/canva/forest.mp4`
+      };
+      
+      return fallbackVideos[cardIndex] || fallbackVideos[0];
     },
     [assetsLoading, contentSet?.visual?.cdn_url, contentSet?.visuals]
   );

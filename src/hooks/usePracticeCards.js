@@ -40,7 +40,7 @@ export function usePracticeCards(spaceName) {
         
         if (!response.ok) {
           // If API fails, return empty array (cards will use defaults)
-          console.warn(`Failed to fetch practice cards for ${spaceName}: ${response.statusText}`);
+          // Silently fail - don't log in production
           setCards([]);
           setLoading(false);
           return;
@@ -57,19 +57,33 @@ export function usePracticeCards(spaceName) {
           cardsMap.set(card.card_index, card);
         });
         
-        // Fill missing cards with defaults
+        // Fill missing cards with defaults - each with a unique relaxing theme
+        const defaultCardNames = [
+          'Gentle Clouds',
+          'Soothing Rain',
+          'Calm Waves',
+          'Peaceful Forest'
+        ];
+        
+        const defaultDescriptions = [
+          'Drift away with gentle clouds moving across the sky.',
+          'Find calm in the gentle rhythm of falling rain.',
+          'Let ocean waves wash away tension and stress.',
+          'Immerse yourself in the tranquility of nature.'
+        ];
+        
         const finalCards = [];
         for (let i = 0; i < 4; i++) {
           if (cardsMap.has(i)) {
             finalCards.push(cardsMap.get(i));
           } else {
-            // Default card data
+            // Default card data with relaxing themes
             finalCards.push({
               id: null,
               space_name: spaceName,
               card_index: i,
-              title: `${spaceName} - Card ${i + 1}`,
-              description: 'A space for mindful presence.',
+              title: defaultCardNames[i] || `${spaceName} - Card ${i + 1}`,
+              description: defaultDescriptions[i] || 'A space for mindful presence.',
               guidance: null,
               is_practice_of_day: false,
               practice_type: 'ambient',
@@ -83,14 +97,14 @@ export function usePracticeCards(spaceName) {
         
         setCards(finalCards);
       } catch (err) {
-        console.error('Error fetching practice cards:', err);
+        // Silently fail - don't log errors in production
         setError(err.message);
-        // Return default cards on error
+        // Return default cards on error with relaxing themes
         setCards([
-          { space_name: spaceName, card_index: 0, title: `${spaceName} - Card 1`, description: 'A space for mindful presence.', status: 'active' },
-          { space_name: spaceName, card_index: 1, title: `${spaceName} - Card 2`, description: 'A space for mindful presence.', status: 'active' },
-          { space_name: spaceName, card_index: 2, title: `${spaceName} - Card 3`, description: 'A space for mindful presence.', status: 'active' },
-          { space_name: spaceName, card_index: 3, title: `${spaceName} - Card 4`, description: 'A space for mindful presence.', status: 'active' }
+          { space_name: spaceName, card_index: 0, title: 'Gentle Clouds', description: 'Drift away with gentle clouds moving across the sky.', status: 'active' },
+          { space_name: spaceName, card_index: 1, title: 'Soothing Rain', description: 'Find calm in the gentle rhythm of falling rain.', status: 'active' },
+          { space_name: spaceName, card_index: 2, title: 'Calm Waves', description: 'Let ocean waves wash away tension and stress.', status: 'active' },
+          { space_name: spaceName, card_index: 3, title: 'Peaceful Forest', description: 'Immerse yourself in the tranquility of nature.', status: 'active' }
         ]);
       } finally {
         setLoading(false);
