@@ -46,6 +46,14 @@ export const VOICE_AUDIO_OPTIONS = [
     description: 'Gentle bell tones',
     type: 'ambient',
     icon: '🔔'
+  },
+  {
+    id: 'ai-guided-meditation',
+    name: 'AI Guided Meditation',
+    description: 'Soft, gentle voice guides you through meditation',
+    type: 'guided',
+    icon: '🧘',
+    isAI: true // Flag to indicate this uses AI generation
   }
 ];
 
