@@ -239,9 +239,9 @@ function createBowlsEngine() {
     rainFilter.Q.value = 0.5;
 
     // Gain for subtle rain texture
+    // Start silent - will be controlled by start() function for proper timing with strike
     const rainGain = ctx.createGain();
     rainGain.gain.setValueAtTime(0.0001, ctx.currentTime);
-    rainGain.gain.linearRampToValueAtTime(mode === 'practice' ? 0.08 : 0.06, ctx.currentTime + 1.5);
 
     // Connect: source -> filter -> gain -> rainBus
     source.connect(rainFilter);
@@ -383,22 +383,23 @@ function createBowlsEngine() {
 
     const now = ctx.currentTime;
 
-    // IMMEDIATE: Play a clear strike sound right away (this is the "tap to begin" sound)
-    // Make it louder and more prominent for the first interaction
+    // PROMINENT WELCOME STRIKE: Like a bell ringing to open the door to peace
+    // This strike should be clear, resonant, and feel like entering a sacred space
     if (strikeBus && ctx) {
       const welcomeStrike = now + 0.05; // Very slight delay to ensure context is ready
-      // Use a more prominent strike for the welcome sound
-      const base = rand(140, 180); // Lower, more resonant for welcome
+      // Use a lower, more resonant frequency for that "entering a temple" feeling
+      const base = rand(110, 150); // Lower = more meditative and grounding
       const partials = [
-        { ratio: 1.0, amp: 1.0 },
-        { ratio: 2.0, amp: 0.8 },
-        { ratio: 3.0, amp: 0.6 },
-        { ratio: 4.0, amp: 0.4 },
-        { ratio: 5.0, amp: 0.25 },
-        { ratio: 6.0, amp: 0.15 }
+        { ratio: 1.0, amp: 1.0 },      // Fundamental - strong
+        { ratio: 2.0, amp: 0.85 },     // Octave - clear
+        { ratio: 3.0, amp: 0.7 },      // Fifth - rich
+        { ratio: 4.0, amp: 0.5 },      // Double octave
+        { ratio: 5.0, amp: 0.35 },     // Major third
+        { ratio: 6.0, amp: 0.25 }      // Fifth
       ];
-      const baseAmp = 0.18; // Gentle welcome strike - not too loud
-      const decay = rand(6.0, 9.0); // Longer ring-out
+      // Louder, more prominent strike - this is the "door opening" moment
+      const baseAmp = 0.28; // Clear and present, but not jarring
+      const decay = rand(7.0, 10.0); // Long, meditative ring-out
 
       for (let i = 0; i < partials.length; i += 1) {
         const { ratio, amp } = partials[i];
@@ -407,11 +408,12 @@ function createBowlsEngine() {
 
         osc.type = 'sine';
         osc.frequency.setValueAtTime(base * ratio, welcomeStrike);
-        osc.detune.setValueAtTime(rand(-2, 2), welcomeStrike);
+        osc.detune.setValueAtTime(rand(-1.5, 1.5), welcomeStrike); // Less detune = purer tone
 
         const peak = baseAmp * amp;
+        // Quick attack for clear strike, then long decay
         g.gain.setValueAtTime(0.0001, welcomeStrike);
-        g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), welcomeStrike + 0.01);
+        g.gain.exponentialRampToValueAtTime(Math.max(0.0001, peak), welcomeStrike + 0.008);
         g.gain.exponentialRampToValueAtTime(0.0001, welcomeStrike + decay);
 
         osc.connect(g);
@@ -425,28 +427,46 @@ function createBowlsEngine() {
     // Continuous session bed with rich harmonics
     // Gentle, subtle gain - like a background hum with rain
     const targetGain = mode === 'practice' ? 0.08 : 0.065;
-    // Faster fade-in so users hear it immediately after first tap.
-    setMasterGain(targetGain, 0.1);
+    // Start very quiet, then fade in after the strike
+    setMasterGain(0.0001, 0.01); // Start silent
 
-    // Ensure continuous pad exists and fade its voices in gently.
-    // Start the pad immediately (don't wait)
+    // Ensure continuous pad exists - but wait for strike to ring first
     ensurePad();
     if (padNodes && ctx) {
+      const enterTime = now + 0.3; // Start entering the peaceful space 0.3s after strike
       for (const bowl of padNodes.bowlVoices) {
         try {
-          // Fade in the master gain for each bowl - start immediately after strike
+          // Start silent, then fade in gently after the strike
           bowl.masterGain.gain.cancelScheduledValues(now);
-          bowl.masterGain.gain.setValueAtTime(Math.max(0.0001, bowl.masterGain.gain.value || 0.0001), now);
-          // Faster fade-in so continuous tone starts right after strike
-          bowl.masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, bowl.target), now + 0.8);
+          bowl.masterGain.gain.setValueAtTime(0.0001, now);
+          // Gentle fade-in starting after strike - like walking into the space
+          bowl.masterGain.gain.linearRampToValueAtTime(0.0001, enterTime);
+          bowl.masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, bowl.target), enterTime + 1.2);
         } catch {
           // ignore
         }
       }
     }
 
-    // Start gentle rain texture
+    // Start gentle rain texture - also after the strike, like entering the environment
     ensureRain();
+    if (rainNoise && rainNoise.gain && ctx) {
+      const enterTime = now + 0.3; // Rain starts with the hum
+      const currentGain = rainNoise.gain.gain.value || 0.0001;
+      rainNoise.gain.gain.cancelScheduledValues(now);
+      rainNoise.gain.gain.setValueAtTime(0.0001, now);
+      rainNoise.gain.gain.linearRampToValueAtTime(0.0001, enterTime);
+      rainNoise.gain.gain.linearRampToValueAtTime(mode === 'practice' ? 0.08 : 0.06, enterTime + 1.2);
+    }
+
+    // Fade in master gain after strike - like the door opening
+    const enterTime = now + 0.3;
+    setMasterGain(0.0001, 0.01);
+    setTimeout(() => {
+      if (!isMuted && ctx) {
+        setMasterGain(targetGain, 0.1);
+      }
+    }, 300); // Start fade-in 300ms after strike
 
     scheduleNext();
   };
