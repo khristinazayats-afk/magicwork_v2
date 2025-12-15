@@ -388,8 +388,10 @@ function createBowlsEngine() {
 
     const now = ctx.currentTime;
 
-    // TIBETAN SINGING BOWL STRIKE: Muted bell sound (like a soft, warm bell)
+    // TIBETAN SINGING BOWL STRIKE: Disabled until user finds perfect sound
     // This strike opens the door to the peaceful environment
+    // TEMPORARILY DISABLED - user wants to find perfect sound first
+    /*
     if (strikeBus && ctx) {
       const welcomeStrike = now + 0.02; // Immediate response to button click
       // Muted bells are lower and softer - use lower frequency range
@@ -440,6 +442,7 @@ function createBowlsEngine() {
         osc.stop(welcomeStrike + decay + 0.3);
       }
     }
+    */
 
     // Continuous session bed with rich harmonics
     // Gentle, subtle gain - like a background hum with rain
@@ -447,10 +450,10 @@ function createBowlsEngine() {
     // Start very quiet, then fade in after the strike
     setMasterGain(0.0001, 0.01); // Start silent
 
-    // Ensure continuous pad exists - but wait for strike to ring first
+    // Ensure continuous pad exists - start immediately (no strike to wait for)
     ensurePad();
     if (padNodes && ctx) {
-      const enterTime = now + 0.3; // Start entering the peaceful space 0.3s after strike
+      const enterTime = now + 0.1; // Start entering the peaceful space immediately (no strike delay)
       for (const bowl of padNodes.bowlVoices) {
         try {
           // Start silent, then fade in gently after the strike
