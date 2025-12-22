@@ -11,6 +11,7 @@ import 'providers/theme_provider.dart';
 import 'providers/analytics_provider.dart';
 import 'providers/user_profile_provider.dart';
 import 'widgets/analytics_navigation_observer.dart';
+import 'widgets/ambient_sound_manager.dart';
 import 'screens/splash_screen.dart';
 import 'screens/greeting_screen.dart';
 import 'screens/login_screen.dart';
@@ -88,13 +89,15 @@ class MyApp extends StatelessWidget {
                 });
               }
 
-              return MaterialApp.router(
-                title: AppConfig.appName,
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: themeProvider.themeMode,
-                routerConfig: _router,
+              return AmbientSoundManager(
+                child: MaterialApp.router(
+                  title: AppConfig.appName,
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.lightTheme,
+                  darkTheme: AppTheme.darkTheme,
+                  themeMode: themeProvider.themeMode,
+                  routerConfig: _router,
+                ),
               );
             },
           ),
