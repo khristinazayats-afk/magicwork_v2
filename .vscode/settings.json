@@ -1,5 +1,6 @@
 {
   "css.lint.unknownAtRules": "ignore",
-  "css.lint.validProperties": "ignore"
+  "css.lint.validProperties": "ignore",
+  "java.configuration.updateBuildConfiguration": "automatic"
 }
 

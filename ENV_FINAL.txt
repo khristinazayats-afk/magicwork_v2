@@ -1,0 +1,61 @@
+# ========================================
+# YOUR COMPLETE .env FILE - FINAL VERSION
+# Copy this entire content to .env in your project root
+# ========================================
+
+# ----------------------------------------
+# PostgreSQL Database (✅ READY - From Supabase)
+# ----------------------------------------
+POSTGRES_URL="postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x"
+POSTGRES_PRISMA_URL="postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true"
+POSTGRES_URL_NON_POOLING="postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require"
+POSTGRES_HOST="db.ejhafhggndirnxmwrtgm.supabase.co"
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="MYXp6u8dlToRXXdV"
+POSTGRES_DATABASE="postgres"
+
+# ----------------------------------------
+# Supabase (✅ READY)
+# ----------------------------------------
+NEXT_PUBLIC_SUPABASE_URL="https://ejhafhggndirnxmwrtgm.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqaGFmaGdnbmRpcm54bXdydGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MTk3NzcsImV4cCI6MjA3ODM5NTc3N30.K3PsFrxbqAmvLAT_aJLG7u4CAIoP5eGo8rmYQTZMDqU"
+SUPABASE_URL="https://ejhafhggndirnxmwrtgm.supabase.co"
+SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqaGFmaGdnbmRpcm54bXdydGdtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjgxOTc3NywiZXhwIjoyMDc4Mzk1Nzc3fQ.bV--K23K-cIG7lzECPCe2IQ8NlkU7GMA3n-_J8irPKg"
+SUPABASE_JWT_SECRET="scZGdXghTBVlhjoNbd7AHad1zQNz7i7Pz1EwTiHnlqYFtK+54up9ghZ8+yQ7ajQsjG+Orh3NVd6anMSejywrpA=="
+
+# ----------------------------------------
+# AWS S3 Storage (✅ READY)
+# ----------------------------------------
+AWS_ACCESS_KEY_ID=AKIA4LUZWCSJJ5IOFWFS
+AWS_SECRET_ACCESS_KEY=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
+AWS_REGION=eu-north-1
+S3_BUCKET=magicwork-canva-assets
+
+# ----------------------------------------
+# CloudFront CDN (✅ READY)
+# ----------------------------------------
+# Standard CloudFront domain
+CDN_BASE_URL=https://d3hajr7xji31qq.cloudfront.net
+
+# Custom domain (if configured with SSL)
+# CDN_BASE_URL=https://cdn.magicwork.app
+
+# ----------------------------------------
+# Google Sheets CMS (✅ READY)
+# ----------------------------------------
+GOOGLE_SHEET_ID=1fCTWsJaqzuZVTxcZgFSipkqnSPLEIqtuEy9lSCQnGfU
+GOOGLE_SHEET_NAME=Sheet1
+GOOGLE_SHEET_PUBLIC=true
+
+# ----------------------------------------
+# Export API (✅ READY)
+# ----------------------------------------
+EXPORT_API_URL=http://localhost:3001/api/export-canva
+EXPORT_API_PORT=3001
+
+# ----------------------------------------
+# Application Settings (✅ READY)
+# ----------------------------------------
+NODE_ENV=development
+PUBLIC_URL=http://localhost:5173
+

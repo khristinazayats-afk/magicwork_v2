@@ -1,0 +1,22 @@
+[
+  {
+    "fileName": "main-overview.mdc",
+    "description": "Complete system overview covering the meditation/wellness platform architecture, key components, and core business domains"
+  },
+  {
+    "fileName": "animation-system.mdc",
+    "description": "Detailed documentation of the specialized particle animation system, including boomerang trajectories, physiological sigh patterns, and breathing visualizations"
+  },
+  {
+    "fileName": "progression-system.mdc",
+    "description": "Comprehensive documentation of the vibe/achievement system, including the 10-level progression algorithm, streak calculations, and reward mechanisms"
+  },
+  {
+    "fileName": "practice-generation.mdc",
+    "description": "Technical specification of the AI-driven practice generation system, including emotional state processing, content orchestration, and personalization algorithms"
+  },
+  {
+    "fileName": "data-flow.mdc",
+    "description": "Documentation of data flow between components, focusing on practice session management, emotional state tracking, and real-time presence systems"
+  }
+]

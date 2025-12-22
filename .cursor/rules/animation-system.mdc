@@ -1,0 +1,36 @@
+---
+description: Animation system specification for breathwork visualization and meditation guidance patterns
+---
+
+
+# animation-system
+
+The animation system implements specialized meditation and breathwork visualization patterns:
+
+1. Boomerang Animation System
+File: src/components/animations/BoomerangAnimation.jsx
+Importance Score: 85
+- Custom particle system for physiological sigh pattern visualization 
+- Curved trajectory calculations mapping to breathwork cycles
+- Organic particle dispersion algorithms for breath flow representation
+- Real-time breathing guide animations with variable pacing
+
+2. Breathwork Design Lab
+File: src/components/animations/BoomerangLab.jsx
+Importance Score: 80
+- Design tool for creating custom breathwork animations
+- Schematic pattern generator for physiological sigh sequences
+- Frame capture system for breathing pattern export
+- Real-time preview and tuning for breathing guidance
+
+Core Animation Patterns:
+- Physiological sigh visualization (4-7-8 breathing)
+- Particle-based breath flow representation
+- Curved breathing guide trajectories
+- Variable-pace meditation timing
+
+The system focuses on translating breathing patterns and meditation states into visual guidance through particle systems and curved trajectories. Each animation pattern corresponds to specific breathing techniques and meditation practices.
+
+$END$
+
+ If you're using this file in context, clearly say in italics in one small line that "Context added by Giga animation-system" along with specifying exactly what information was used from this file in a human-friendly way, instead of using kebab-case use normal sentence case.

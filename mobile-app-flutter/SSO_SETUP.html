@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SSO_SETUP</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#sso-single-sign-on-setup-guide"
+id="toc-sso-single-sign-on-setup-guide">SSO (Single Sign-On) Setup
+Guide</a>
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#implementation-details"
+id="toc-implementation-details">Implementation Details</a>
+<ul>
+<li><a href="#oauth-providers" id="toc-oauth-providers">1. OAuth
+Providers</a></li>
+<li><a href="#ui-components" id="toc-ui-components">2. UI
+Components</a></li>
+<li><a href="#authentication-flow" id="toc-authentication-flow">3.
+Authentication Flow</a></li>
+<li><a href="#deep-link-configuration"
+id="toc-deep-link-configuration">4. Deep Link Configuration</a></li>
+</ul></li>
+<li><a href="#supabase-dashboard-configuration"
+id="toc-supabase-dashboard-configuration">Supabase Dashboard
+Configuration</a>
+<ul>
+<li><a href="#step-1-enable-oauth-providers"
+id="toc-step-1-enable-oauth-providers">Step 1: Enable OAuth
+Providers</a></li>
+<li><a href="#step-2-configure-google-oauth"
+id="toc-step-2-configure-google-oauth">Step 2: Configure Google
+OAuth</a></li>
+<li><a href="#step-3-configure-apple-oauth"
+id="toc-step-3-configure-apple-oauth">Step 3: Configure Apple
+OAuth</a></li>
+<li><a href="#step-4-configure-redirect-urls"
+id="toc-step-4-configure-redirect-urls">Step 4: Configure Redirect
+URLs</a></li>
+</ul></li>
+<li><a href="#testing-oauth" id="toc-testing-oauth">Testing OAuth</a>
+<ul>
+<li><a href="#test-google-sign-in" id="toc-test-google-sign-in">Test
+Google Sign-In:</a></li>
+<li><a href="#test-apple-sign-in" id="toc-test-apple-sign-in">Test Apple
+Sign-In:</a></li>
+<li><a href="#troubleshooting"
+id="toc-troubleshooting">Troubleshooting:</a></li>
+</ul></li>
+<li><a href="#files-modified" id="toc-files-modified">Files Modified</a>
+<ul>
+<li><a href="#created" id="toc-created">Created:</a></li>
+<li><a href="#modified" id="toc-modified">Modified:</a></li>
+</ul></li>
+<li><a href="#security-notes" id="toc-security-notes">Security
+Notes</a></li>
+<li><a href="#next-steps" id="toc-next-steps">Next Steps</a></li>
+<li><a href="#openai-api-key-setup" id="toc-openai-api-key-setup">OpenAI
+API Key Setup</a>
+<ul>
+<li><a href="#step-1-get-openai-api-key"
+id="toc-step-1-get-openai-api-key">Step 1: Get OpenAI API Key</a></li>
+<li><a href="#step-2-configure-api-key-in-the-app"
+id="toc-step-2-configure-api-key-in-the-app">Step 2: Configure API Key
+in the App</a></li>
+<li><a href="#step-3-verify-api-key-works"
+id="toc-step-3-verify-api-key-works">Step 3: Verify API Key
+Works</a></li>
+<li><a href="#step-4-secure-storage-production"
+id="toc-step-4-secure-storage-production">Step 4: Secure Storage
+(Production)</a></li>
+<li><a href="#openai-api-costs" id="toc-openai-api-costs">OpenAI API
+Costs</a></li>
+<li><a href="#troubleshooting-1"
+id="toc-troubleshooting-1">Troubleshooting</a></li>
+</ul></li>
+<li><a href="#status-implementation-complete"
+id="toc-status-implementation-complete">Status: ✅ Implementation
+Complete</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="sso-single-sign-on-setup-guide">SSO (Single Sign-On) Setup
+Guide</h1>
+<h2 id="overview">Overview</h2>
+<p>The MagicWork app now supports Single Sign-On (SSO) with Google and
+Apple. Users can sign in using their Google or Apple accounts instead of
+creating a new account with email/password.</p>
+<hr />
+<h2 id="implementation-details">Implementation Details</h2>
+<h3 id="oauth-providers">1. OAuth Providers</h3>
+<ul>
+<li><strong>Google OAuth</strong> - Sign in with Google account</li>
+<li><strong>Apple OAuth</strong> - Sign in with Apple ID</li>
+</ul>
+<h3 id="ui-components">2. UI Components</h3>
+<ul>
+<li>OAuth buttons added to Login screen (<code>/login</code>)</li>
+<li>OAuth buttons added to Sign Up screen (<code>/signup</code>)</li>
+<li>Buttons styled to match app design</li>
+<li>Loading states during OAuth flow</li>
+</ul>
+<h3 id="authentication-flow">3. Authentication Flow</h3>
+<ol type="1">
+<li>User taps “Continue with Google” or “Continue with Apple”</li>
+<li>App opens browser/WebView for OAuth authentication</li>
+<li>User authenticates with provider (Google/Apple)</li>
+<li>Provider redirects back to app via deep link:
+<code>magicwork://auth-callback</code></li>
+<li><code>AuthStateListener</code> detects successful
+authentication</li>
+<li>User is automatically navigated to feed screen</li>
+</ol>
+<h3 id="deep-link-configuration">4. Deep Link Configuration</h3>
+<p><strong>iOS (Info.plist):</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">key</span>&gt;CFBundleURLTypes&lt;/<span class="kw">key</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">array</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">dict</span>&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">key</span>&gt;CFBundleURLSchemes&lt;/<span class="kw">key</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">array</span>&gt;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">string</span>&gt;magicwork&lt;/<span class="kw">string</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">array</span>&gt;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">dict</span>&gt;</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">array</span>&gt;</span></code></pre></div>
+<p><strong>Android (AndroidManifest.xml):</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">intent-filter</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">action</span> <span class="ot">android:name=</span><span class="st">&quot;android.intent.action.VIEW&quot;</span>/&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">category</span> <span class="ot">android:name=</span><span class="st">&quot;android.intent.category.DEFAULT&quot;</span>/&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">category</span> <span class="ot">android:name=</span><span class="st">&quot;android.intent.category.BROWSABLE&quot;</span>/&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">data</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="ot">android:scheme=</span><span class="st">&quot;magicwork&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">android:host=</span><span class="st">&quot;auth-callback&quot;</span>/&gt;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">intent-filter</span>&gt;</span></code></pre></div>
+<hr />
+<h2 id="supabase-dashboard-configuration">Supabase Dashboard
+Configuration</h2>
+<h3 id="step-1-enable-oauth-providers">Step 1: Enable OAuth
+Providers</h3>
+<ol type="1">
+<li>Go to <a href="https://app.supabase.com">Supabase Dashboard</a></li>
+<li>Select your project</li>
+<li>Navigate to <strong>Authentication</strong> →
+<strong>Providers</strong></li>
+<li>Enable <strong>Google</strong> and <strong>Apple</strong>
+providers</li>
+</ol>
+<h3 id="step-2-configure-google-oauth">Step 2: Configure Google
+OAuth</h3>
+<ol type="1">
+<li><strong>Get Google OAuth Credentials:</strong>
+<ul>
+<li><p>Go to <a href="https://console.cloud.google.com">Google Cloud
+Console</a></p></li>
+<li><p>Create a new project or select existing</p></li>
+<li><p>Enable Google+ API</p></li>
+<li><p>Go to <strong>Credentials</strong> → <strong>Create
+Credentials</strong> → <strong>OAuth 2.0 Client ID</strong></p></li>
+<li><p>Application type: <strong>Web application</strong></p></li>
+<li><p>Authorized redirect URIs:</p>
+<pre><code>https://ejhafhggndirnxmwrtgm.supabase.co/auth/v1/callback</code></pre></li>
+<li><p>Copy <strong>Client ID</strong> and <strong>Client
+Secret</strong></p></li>
+</ul></li>
+<li><strong>Configure in Supabase:</strong>
+<ul>
+<li>In Supabase Dashboard → Authentication → Providers → Google</li>
+<li>Paste <strong>Client ID</strong> and <strong>Client
+Secret</strong></li>
+<li>Click <strong>Save</strong></li>
+</ul></li>
+</ol>
+<h3 id="step-3-configure-apple-oauth">Step 3: Configure Apple OAuth</h3>
+<ol type="1">
+<li><strong>Get Apple OAuth Credentials:</strong>
+<ul>
+<li><p>Go to <a href="https://developer.apple.com">Apple Developer
+Portal</a></p></li>
+<li><p>Navigate to <strong>Certificates, Identifiers &amp;
+Profiles</strong></p></li>
+<li><p>Create a <strong>Services ID</strong> (if not exists)</p></li>
+<li><p>Enable <strong>Sign in with Apple</strong></p></li>
+<li><p>Configure <strong>Return URLs</strong>:</p>
+<pre><code>https://ejhafhggndirnxmwrtgm.supabase.co/auth/v1/callback</code></pre></li>
+<li><p>Create a <strong>Key</strong> for Sign in with Apple</p></li>
+<li><p>Download the key file (.p8)</p></li>
+<li><p>Note the <strong>Key ID</strong> and <strong>Team
+ID</strong></p></li>
+</ul></li>
+<li><strong>Configure in Supabase:</strong>
+<ul>
+<li>In Supabase Dashboard → Authentication → Providers → Apple</li>
+<li>Enter <strong>Services ID</strong> (Client ID)</li>
+<li>Enter <strong>Team ID</strong></li>
+<li>Enter <strong>Key ID</strong></li>
+<li>Upload <strong>Key File</strong> (.p8)</li>
+<li>Click <strong>Save</strong></li>
+</ul></li>
+</ol>
+<h3 id="step-4-configure-redirect-urls">Step 4: Configure Redirect
+URLs</h3>
+<p>In Supabase Dashboard → Authentication → URL Configuration:</p>
+<p><strong>Site URL:</strong></p>
+<pre><code>magicwork://auth-callback</code></pre>
+<p><strong>Redirect URLs (add these):</strong></p>
+<pre><code>magicwork://auth-callback
+https://ejhafhggndirnxmwrtgm.supabase.co/auth/v1/callback</code></pre>
+<hr />
+<h2 id="testing-oauth">Testing OAuth</h2>
+<h3 id="test-google-sign-in">Test Google Sign-In:</h3>
+<ol type="1">
+<li>Open app → Navigate to Login or Sign Up</li>
+<li>Tap “Continue with Google”</li>
+<li>Browser should open with Google sign-in</li>
+<li>Sign in with Google account</li>
+<li>Should redirect back to app</li>
+<li>Should navigate to feed screen automatically</li>
+</ol>
+<h3 id="test-apple-sign-in">Test Apple Sign-In:</h3>
+<ol type="1">
+<li>Open app → Navigate to Login or Sign Up</li>
+<li>Tap “Continue with Apple”</li>
+<li>Browser should open with Apple sign-in</li>
+<li>Sign in with Apple ID</li>
+<li>Should redirect back to app</li>
+<li>Should navigate to feed screen automatically</li>
+</ol>
+<h3 id="troubleshooting">Troubleshooting:</h3>
+<p><strong>OAuth not working:</strong> - Check Supabase Dashboard →
+Authentication → Providers are enabled - Verify redirect URLs are
+configured correctly - Check deep link configuration in Info.plist (iOS)
+and AndroidManifest.xml (Android) - Verify OAuth credentials are correct
+in Supabase</p>
+<p><strong>Deep link not working:</strong> - iOS: Check Info.plist has
+<code>CFBundleURLSchemes</code> with <code>magicwork</code> - Android:
+Check AndroidManifest.xml has intent-filter with
+<code>magicwork://auth-callback</code> - Test deep link:
+<code>magicwork://auth-callback</code> should open the app</p>
+<p><strong>Session not persisting:</strong> - Check Supabase session is
+being stored - Verify <code>AuthStateListener</code> is listening for
+auth state changes - Check <code>AuthService.initialize()</code> is
+called on app start</p>
+<hr />
+<h2 id="files-modified">Files Modified</h2>
+<h3 id="created">Created:</h3>
+<ul>
+<li><code>lib/widgets/auth_state_listener.dart</code> - Listens for
+OAuth callbacks</li>
+</ul>
+<h3 id="modified">Modified:</h3>
+<ul>
+<li><code>lib/services/auth_service.dart</code> - Added
+<code>signInWithOAuth()</code> method</li>
+<li><code>lib/providers/auth_provider.dart</code> - Added
+<code>signInWithGoogle()</code> and <code>signInWithApple()</code>
+methods</li>
+<li><code>lib/screens/login_screen.dart</code> - Added OAuth
+buttons</li>
+<li><code>lib/screens/signup_screen.dart</code> - Added OAuth
+buttons</li>
+<li><code>lib/main.dart</code> - Added <code>AuthStateListener</code>
+widget</li>
+<li><code>ios/Runner/Info.plist</code> - Added deep link
+configuration</li>
+<li><code>android/app/src/main/AndroidManifest.xml</code> - Added deep
+link configuration</li>
+</ul>
+<hr />
+<h2 id="security-notes">Security Notes</h2>
+<ol type="1">
+<li><strong>OAuth Credentials:</strong>
+<ul>
+<li>Never commit OAuth credentials to version control</li>
+<li>Store credentials securely in Supabase Dashboard</li>
+<li>Rotate credentials periodically</li>
+</ul></li>
+<li><strong>Deep Links:</strong>
+<ul>
+<li>Deep links are handled securely by Supabase</li>
+<li>OAuth tokens are exchanged server-side</li>
+<li>No sensitive data in deep link URLs</li>
+</ul></li>
+<li><strong>Session Management:</strong>
+<ul>
+<li>Sessions are managed by Supabase</li>
+<li>Tokens are stored securely by Supabase SDK</li>
+<li>Sessions automatically refresh when needed</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<ol type="1">
+<li><strong>Configure OAuth in Supabase Dashboard</strong> (see steps
+above)</li>
+<li><strong>Test OAuth flows</strong> on both iOS and Android</li>
+<li><strong>Handle edge cases:</strong>
+<ul>
+<li>User cancels OAuth flow</li>
+<li>Network errors during OAuth</li>
+<li>OAuth provider errors</li>
+</ul></li>
+<li><strong>Optional Enhancements:</strong>
+<ul>
+<li>Add more OAuth providers (Facebook, Twitter, etc.)</li>
+<li>Customize OAuth button styling</li>
+<li>Add OAuth account linking (link Google/Apple to existing email
+account)</li>
+</ul></li>
+</ol>
+<hr />
+<hr />
+<h2 id="openai-api-key-setup">OpenAI API Key Setup</h2>
+<p>The MagicWork app uses OpenAI’s API for generating personalized
+meditation scripts, images, and content. You need to obtain an OpenAI
+API key and configure it in the app.</p>
+<h3 id="step-1-get-openai-api-key">Step 1: Get OpenAI API Key</h3>
+<ol type="1">
+<li><strong>Create OpenAI Account:</strong>
+<ul>
+<li>Go to <a href="https://platform.openai.com">OpenAI Platform</a></li>
+<li>Click <strong>Sign Up</strong> or <strong>Log In</strong></li>
+<li>Complete account registration (requires email verification)</li>
+</ul></li>
+<li><strong>Add Payment Method:</strong>
+<ul>
+<li>OpenAI requires a payment method to use the API</li>
+<li>Go to <strong>Settings</strong> → <strong>Billing</strong></li>
+<li>Add a credit card or payment method</li>
+<li>Note: OpenAI charges based on API usage (pay-as-you-go)</li>
+</ul></li>
+<li><strong>Generate API Key:</strong>
+<ul>
+<li>Go to <a href="https://platform.openai.com/api-keys">API Keys
+page</a></li>
+<li>Click <strong>Create new secret key</strong></li>
+<li>Give it a name (e.g., “MagicWork App”)</li>
+<li>Click <strong>Create secret key</strong></li>
+<li><strong>IMPORTANT:</strong> Copy the key immediately - you won’t be
+able to see it again!</li>
+<li>The key will look like: <code>sk-proj-...</code> or
+<code>sk-...</code></li>
+</ul></li>
+</ol>
+<h3 id="step-2-configure-api-key-in-the-app">Step 2: Configure API Key
+in the App</h3>
+<p>The app supports multiple ways to configure the OpenAI API key:</p>
+<h4 id="option-a-through-app-settings-recommended-for-testing">Option A:
+Through App Settings (Recommended for Testing)</h4>
+<ol type="1">
+<li><strong>Launch the app</strong></li>
+<li><strong>Navigate to Settings/Account</strong> (if available in
+UI)</li>
+<li><strong>Enter API Key</strong> in the settings screen</li>
+<li>The key will be stored securely in SharedPreferences</li>
+</ol>
+<h4 id="option-b-programmatically-for-development">Option B:
+Programmatically (For Development)</h4>
+<p>The app uses <code>AppConfig</code> to manage the API key. You can
+set it programmatically:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="st">&#39;package:magicwork/config/app_config.dart&#39;</span>;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Set OpenAI API key</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="at">await</span> AppConfig<span class="op">.</span>setOpenAIApiKey(<span class="st">&#39;your-api-key-here&#39;</span>);</span></code></pre></div>
+<h4 id="option-c-default-key-development-only">Option C: Default Key
+(Development Only)</h4>
+<p>For development, the app has a default API key configured in
+<code>lib/config/app_config.dart</code>:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">return</span> kDebugMode </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">?</span> <span class="st">&#39;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&#39;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span> <span class="cn">null</span>;</span></code></pre></div>
+<p><strong>⚠️ WARNING:</strong> Never commit API keys to version
+control! Use environment variables or secure storage in production.</p>
+<h3 id="step-3-verify-api-key-works">Step 3: Verify API Key Works</h3>
+<ol type="1">
+<li><strong>Test AI Features:</strong>
+<ul>
+<li>Start a meditation practice</li>
+<li>The app should generate personalized scripts using OpenAI</li>
+<li>Check console logs for any API errors</li>
+</ul></li>
+<li><strong>Check API Usage:</strong>
+<ul>
+<li>Go to <a href="https://platform.openai.com/usage">OpenAI Usage
+Dashboard</a></li>
+<li>Monitor your API usage and costs</li>
+<li>Set up usage limits if needed</li>
+</ul></li>
+</ol>
+<h3 id="step-4-secure-storage-production">Step 4: Secure Storage
+(Production)</h3>
+<p>For production apps, consider:</p>
+<ol type="1">
+<li><strong>Environment Variables:</strong>
+<ul>
+<li>Store API key in environment variables</li>
+<li>Never hardcode in source code</li>
+<li>Use secure key management services</li>
+</ul></li>
+<li><strong>Backend Proxy:</strong>
+<ul>
+<li>Create a backend API that proxies OpenAI requests</li>
+<li>Store API key on server only</li>
+<li>App calls your backend, which calls OpenAI</li>
+</ul></li>
+<li><strong>Key Rotation:</strong>
+<ul>
+<li>Regularly rotate API keys</li>
+<li>Revoke old keys when creating new ones</li>
+<li>Monitor for unauthorized usage</li>
+</ul></li>
+</ol>
+<h3 id="openai-api-costs">OpenAI API Costs</h3>
+<p><strong>Current Pricing (as of 2024):</strong> -
+<strong>GPT-4o:</strong> ~$2.50-$10 per 1M input tokens, ~$10-$30 per 1M
+output tokens - <strong>DALL-E 3:</strong> $0.040 per image (1024x1024),
+$0.080 per image (1024x1792) - <strong>Text-to-Speech:</strong> $15 per
+1M characters</p>
+<p><strong>Cost Optimization Tips:</strong> - Use GPT-3.5-turbo for
+simple tasks (cheaper) - Cache generated content when possible - Set
+usage limits in OpenAI dashboard - Monitor usage regularly</p>
+<h3 id="troubleshooting-1">Troubleshooting</h3>
+<p><strong>API Key Not Working:</strong> - Verify key is correct (no
+extra spaces) - Check key hasn’t been revoked - Ensure payment method is
+active - Check API usage limits in OpenAI dashboard</p>
+<p><strong>Rate Limit Errors:</strong> - OpenAI has rate limits based on
+your tier - Free tier: 3 requests/minute - Paid tier: Higher limits -
+Implement retry logic with exponential backoff</p>
+<p><strong>Authentication Errors:</strong> - Verify API key format
+(starts with <code>sk-</code>) - Check key hasn’t expired - Ensure key
+has proper permissions</p>
+<hr />
+<h2 id="status-implementation-complete">Status: ✅ Implementation
+Complete</h2>
+<p>OAuth SSO is fully implemented and ready for testing. Configure OAuth
+providers in Supabase Dashboard to enable Google and Apple sign-in.</p>
+<p>OpenAI API key setup is documented above. Configure your API key to
+enable AI-powered features in the app.</p>
+</body>
+</html>

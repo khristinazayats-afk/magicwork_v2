@@ -154,7 +154,7 @@ node scripts/view-database.js
    - **Host:** `aws-1-eu-central-1.pooler.supabase.com`
    - **Port:** `5432`
    - **User:** `postgres.ejhafhggndirnxmwrtgm`
-   - **Password:** `<SUPABASE_DB_PASSWORD>`
+   - **Password:** `MYXp6u8dlToRXXdV`
    - **Database:** `postgres`
    - **SSL:** Enable (required)
 

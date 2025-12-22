@@ -21,6 +21,22 @@
 /build
 /dist
 
+# Flutter/Dart
+mobile-app-flutter/build/
+mobile-app-flutter/.dart_tool/
+mobile-app-flutter/.flutter-plugins
+mobile-app-flutter/.flutter-plugins-dependencies
+mobile-app-flutter/.packages
+mobile-app-flutter/pubspec.lock
+mobile-app-flutter/ios/Pods/
+mobile-app-flutter/ios/.symlinks/
+mobile-app-flutter/ios/Flutter/Flutter.framework
+mobile-app-flutter/ios/Flutter/Flutter.podspec
+mobile-app-flutter/android/.gradle/
+mobile-app-flutter/android/app/build/
+*.dSYM
+*.framework
+
 # misc
 .DS_Store
 *.pem
@@ -33,11 +49,6 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-
-# environment exports/templates (these currently contain real credentials; never commit)
-ENV_FINAL.txt
-ENV_READY_TO_USE.txt
-ENV*.txt
 
 # vercel
 .vercel

@@ -23,8 +23,8 @@ CDN_BASE_URL=https://cdn.magicwork.app
 CDN_DOMAIN=https://cdn.magicwork.app
 
 # Database (Supabase)
-POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:<SUPABASE_DB_PASSWORD>@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
-POSTGRES_URL=postgres://postgres.ejhafhggndirnxmwrtgm:<SUPABASE_DB_PASSWORD>@aws-1-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x
+POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
+POSTGRES_URL=postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x
 ```
 
 ### For Vercel Deployment

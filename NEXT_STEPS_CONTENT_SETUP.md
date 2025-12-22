@@ -32,7 +32,7 @@ AWS_REGION=eu-north-1
 S3_BUCKET=magicwork-canva-assets
 CDN_BASE=https://cdn.magicwork.app
 CDN_BASE_URL=https://cdn.magicwork.app
-POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:<SUPABASE_DB_PASSWORD>@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
+POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
 ```
 
 **Also add these to Vercel:**

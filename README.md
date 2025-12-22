@@ -1,6 +1,6 @@
-# 🪄 MagicWork MVP — Swipe-to-Calm Experience
+# 🪄 MagicWork — Shared Calm Experience
 
-A minimalist mobile web app that helps users calm their mind in under one minute through immersive soundscapes.
+A minimalist mobile web app that replaces anxious scrolling with moments of shared calm through immersive, sound-based practices.
 
 ## 🚀 Quick Start
 
