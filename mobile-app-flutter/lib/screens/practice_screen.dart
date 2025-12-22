@@ -6,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import '../providers/analytics_provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/ai_voice_generator.dart';
+import '../services/ai_music_generator.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -16,7 +17,9 @@ class PracticeScreen extends StatefulWidget {
 
 class _PracticeScreenState extends State<PracticeScreen> {
   final AIVoiceGenerator _voiceGenerator = AIVoiceGenerator();
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final AIMusicGenerator _musicGenerator = AIMusicGenerator();
+  final AudioPlayer _voicePlayer = AudioPlayer();
+  final AudioPlayer _musicPlayer = AudioPlayer();
   
   String? _practiceContent;
   String? _emotionalState;
@@ -24,11 +27,13 @@ class _PracticeScreenState extends State<PracticeScreen> {
   int _durationMinutes = 10;
   int _remainingSeconds = 0;
   bool _isLoadingAudio = false;
+  bool _isLoadingMusic = false;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    _setupAudio();
     _loadPracticeData();
     _startTimer();
     
@@ -41,6 +46,15 @@ class _PracticeScreenState extends State<PracticeScreen> {
         userId: authProvider.user?.id,
       );
     });
+  }
+
+  void _setupAudio() {
+    // Set music volume lower than voice
+    _musicPlayer.setVolume(0.3);
+    _voicePlayer.setVolume(1.0);
+    
+    // Loop music
+    _musicPlayer.setReleaseMode(ReleaseMode.loop);
   }
 
   void _loadPracticeData() {
@@ -58,9 +72,10 @@ class _PracticeScreenState extends State<PracticeScreen> {
             _remainingSeconds = _durationMinutes * 60;
           });
         
-        // Generate audio narration
+        // Generate audio narration and music
         if (_practiceContent != null && _practiceContent!.isNotEmpty) {
           _generateAudioNarration();
+          _generateBackgroundMusic();
         }
       }
     });
@@ -82,16 +97,11 @@ class _PracticeScreenState extends State<PracticeScreen> {
       );
 
       if (audioData != null && mounted) {
-        // Save to temporary file and play
-        // In a real app, you'd save to app's temp directory
-        // For now, we'll use a placeholder approach
+        // Play voice
+        await _voicePlayer.play(BytesSource(audioData));
         setState(() {
           _isLoadingAudio = false;
         });
-        
-        // Note: In production, save audioData to a file and play it
-        // For now, we'll show the text content
-        print('Audio generated successfully (${audioData.length} bytes)');
       } else {
         setState(() {
           _isLoadingAudio = false;
@@ -101,6 +111,36 @@ class _PracticeScreenState extends State<PracticeScreen> {
       print('Error generating audio: $e');
       setState(() {
         _isLoadingAudio = false;
+      });
+    }
+  }
+
+  Future<void> _generateBackgroundMusic() async {
+    setState(() {
+      _isLoadingMusic = true;
+    });
+
+    try {
+      final musicUrl = await _musicGenerator.generateAmbientMusic(
+        prompt: _intent ?? 'peaceful meditation',
+        emotionalState: _emotionalState ?? 'neutral',
+        duration: _durationMinutes * 60,
+      );
+
+      if (musicUrl != null && mounted) {
+        await _musicPlayer.play(UrlSource(musicUrl));
+        setState(() {
+          _isLoadingMusic = false;
+        });
+      } else {
+        setState(() {
+          _isLoadingMusic = false;
+        });
+      }
+    } catch (e) {
+      print('Error generating music: $e');
+      setState(() {
+        _isLoadingMusic = false;
       });
     }
   }
@@ -119,6 +159,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   Future<void> _completePractice() async {
     _timer?.cancel();
+    _voicePlayer.stop();
+    _musicPlayer.stop();
     
     final authProvider = context.read<AuthProvider>();
     final analyticsProvider = context.read<AnalyticsProvider>();
@@ -151,7 +193,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
   @override
   void dispose() {
     _timer?.cancel();
-    _audioPlayer.dispose();
+    _voicePlayer.dispose();
+    _musicPlayer.dispose();
     super.dispose();
   }
 
@@ -170,7 +213,11 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.close),
-                    onPressed: () => context.go('/feed'),
+                    onPressed: () {
+                      _voicePlayer.stop();
+                      _musicPlayer.stop();
+                      context.go('/feed');
+                    },
                   ),
                   Column(
                     children: [
@@ -204,17 +251,17 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (_isLoadingAudio)
-                      const Center(
+                    if (_isLoadingAudio || _isLoadingMusic)
+                      Center(
                         child: Padding(
-                          padding: EdgeInsets.all(32.0),
+                          padding: const EdgeInsets.all(32.0),
                           child: Column(
                             children: [
-                              CircularProgressIndicator(),
-                              SizedBox(height: 16),
+                              const CircularProgressIndicator(),
+                              const SizedBox(height: 16),
                               Text(
-                                'Generating audio narration...',
-                                style: TextStyle(
+                                _isLoadingAudio ? 'Generating audio narration...' : 'Generating background music...',
+                                style: const TextStyle(
                                   fontFamily: 'HankenGrotesk',
                                   color: Color(0xFF1e2d2e),
                                 ),
@@ -305,3 +352,4 @@ class _PracticeScreenState extends State<PracticeScreen> {
     );
   }
 }
+
