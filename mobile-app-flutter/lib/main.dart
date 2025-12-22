@@ -21,6 +21,7 @@ import 'screens/practice_personalization_screen.dart';
 import 'screens/practice_screen.dart';
 import 'screens/after_practice_modal.dart';
 import 'screens/emotional_checkin_screen.dart';
+import 'screens/intent_selection_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/user_account_screen.dart';
 import 'screens/what_to_expect_screen.dart';
@@ -153,7 +154,10 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/practice',
-      builder: (context, state) => const PracticeScreen(),
+      builder: (context, state) {
+        // Pass extra data if available
+        return PracticeScreen();
+      },
     ),
     GoRoute(
       path: '/practice/complete',
@@ -162,6 +166,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/checkin',
       builder: (context, state) => const EmotionalCheckInScreen(),
+    ),
+    GoRoute(
+      path: '/intent',
+      builder: (context, state) => const IntentSelectionScreen(),
     ),
     GoRoute(
       path: '/profile',

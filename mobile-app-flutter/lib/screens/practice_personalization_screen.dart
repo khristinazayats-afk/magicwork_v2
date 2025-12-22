@@ -17,13 +17,36 @@ class _PracticePersonalizationScreenState
   bool _isGenerating = false;
   String? _errorMessage;
 
-  // Get emotional state from route extra
+  // Get emotional state and intent from route extra
   String? get _emotionalState {
     final extra = GoRouterState.of(context).extra;
     if (extra is Map && extra.containsKey('emotionalState')) {
       return extra['emotionalState'] as String?;
     }
     return 'neutral'; // Default fallback
+  }
+
+  String? get _intent {
+    final extra = GoRouterState.of(context).extra;
+    if (extra is Map && extra.containsKey('intent')) {
+      return extra['intent'] as String?;
+    }
+    return null;
+  }
+
+  String _getIntentLabel(String? intent) {
+    if (intent == null) return '';
+    final intentMap = {
+      'reduce_stress': 'reduce stress',
+      'improve_focus': 'improve focus and concentration',
+      'better_sleep': 'prepare for better sleep',
+      'boost_energy': 'boost energy mindfully',
+      'emotional_balance': 'find emotional balance',
+      'self_compassion': 'cultivate self-compassion',
+      'manage_pain': 'manage physical discomfort',
+      'gratitude': 'cultivate gratitude',
+    };
+    return intentMap[intent] ?? intent.replaceAll('_', ' ');
   }
 
   final List<int> _durationOptions = [5, 10, 15, 20, 30];
@@ -41,6 +64,7 @@ class _PracticePersonalizationScreenState
       final practiceContent = await _aiGenerator.generatePracticeContent(
         emotionalState: _emotionalState ?? 'neutral',
         durationMinutes: _selectedDuration,
+        intent: _intent,
       );
 
       if (practiceContent == null || practiceContent.isEmpty) {
@@ -58,6 +82,7 @@ class _PracticePersonalizationScreenState
           extra: {
             'practiceContent': practiceContent,
             'emotionalState': _emotionalState,
+            'intent': _intent,
             'durationMinutes': _selectedDuration,
           },
         );
@@ -180,7 +205,9 @@ class _PracticePersonalizationScreenState
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Your practice will be personalized based on how you\'re feeling right now. Our AI will create a guided meditation script tailored to help you find calm and presence.',
+                      _intent != null
+                          ? 'Your practice will be personalized based on how you\'re feeling and your intention to ${_getIntentLabel(_intent)}. Our AI will create a guided meditation script tailored specifically for you.'
+                          : 'Your practice will be personalized based on how you\'re feeling right now. Our AI will create a guided meditation script tailored to help you find calm and presence.',
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: 'HankenGrotesk',

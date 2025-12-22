@@ -170,7 +170,7 @@ class _EmotionalCheckInScreenState extends State<EmotionalCheckInScreen> {
                     ? null
                     : () {
                         context.push(
-                          '/practice/personalize',
+                          '/intent',
                           extra: {'emotionalState': _selectedEmotionalState},
                         );
                       },

@@ -76,6 +76,7 @@ class AnalyticsNavigationObserver extends NavigatorObserver {
       '/practice': 'Practice',
       '/practice/complete': 'Practice Complete',
       '/checkin': 'Emotional Check-in',
+      '/intent': 'Intent Selection',
       '/profile': 'Profile',
       '/account': 'Account',
       '/what-to-expect': 'What to Expect',

@@ -20,6 +20,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
   
   String? _practiceContent;
   String? _emotionalState;
+  String? _intent;
   int _durationMinutes = 10;
   int _remainingSeconds = 0;
   bool _isLoadingAudio = false;
@@ -49,12 +50,13 @@ class _PracticeScreenState extends State<PracticeScreen> {
       final extra = location.extra;
       
       if (extra is Map && mounted) {
-        setState(() {
-          _practiceContent = extra['practiceContent'] as String?;
-          _emotionalState = extra['emotionalState'] as String?;
-          _durationMinutes = extra['durationMinutes'] as int? ?? 10;
-          _remainingSeconds = _durationMinutes * 60;
-        });
+          setState(() {
+            _practiceContent = extra['practiceContent'] as String?;
+            _emotionalState = extra['emotionalState'] as String?;
+            _intent = extra['intent'] as String?;
+            _durationMinutes = extra['durationMinutes'] as int? ?? 10;
+            _remainingSeconds = _durationMinutes * 60;
+          });
         
         // Generate audio narration
         if (_practiceContent != null && _practiceContent!.isNotEmpty) {
@@ -130,6 +132,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
         properties: {
           'completed_at': DateTime.now().toIso8601String(),
           'emotional_state': _emotionalState ?? 'unknown',
+          'intent': _intent ?? 'none',
         },
       );
     }
