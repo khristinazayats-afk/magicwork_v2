@@ -4,22 +4,20 @@ import Flutter
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
+  var flutterEngine: FlutterEngine?
 
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     guard let windowScene = (scene as? UIWindowScene) else { return }
     
-    let flutterEngine = (UIApplication.shared.delegate as! FlutterAppDelegate).window?.rootViewController as? FlutterViewController
+    // Create Flutter engine
+    flutterEngine = FlutterEngine(name: "io.flutter", project: nil)
+    flutterEngine?.run()
+    GeneratedPluginRegistrant.register(with: flutterEngine!)
     
+    // Create window and set Flutter view controller
     window = UIWindow(windowScene: windowScene)
-    if let flutterEngine = flutterEngine {
-      window?.rootViewController = flutterEngine
-    } else {
-      // Fallback: create new Flutter engine
-      let engine = FlutterEngine(name: "io.flutter", project: nil)
-      engine.run()
-      GeneratedPluginRegistrant.register(with: engine)
-      window?.rootViewController = FlutterViewController(engine: engine, nibName: nil, bundle: nil)
-    }
+    let flutterViewController = FlutterViewController(engine: flutterEngine!, nibName: nil, bundle: nil)
+    window?.rootViewController = flutterViewController
     window?.makeKeyAndVisible()
   }
 
