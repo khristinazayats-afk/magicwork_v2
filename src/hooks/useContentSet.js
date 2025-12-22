@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
 
-// Development-only logging helper
-const isDev = import.meta.env.DEV;
-const devLog = isDev ? console.log.bind(console) : () => {};
-const devWarn = isDev ? console.warn.bind(console) : () => {};
-const devError = console.error.bind(console); // keep errors in prod
-
 // Use deployed API URL for local development since serverless functions don't run locally
 // Try to use proxy first, fallback to deployed API
 const API_BASE = import.meta.env.DEV 
@@ -53,7 +47,7 @@ export function useContentSet(spaceName) {
         if (!setResponse.ok) {
           // If API fails (500 or any error), use fallback mock data for supported spaces
           if (spaceName === 'Drift into Sleep' || spaceName === 'Slow Morning') {
-            devWarn(`API returned ${setResponse.status}, using fallback data for ${spaceName}`);
+            console.warn(`API returned ${setResponse.status}, using fallback data for ${spaceName}`);
             const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
             
             if (spaceName === 'Slow Morning') {
@@ -159,15 +153,15 @@ export function useContentSet(spaceName) {
               ? videosData.filter(asset => asset.type === 'video' && asset.status === 'live')
               : [];
           } catch (e) {
-            devWarn('Failed to parse videos response:', e);
+            console.warn('Failed to parse videos response:', e);
             allVideos = [];
           }
         } else {
-          devWarn(`Videos API returned ${videosResponse.status}, will use content set videos or fallback`);
+          console.warn(`Videos API returned ${videosResponse.status}, will use content set videos or fallback`);
         }
         
-        devLog('Content set response:', setData);
-        devLog('All videos for space:', allVideos);
+        console.log('Content set response:', setData);
+        console.log('All videos for space:', allVideos);
         
         // For "Drift into Sleep", ensure we have multiple videos
         // If API only returns 1 video or less, use mock data with 4 videos
@@ -176,7 +170,7 @@ export function useContentSet(spaceName) {
         // For "Drift into Sleep", always ensure we have 4 videos
         if (spaceName === 'Drift into Sleep') {
           if (finalVisuals.length < 4) {
-            devWarn(`Only ${finalVisuals.length} video(s) found for Drift into Sleep, using mock data with 4 videos`);
+            console.warn(`Only ${finalVisuals.length} video(s) found for Drift into Sleep, using mock data with 4 videos`);
             const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
             finalVisuals = [
               {
@@ -213,7 +207,7 @@ export function useContentSet(spaceName) {
               }
             ];
           } else {
-            devLog(`Found ${finalVisuals.length} videos for Drift into Sleep, using API data`);
+            console.log(`Found ${finalVisuals.length} videos for Drift into Sleep, using API data`);
           }
         }
         
@@ -222,9 +216,10 @@ export function useContentSet(spaceName) {
           visuals: finalVisuals
         });
       } catch (err) {
-        // Silently fail - don't log errors to console in production
+        console.error('Error fetching content set:', err);
         // Use mock data as fallback for supported spaces when API fails
         if (spaceName === 'Drift into Sleep' || spaceName === 'Slow Morning') {
+          console.warn(`Using fallback data due to API error for ${spaceName}`);
           const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
           
           if (spaceName === 'Slow Morning') {

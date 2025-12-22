@@ -20,23 +20,17 @@ import SimpleVideoTest from './components/SimpleVideoTest';
 import VibeBadgesTest from './components/VibeBadgesTest';
 import ContentAssetsTest from './components/ContentAssetsTest';
 import AllContentAssetsTest from './components/AllContentAssetsTest';
-import { useAmbientSound } from './contexts/AmbientSoundContext';
 
 // Lazy load Feed to avoid loading Tone.js before user interaction
 // const Feed = lazy(() => import('./components/Feed'));
 
-// Development-only logging helper
-const isDev = import.meta.env.DEV;
-const devLog = isDev ? console.log.bind(console) : () => {};
-
 function App() {
-  devLog('[App] Component rendering');
+  console.log('[App] Component rendering');
   const [started, setStarted] = useState(false);
   const [sawSteps, setSawSteps] = useState(false);
-  const { startAmbient, setAmbientMode } = useAmbientSound();
   
   useEffect(() => {
-    devLog('[App] State changed:', { started, sawSteps });
+    console.log('[App] State changed:', { started, sawSteps });
   }, [started, sawSteps]);
   
   // Check if we're in test mode via URL (accepts both singular and plural)
@@ -61,13 +55,10 @@ function App() {
   
   // Debug: log URL check
   if (isGardenStatesDemo) {
-    devLog('🌱 Garden States Demo detected in URL');
+    console.log('🌱 Garden States Demo detected in URL');
   }
 
   const handleStart = () => {
-    // Start the calming background bowls loop once we have a user interaction.
-    setAmbientMode('menu');
-    startAmbient('menu');
     setStarted(true);
   };
 
@@ -125,7 +116,7 @@ function App() {
     return (
       <div className="w-full h-screen bg-[#fcf8f2] overflow-y-auto">
         <HomeScreen onExplore={() => {
-          devLog('Explore clicked');
+          console.log('Explore clicked');
         }} />
       </div>
     );
@@ -184,7 +175,7 @@ function App() {
     return <StepsScreen onContinue={() => setSawSteps(true)} onBack={handleBackToSplash} />;
   }
 
-  devLog('App: Rendering Feed directly (no Suspense)');
+  console.log('App: Rendering Feed directly (no Suspense)');
   
   return <Feed onBack={handleBackToSteps} />;
 }

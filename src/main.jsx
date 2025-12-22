@@ -2,25 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import ErrorBoundary from './components/ErrorBoundary'
-import { AmbientSoundProvider } from './contexts/AmbientSoundContext'
-import { Analytics } from '@vercel/analytics/react'
 import './index.css'
-
-// Development-only logging helper
-const isDev = import.meta.env.DEV;
-const devLog = isDev ? console.log.bind(console) : () => {};
-const devWarn = isDev ? console.warn.bind(console) : () => {};
-const devError = console.error.bind(console); // Keep errors in production
 
 // Global error handlers
 window.addEventListener('error', (event) => {
-  devError('[Global] Unhandled error:', event.error);
+  console.error('[Global] Unhandled error:', event.error);
   // Prevent default browser error handling
   event.preventDefault();
 });
 
 window.addEventListener('unhandledrejection', (event) => {
-  devError('[Global] Unhandled promise rejection:', event.reason);
+  console.error('[Global] Unhandled promise rejection:', event.reason);
   // Prevent default browser error handling
   event.preventDefault();
 });
@@ -37,14 +29,14 @@ if ('serviceWorker' in navigator && !isDevelopment) {
         updateViaCache: 'none' // Never cache the service worker file
       });
       
-      devLog('[SW] Service Worker registered:', registration.scope);
+      console.log('[SW] Service Worker registered:', registration.scope);
 
       // Track if we've already reloaded to prevent infinite loops
       let hasReloaded = false;
       const reloadOnce = () => {
         if (!hasReloaded) {
           hasReloaded = true;
-          devLog('[SW] Reloading page to activate new service worker...');
+          console.log('[SW] Reloading page to activate new service worker...');
           setTimeout(() => {
             window.location.reload();
           }, 100);
@@ -54,7 +46,7 @@ if ('serviceWorker' in navigator && !isDevelopment) {
       // Only check for updates periodically, not on every page load
       const checkForUpdates = () => {
         registration.update().catch((err) => {
-          devWarn('[SW] Update check failed:', err);
+          console.warn('[SW] Update check failed:', err);
         });
       };
 
@@ -63,14 +55,14 @@ if ('serviceWorker' in navigator && !isDevelopment) {
 
       // Listen for service worker updates - only reload if there's actually a waiting worker
       registration.addEventListener('updatefound', () => {
-        devLog('[SW] Update found, installing new service worker...');
+        console.log('[SW] Update found, installing new service worker...');
         const newWorker = registration.installing;
         
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
             // Only reload if there's a waiting service worker (not on first install)
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller && registration.waiting) {
-              devLog('[SW] New service worker waiting, will reload on next navigation');
+              console.log('[SW] New service worker waiting, will reload on next navigation');
               // Don't auto-reload - let user continue browsing
               // The new worker will activate on next page load
             }
@@ -81,7 +73,7 @@ if ('serviceWorker' in navigator && !isDevelopment) {
       // Listen for messages from service worker - but don't auto-reload
       navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data && event.data.type === 'SW_UPDATED') {
-          devLog('[SW] Service worker updated to version:', event.data.version);
+          console.log('[SW] Service worker updated to version:', event.data.version);
           // Don't auto-reload - this causes infinite loops
           // The new version will be used on next page navigation
         }
@@ -91,7 +83,7 @@ if ('serviceWorker' in navigator && !isDevelopment) {
       // Removing the controllerchange listener that was causing reload loops
 
     } catch (error) {
-      devError('[SW] Service Worker registration failed:', error);
+      console.error('[SW] Service Worker registration failed:', error);
     }
   };
 
@@ -106,27 +98,24 @@ if ('serviceWorker' in navigator && !isDevelopment) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
     registrations.forEach((registration) => {
       registration.unregister();
-      devLog('[SW] Unregistered service worker for development mode');
+      console.log('[SW] Unregistered service worker for development mode');
     });
   });
 }
 
-devLog('[main.jsx] Starting app render...');
+console.log('[main.jsx] Starting app render...');
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  devError('[main.jsx] ERROR: root element not found!');
+  console.error('[main.jsx] ERROR: root element not found!');
 } else {
-  devLog('[main.jsx] Root element found, rendering...');
+  console.log('[main.jsx] Root element found, rendering...');
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <ErrorBoundary>
-        <AmbientSoundProvider>
-          <App />
-          <Analytics />
-        </AmbientSoundProvider>
+        <App />
       </ErrorBoundary>
     </React.StrictMode>,
   );
-  devLog('[main.jsx] App rendered successfully');
+  console.log('[main.jsx] App rendered successfully');
 }
 

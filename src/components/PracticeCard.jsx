@@ -14,13 +14,6 @@ import { usePostEvent } from '../hooks/usePostEvent';
 import { saveSession } from '../utils/sessionTracking';
 import { recordWeeklyPractice } from '../utils/weeklyTracking';
 import { useContentSet } from '../hooks/useContentSet';
-import { useUsageTracking } from '../hooks/useUsageTracking';
-
-// Development-only logging helper
-const isDev = import.meta.env.DEV;
-const devLog = isDev ? console.log.bind(console) : () => {};
-const devWarn = isDev ? console.warn.bind(console) : () => {};
-const devError = console.error.bind(console); // keep errors in prod
 
 // Descriptions shown when browsing the feed (not joined) - Main Feed specific
 const descriptions = {
@@ -66,18 +59,11 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   const { audioRef, playStation, pause, resume, isPlaying, currentTrackInfo } = useLocalAudio();
   const { postEvent } = usePostEvent();
   useTuneTracking(isPlaying, audioRef);
-  // Get dynamic live count for this space (sum across all 4 cards)
-  const { getLiveCount: getLiveCountForSpace } = useUsageTracking(station?.name || null);
-  const participantCount = useMemo(() => {
-    if (!getLiveCountForSpace || typeof getLiveCountForSpace !== 'function') return 0;
-    // Sum counts across all 4 cards in this space
-    return (getLiveCountForSpace(0) || 0) + (getLiveCountForSpace(1) || 0) + 
-           (getLiveCountForSpace(2) || 0) + (getLiveCountForSpace(3) || 0);
-  }, [getLiveCountForSpace]);
   const [joined, setJoined] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [heartsSent, setHeartsSent] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
+  const [participantCount] = useState(Math.floor(Math.random() * 50) + 20); // Placeholder
   const [floatingHearts, setFloatingHearts] = useState([]);
   const [joinedAt, setJoinedAt] = useState(null);
   const [milestone, setMilestone] = useState(null);
@@ -141,7 +127,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
                 try {
                   onLeave();
                 } catch (err) {
-                  devError('[PracticeCard] Error calling onLeave:', err);
+                  console.error('[PracticeCard] Error calling onLeave:', err);
                 }
               }
               // Save session when timer completes
@@ -161,10 +147,10 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
                     mode: practiceMode || 'ambient',
                   },
                 }).catch(err => {
-                  devError('Error tracking practice completion:', err);
+                  console.error('Error tracking practice completion:', err);
                 });
               } catch (err) {
-                devError('[PracticeCard] Error saving session on timer completion:', err);
+                console.error('[PracticeCard] Error saving session on timer completion:', err);
               }
               return 0;
             }
@@ -202,7 +188,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
       // Show new tabbed interface
       setShowTabs(true);
     } catch (error) {
-      devError(`[PracticeCard] ✗ Could not join ${station.name}:`, error);
+      console.error(`[PracticeCard] ✗ Could not join ${station.name}:`, error);
       
       const errorMsg = error.message || 'Unknown error';
       alert(`Could not join ${station.name}.\n\nError: ${errorMsg}\n\nPlease check the console for details or try another practice.`);
@@ -361,10 +347,10 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
       
       if (!result?.success && result?.message) {
         // Show friendly message if cap reached
-        devLog(result.message);
+        console.log(result.message);
       }
     } catch (err) {
-      devError('Error tracking light send:', err);
+      console.error('Error tracking light send:', err);
     }
     
     // Optional: add haptic feedback
@@ -402,11 +388,8 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
           }}
           src={videoUrl}
           onError={(e) => {
-            // Silently fail - don't show errors to users, just hide the video
-            if (e.target) {
-              e.target.style.display = 'none';
-              e.target.style.opacity = '0';
-            }
+            console.error('[PracticeCard] Video failed to load:', e.target.src);
+            e.target.style.display = 'none';
           }}
         />
       )}
@@ -546,23 +529,16 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
 
 
             {!joined && !showSummary && (
-              <motion.div
+              <motion.p 
                 key="description"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-center mb-6 space-y-2"
+                className="font-hanken text-[#1e2d2e]/80 text-base md:text-lg leading-relaxed text-center mb-6"
               >
-                <p className="font-hanken text-[#1e2d2e]/80 text-base md:text-lg leading-relaxed">
-                  {description}
-                </p>
-                {station?.helpDescription && (
-                  <p className="font-hanken text-[#1e2d2e]/60 text-sm md:text-base leading-relaxed">
-                    {station.helpDescription}
-                  </p>
-                )}
-              </motion.div>
+                {description}
+              </motion.p>
             )}
 
           </AnimatePresence>
@@ -574,7 +550,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
       {/* Show SwipeHint ONLY AFTER: FirstTimeGuide is dismissed, feed is loaded, and we've scrolled to the card */}
       {station.name === 'Get in the Flow State' && (
         <div style={{ display: 'none' }}>
-          {devLog('[PracticeCard] Get in the Flow State card render check:', {
+          {console.log('[PracticeCard] Get in the Flow State card render check:', {
             joined,
             showSummary,
             showFirstTimeHint,

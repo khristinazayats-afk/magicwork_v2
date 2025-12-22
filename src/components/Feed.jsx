@@ -7,20 +7,11 @@ import PracticeCard from './PracticeCard';
 import FirstTimeGuide from './FirstTimeGuide';
 import stationsData from '../data/stations.json';
 
-// Development-only logging helper
-const isDev = import.meta.env.DEV;
-const devLog = isDev ? console.log.bind(console) : () => {};
-
 export default function Feed({ onBack }) {
-  devLog('Feed: Component rendering');
+  console.log('Feed: Component rendering');
   
-  // Only show the 3 main spaces: Slow Morning, Gentle De-Stress, Drift into Sleep
-  const [spaces] = useState(() => {
-    const allowedSpaces = ['Slow Morning', 'Gentle De-Stress', 'Drift into Sleep'];
-    return (stationsData.stations || []).filter(station => 
-      allowedSpaces.includes(station.name)
-    );
-  });
+  // Use all spaces for scrollable feed (9 spaces)
+  const [spaces] = useState(stationsData.stations || []);
   
   const [showSettings, setShowSettings] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -51,10 +42,10 @@ export default function Feed({ onBack }) {
     // When FirstTimeGuide is dismissed, SwipeHint should appear
     if (!showHint) {
       setSwipeHintReady(true);
-      devLog('[Feed] FirstTimeGuide dismissed, setting swipeHintReady to true');
+      console.log('[Feed] FirstTimeGuide dismissed, setting swipeHintReady to true');
     } else {
       setSwipeHintReady(false);
-      devLog('[Feed] FirstTimeGuide showing, resetting swipeHintReady to false');
+      console.log('[Feed] FirstTimeGuide showing, resetting swipeHintReady to false');
     }
   }, [showHint]);
   
@@ -64,7 +55,7 @@ export default function Feed({ onBack }) {
       // Small delay to ensure card is rendered
       setTimeout(() => {
         setSwipeHintReady(true);
-        devLog('[Feed] Feed loaded, FirstTimeGuide not showing, setting swipeHintReady to true');
+        console.log('[Feed] Feed loaded, FirstTimeGuide not showing, setting swipeHintReady to true');
       }, 100);
     }
   }, [spaces.length, showHint]);
@@ -139,7 +130,7 @@ export default function Feed({ onBack }) {
   const dismissHint = useCallback(() => {
     // Use ref to check current state (avoids closure issues)
     if (showHintRef.current) {
-      devLog('[Feed] Dismissing hint screen - button clicked');
+      console.log('[Feed] Dismissing hint screen - button clicked');
       showHintRef.current = false;
       setShowHint(false);
       hintDismissedTimeRef.current = Date.now(); // Record dismissal time
@@ -155,7 +146,7 @@ export default function Feed({ onBack }) {
         setInteractedCards(prev => {
           const newSet = new Set(prev);
           newSet.delete(getInFlowStateIndex); // Remove from interacted set
-          devLog('[Feed] Reset interaction for Get in the Flow State, index:', getInFlowStateIndex, 'remaining:', Array.from(newSet), 'showHint:', showHintRef.current);
+          console.log('[Feed] Reset interaction for Get in the Flow State, index:', getInFlowStateIndex, 'remaining:', Array.from(newSet), 'showHint:', showHintRef.current);
           return newSet;
         });
       }
@@ -167,7 +158,7 @@ export default function Feed({ onBack }) {
           // Set protection flags BEFORE scrolling to prevent interaction tracking
           isScrollingRef.current = true;
           isScrollingToSwipeHintRef.current = true;
-          devLog('[Feed] Setting scroll protection flags before scrolling to SwipeHint');
+          console.log('[Feed] Setting scroll protection flags before scrolling to SwipeHint');
           
           requestAnimationFrame(() => {
             if (!scrollContainerRef.current) return;
@@ -175,33 +166,33 @@ export default function Feed({ onBack }) {
             
             // Find "Get in the Flow State" card and scroll to it
             const getInFlowStateIndex = spaces.findIndex(space => space.name === 'Get in the Flow State');
-            devLog('[Feed] Found Get in the Flow State at index:', getInFlowStateIndex);
+            console.log('[Feed] Found Get in the Flow State at index:', getInFlowStateIndex);
             if (getInFlowStateIndex !== -1) {
               const middleSetStart = spaces.length;
               const getInFlowStateCardIndex = middleSetStart + getInFlowStateIndex;
               const card = scrollContainerRef.current.children[getInFlowStateCardIndex + 1];
-              devLog('[Feed] Scrolling to card index:', getInFlowStateCardIndex + 1, 'card exists:', !!card);
+              console.log('[Feed] Scrolling to card index:', getInFlowStateCardIndex + 1, 'card exists:', !!card);
               if (card) {
                 card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                devLog('[Feed] Scroll initiated to Get in the Flow State card');
+                console.log('[Feed] Scroll initiated to Get in the Flow State card');
               }
             }
             
             // Release scroll lock after scroll completes
             setTimeout(() => {
               isScrollingRef.current = false;
-              devLog('[Feed] Scroll completed, SwipeHint should be visible');
+              console.log('[Feed] Scroll completed, SwipeHint should be visible');
             }, 800);
             
             setTimeout(() => {
               isScrollingToSwipeHintRef.current = false;
-              devLog('[Feed] Releasing SwipeHint protection, interaction tracking can resume');
+              console.log('[Feed] Releasing SwipeHint protection, interaction tracking can resume');
             }, 3000); // Keep protection for 3 seconds total
           });
         }
       }, 500); // Wait for FirstTimeGuide exit animation
     } else {
-      devLog('[Feed] dismissHint called but showHintRef.current is false');
+      console.log('[Feed] dismissHint called but showHintRef.current is false');
     }
   }, [spaces]);
 
@@ -210,11 +201,11 @@ export default function Feed({ onBack }) {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container || spaces.length === 0) {
-      devLog('[Feed] Scroll handler setup skipped:', { container: !!container, spacesLength: spaces.length });
+      console.log('[Feed] Scroll handler setup skipped:', { container: !!container, spacesLength: spaces.length });
       return;
     }
     
-    devLog('[Feed] Setting up scroll handlers, showHint:', showHint, 'hintReady:', hintReadyRef.current);
+    console.log('[Feed] Setting up scroll handlers, showHint:', showHint, 'hintReady:', hintReadyRef.current);
 
     // Initialize scroll position tracking
     lastScrollTopRef.current = container.scrollTop;
@@ -238,7 +229,7 @@ export default function Feed({ onBack }) {
         // If user scrolled and we're on "Get in the Flow State" card, mark it as interacted
         // Only track if FirstTimeGuide has been dismissed (showHint is false)
         if (spaces[normalizedIndex]?.name === 'Get in the Flow State') {
-          devLog('[Feed] Marking Get in the Flow State as interacted, index:', normalizedIndex, 'timeSinceDismissed:', timeSinceHintDismissed);
+          console.log('[Feed] Marking Get in the Flow State as interacted, index:', normalizedIndex, 'timeSinceDismissed:', timeSinceHintDismissed);
           setInteractedCards(prev => {
             const newSet = new Set(prev);
             newSet.add(normalizedIndex);
@@ -250,7 +241,7 @@ export default function Feed({ onBack }) {
       // Dismiss hint on any scroll movement (up or down) - check if scroll position actually changed
       if (hintReadyRef.current && showHint && scrollDelta !== 0) {
         // This is a real user scroll, dismiss the hint
-        devLog('[Feed] Scroll detected, dismissing hint. Scroll delta:', scrollDelta);
+        console.log('[Feed] Scroll detected, dismissing hint. Scroll delta:', scrollDelta);
         dismissHint();
       }
       
@@ -286,7 +277,7 @@ export default function Feed({ onBack }) {
     const handleWheel = (e) => {
       // Dismiss hint on any wheel movement
       if (showHint && Math.abs(e.deltaY) > 0) {
-        devLog('[Feed] Wheel event detected, dismissing hint. deltaY:', e.deltaY);
+        console.log('[Feed] Wheel event detected, dismissing hint. deltaY:', e.deltaY);
         dismissHint();
       }
       
@@ -324,7 +315,7 @@ export default function Feed({ onBack }) {
       const deltaY = Math.abs(touchEndY - touchStartY);
       // Dismiss hint if user has moved their finger (scrolling)
       if (deltaY > 5) {
-        devLog('[Feed] Touch move detected, dismissing hint. deltaY:', deltaY);
+        console.log('[Feed] Touch move detected, dismissing hint. deltaY:', deltaY);
         dismissHint();
         
         // Track interaction for "Get in the Flow State" card
@@ -357,7 +348,7 @@ export default function Feed({ onBack }) {
     const wheelHandler = (e) => {
       // Use ref to check current state
       if (showHintRef.current && Math.abs(e.deltaY) > 0) {
-        devLog('[Feed] Window wheel event detected, dismissing hint. deltaY:', e.deltaY);
+        console.log('[Feed] Window wheel event detected, dismissing hint. deltaY:', e.deltaY);
         dismissHint();
       }
     };
@@ -375,7 +366,7 @@ export default function Feed({ onBack }) {
         const touchEndY = e.touches[0].clientY;
         const deltaY = Math.abs(touchEndY - touchStartY);
         if (deltaY > 5) {
-          devLog('[Feed] Window touch move detected, dismissing hint');
+          console.log('[Feed] Window touch move detected, dismissing hint');
           dismissHint();
         }
       }
@@ -405,7 +396,7 @@ export default function Feed({ onBack }) {
   // Determine if hint should be shown
   const shouldShowHint = showHint && activeSpaceIndex === null;
   
-  devLog('[Feed] Render check:', { showHint, activeSpaceIndex, shouldShowHint, dismissHintExists: !!dismissHint });
+  console.log('[Feed] Render check:', { showHint, activeSpaceIndex, shouldShowHint, dismissHintExists: !!dismissHint });
   
   return (
     <>
@@ -460,7 +451,7 @@ export default function Feed({ onBack }) {
             : false;
           
           if (space.name === 'Get in the Flow State') {
-            devLog('[Feed] Rendering Get in the Flow State card, index:', normalizedIndex, 'hasInteracted:', hasInteracted, 'swipeHintReady:', swipeHintReady, 'showHint:', showHint);
+            console.log('[Feed] Rendering Get in the Flow State card, index:', normalizedIndex, 'hasInteracted:', hasInteracted, 'swipeHintReady:', swipeHintReady, 'showHint:', showHint);
           }
           
           return (

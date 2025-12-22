@@ -23,21 +23,6 @@ export default defineConfig({
       }
     }
   },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: false,
-    minify: 'esbuild',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'framer-motion': ['framer-motion']
-        }
-      }
-    },
-    chunkSizeWarningLimit: 1000
-  },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src')

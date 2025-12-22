@@ -4,18 +4,11 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useAmbientSound } from '../contexts/AmbientSoundContext';
-
-// Development-only logging helper
-const isDev = import.meta.env.DEV;
-const devWarn = isDev ? console.warn.bind(console) : () => {};
-const devError = console.error.bind(console); // keep errors in prod
 
 export function useLocalAudio() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackInfo, setCurrentTrackInfo] = useState(null);
-  const { pauseAmbient, startAmbient, setAmbientMode } = useAmbientSound();
 
   // Cleanup on unmount
   useEffect(() => {
@@ -40,7 +33,7 @@ export function useLocalAudio() {
     };
 
     const handleError = (e) => {
-      devError('[LocalAudio] Error:', {
+      console.error('[LocalAudio] Error:', {
         error: audio.error,
         code: audio.error?.code,
         message: audio.error?.message,
@@ -67,12 +60,9 @@ export function useLocalAudio() {
    */
   const playStation = (station) => {
     if (!audioRef.current || !station?.localMusic?.file) {
-      devWarn('[LocalAudio] No audio file available for station:', station?.name);
+      console.warn('[LocalAudio] No audio file available for station:', station?.name);
       return;
     }
-
-    // Prevent overlapping sounds: stop the ambient bowls while station audio plays.
-    pauseAmbient();
 
     const audio = audioRef.current;
     const music = station.localMusic;
@@ -91,7 +81,7 @@ export function useLocalAudio() {
 
     // Play
     audio.play().catch(err => {
-      devError('[LocalAudio] Play failed:', err);
+      console.error('[LocalAudio] Play failed:', err);
       setIsPlaying(false);
     });
   };
@@ -103,9 +93,6 @@ export function useLocalAudio() {
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    // Bring back the calm bowls ambiance when station audio stops.
-    setAmbientMode('menu');
-    startAmbient('menu');
   };
 
   /**
@@ -114,12 +101,10 @@ export function useLocalAudio() {
   const resume = async () => {
     if (audioRef.current && audioRef.current.paused) {
       try {
-        // Prevent overlap: bowls off while resuming station audio.
-        pauseAmbient();
         await audioRef.current.play();
         return true;
       } catch (err) {
-        devError('[LocalAudio] Resume failed:', err);
+        console.error('[LocalAudio] Resume failed:', err);
         return false;
       }
     }

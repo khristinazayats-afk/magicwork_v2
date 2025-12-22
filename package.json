@@ -10,11 +10,6 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "capacitor:sync": "npm run build && npx capacitor sync",
-    "capacitor:ios": "npx capacitor open ios",
-    "capacitor:android": "npx capacitor open android",
-    "capacitor:add:ios": "npx capacitor add ios",
-    "capacitor:add:android": "npx capacitor add android",
     "export-canva": "node scripts/export-canva-to-s3.js",
     "export-canva:prod": "NODE_ENV=production node scripts/export-canva-to-s3.js",
     "cms:sync": "NODE_TLS_REJECT_UNAUTHORIZED=0 node scripts/sync-content-cms.js",
@@ -36,7 +31,6 @@
     "@aws-sdk/client-cloudfront": "^3.916.0",
     "@aws-sdk/client-s3": "^3.916.0",
     "@aws-sdk/s3-request-presigner": "^3.916.0",
-    "@vercel/analytics": "^1.6.1",
     "@vercel/postgres": "^0.10.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -57,7 +51,7 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.16",
-    "vercel": "^50.0.1",
+    "vercel": "^48.6.0",
     "vite": "^6.0.3"
   }
 }

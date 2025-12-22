@@ -115,7 +115,6 @@ export default function PracticeJoinedTabs({
           onPlayPause={onPlayPause}
           audioRef={audioRef}
           participantCount={participantCount}
-          filter={filter}
           onToggleFavorite={handleFavoriteToggle}
           onExpandedViewChange={(isExpanded) => {
             setShowFullScreenCounter(isExpanded);
@@ -163,7 +162,7 @@ export default function PracticeJoinedTabs({
               <div className="w-12 h-1 bg-[#1e2d2e]/20 rounded-full mx-auto mb-6" />
               <h3 className="font-hanken text-xl font-semibold text-[#1e2d2e] mb-6">Filter</h3>
               <div className="space-y-3">
-                {['All', 'Favorited'].map((filterName) => (
+                {['All', 'Sounds', 'Practices', 'Guided', 'Favorited'].map((filterName) => (
                   <button
                     key={filterName}
                     onClick={() => {
