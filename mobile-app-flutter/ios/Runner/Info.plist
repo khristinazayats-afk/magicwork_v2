@@ -62,5 +62,17 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>MagicWork needs microphone access for voice-guided meditation and emotional check-in features.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>MagicWork needs camera access for setting your profile picture.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>MagicWork needs photo library access for choosing your profile picture.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>MagicWork uses location to suggest practices based on your environment (e.g., morning walks).</string>
 </dict>
 </plist>
