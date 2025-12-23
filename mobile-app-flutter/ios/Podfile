@@ -41,6 +41,9 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
+      # Define permission handler macros to enable specific permissions
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'PERMISSION_MICROPHONE=1', 'PERMISSION_CAMERA=1', 'PERMISSION_PHOTOS=1', 'PERMISSION_LOCATION=1', 'PERMISSION_NOTIFICATIONS=1', 'PERMISSION_BLUETOOTH=1', 'PERMISSION_APP_TRACKING_TRANSPARENCY=1']
+
       # Fix deployment target warnings - iOS 26.2 minimum for latest features
       if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 26.2
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '26.2'

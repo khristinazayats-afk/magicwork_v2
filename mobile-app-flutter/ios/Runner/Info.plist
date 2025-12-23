@@ -45,34 +45,25 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>UIApplicationSceneManifest</key>
-	<dict>
-		<key>UIApplicationSupportsMultipleScenes</key>
-		<false/>
-		<key>UISceneConfigurations</key>
-		<dict>
-			<key>UIWindowSceneSessionRoleApplication</key>
-			<array>
-				<dict>
-					<key>UISceneConfigurationName</key>
-					<string>Default Configuration</string>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-				</dict>
-			</array>
-		</dict>
-	</dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>MagicWork needs microphone access for voice-guided meditation and emotional check-in features.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>MagicWork needs camera access for setting your profile picture.</string>
+	<string>MagicWork needs camera access for setting your profile picture and recording mindfulness moments.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>MagicWork needs photo library access for choosing your profile picture.</string>
+	<string>MagicWork needs photo library access for choosing your profile picture and saving meditation certificates.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>MagicWork needs permission to save images to your photo library.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MagicWork uses location to suggest practices based on your environment (e.g., morning walks).</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>MagicWork uses location to suggest practices based on your environment (e.g., morning walks).</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>MagicWork uses data to personalize your meditation experience and track your progress across devices.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
