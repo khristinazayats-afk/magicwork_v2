@@ -109,6 +109,11 @@ post_install do |installer|
       # Fix 'cryptexd' search path errors by ensuring inherited paths are used
       config.build_settings['LIBRARY_SEARCH_PATHS'] = '$(inherited)'
       config.build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited)'
+      
+      # Explicitly remove any hardcoded toolchain paths that might be injected
+      if config.build_settings['LIBRARY_SEARCH_PATHS'].is_a?(Array)
+        config.build_settings['LIBRARY_SEARCH_PATHS'].reject! { |path| path.include?('cryptexd') }
+      end
     end
   end
 end
