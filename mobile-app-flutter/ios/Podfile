@@ -92,6 +92,8 @@ post_install do |installer|
       # General warning suppression for all pods (can be removed if needed)
       config.build_settings['GCC_WARN_64_TO_32_BIT_CONVERSION'] = 'NO'
       config.build_settings['CLANG_WARN__DUPLICATE_METHOD_MATCH'] = 'NO'
+      config.build_settings['GCC_WARN_DEPRECATED_FUNCTIONS'] = 'NO'
+      config.build_settings['CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS'] = 'NO'
     end
   end
 end
