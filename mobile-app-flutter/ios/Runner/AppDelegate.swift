@@ -8,11 +8,11 @@ import UIKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
-    
-    // Support for iOS 13+ SceneDelegate
-    // SceneDelegate will handle window creation for iOS 13+
-    // For iOS 12 and earlier, FlutterAppDelegate handles it automatically
-    
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+  
+  // SceneDelegate support
+  override func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
   }
 }

@@ -33,18 +33,37 @@ class _AmbientSoundManagerState extends State<AmbientSoundManager> {
   }
 
   Future<void> _setupAmbientPlayer() async {
-    await _audioPlayer.setReleaseMode(ReleaseMode.loop);
-    await _audioPlayer.setVolume(0.15); // Very subtle background volume
-    _isInitialized = true;
-    _startAmbientSound();
+    try {
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      await _audioPlayer.setVolume(0.15); // Very subtle background volume
+      _isInitialized = true;
+      
+      // Delay slightly to ensure network stack is fully ready on iOS
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted) _startAmbientSound();
+      });
+    } catch (e) {
+      print('Error setting up ambient player: $e');
+    }
   }
 
-  void _startAmbientSound() {
+  void _startAmbientSound() async {
     if (!_isInitialized) return;
     
     // Pick a random sound
     final randomSound = (_ambientSounds..shuffle()).first;
-    _audioPlayer.play(UrlSource(randomSound));
+    
+    try {
+      // Use UrlSource with explicit error handling
+      await _audioPlayer.setSource(UrlSource(randomSound));
+      await _audioPlayer.resume();
+    } catch (e) {
+      print('Error playing ambient sound ($randomSound): $e');
+      // If it fails, try the next one after a delay
+      Future.delayed(const Duration(seconds: 5), () {
+        if (mounted) _startAmbientSound();
+      });
+    }
   }
 
   @override

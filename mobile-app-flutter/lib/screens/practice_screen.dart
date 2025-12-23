@@ -128,7 +128,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
       );
 
       if (musicUrl != null && mounted) {
-        await _musicPlayer.play(UrlSource(musicUrl));
+        // Set source and resume separately for better error handling on iOS
+        await _musicPlayer.setSource(UrlSource(musicUrl));
+        await _musicPlayer.resume();
         setState(() {
           _isLoadingMusic = false;
         });
@@ -138,7 +140,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
         });
       }
     } catch (e) {
-      print('Error generating music: $e');
+      print('Error generating or playing music: $e');
       setState(() {
         _isLoadingMusic = false;
       });
