@@ -18,11 +18,12 @@ class _AmbientSoundManagerState extends State<AmbientSoundManager> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isInitialized = false;
 
-  // Subtle ambient sounds (randomized)
+  // High-quality meditation music tracks (randomized)
   final List<String> _ambientSounds = [
-    'https://cdn.pixabay.com/audio/2022/01/18/audio_826620ca21.mp3', // Soft Wind
-    'https://cdn.pixabay.com/audio/2022/03/15/audio_783a4a753f.mp3', // Gentle Rain
-    'https://cdn.pixabay.com/audio/2021/11/25/audio_91b32e02f9.mp3', // Forest Atmosphere
+    'https://cdn.pixabay.com/audio/2022/05/27/audio_1808f30302.mp3', // Deep Meditation Ambient
+    'https://cdn.pixabay.com/audio/2023/05/30/audio_3fe4a09837.mp3', // Relaxing Meditation
+    'https://cdn.pixabay.com/audio/2023/06/11/audio_527cc9d8bd.mp3', // Spiritual Healing Zen
+    'https://cdn.pixabay.com/audio/2022/08/02/audio_884b904727.mp3', // Tibeten Bowls Meditation
   ];
 
   @override

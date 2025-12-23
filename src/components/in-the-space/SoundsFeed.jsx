@@ -33,13 +33,13 @@ const PRACTICE_TAGS = {
   'sleep-preparation': ['Sleep', 'Relaxation', 'Rest']
 };
 
-// Mock sounds for each space
+// High-quality meditation music for the feed
 const MOCK_SOUNDS = [
-  { id: 'sound-1', type: 'sound', title: 'Forest Rain', description: 'Listen to the gentle sound of rain in a forest.', audioUrl: '/Feed_mp3/spring-forest.mp3', durationSec: 180 },
-  { id: 'sound-2', type: 'sound', title: 'Ocean Waves', description: 'The calming rhythm of ocean waves.', audioUrl: '/Feed_mp3/spring-forest.mp3', durationSec: 240 },
-  { id: 'sound-3', type: 'sound', title: 'Morning Birds', description: 'Gentle birdsong to welcome the day.', audioUrl: '/Feed_mp3/spring-forest.mp3', durationSec: 200 },
-  { id: 'sound-4', type: 'sound', title: 'Mountain Stream', description: 'Flowing water over smooth stones.', audioUrl: '/Feed_mp3/spring-forest.mp3', durationSec: 220 },
-  { id: 'sound-5', type: 'sound', title: 'Desert Wind', description: 'Soft wind through desert sands.', audioUrl: '/Feed_mp3/spring-forest.mp3', durationSec: 190 }
+  { id: 'sound-1', type: 'sound', title: 'Deep Meditation', description: 'Deeply immersive ambient soundscape for profound relaxation.', audioUrl: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808f30302.mp3', durationSec: 600 },
+  { id: 'sound-2', type: 'sound', title: 'Zen Garden', description: 'Traditional instruments and soft atmosphere for mindful presence.', audioUrl: 'https://cdn.pixabay.com/audio/2023/05/30/audio_3fe4a09837.mp3', durationSec: 480 },
+  { id: 'sound-3', type: 'sound', title: 'Spiritual Healing', description: 'Healing frequencies designed to balance your inner energy.', audioUrl: 'https://cdn.pixabay.com/audio/2023/06/11/audio_527cc9d8bd.mp3', durationSec: 540 },
+  { id: 'sound-4', type: 'sound', title: 'Tibetan Bowls', description: 'The resonant sound of singing bowls for deep focus and clarity.', audioUrl: 'https://cdn.pixabay.com/audio/2022/08/02/audio_884b904727.mp3', durationSec: 420 },
+  { id: 'sound-5', type: 'sound', title: 'Celestial Harmony', description: 'Ethereal textures that create a sense of vast, peaceful space.', audioUrl: 'https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3', durationSec: 600 }
 ];
 
 export default function SoundsFeed(props) {
