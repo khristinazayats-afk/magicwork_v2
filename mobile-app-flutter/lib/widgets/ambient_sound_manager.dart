@@ -71,16 +71,24 @@ class _AmbientSoundManagerState extends State<AmbientSoundManager> {
     super.didChangeDependencies();
     
     // Logic to stop ambient noise when in a practice session
-    final String currentPath = GoRouterState.of(context).uri.path;
-    
-    // Stop if we are in the practice screen or emotional check-in (focused parts)
-    // selection screens (feed, intent, personalize) should have the noise
-    if (currentPath.startsWith('/practice') || currentPath == '/checkin') {
-      _audioPlayer.pause();
-    } else {
-      if (_audioPlayer.state != PlayerState.playing) {
-        _audioPlayer.resume();
+    // We wrap this in a try-catch because GoRouterState might not be available 
+    // immediately at the root level during certain lifecycle transitions
+    try {
+      final String currentPath = GoRouterState.of(context).uri.path;
+      
+      // Stop if we are in the practice screen or emotional check-in (focused parts)
+      if (currentPath.startsWith('/practice') || currentPath == '/checkin' || currentPath == '/splash') {
+        if (_audioPlayer.state == PlayerState.playing) {
+          _audioPlayer.pause();
+        }
+      } else {
+        if (_audioPlayer.state != PlayerState.playing && _isInitialized) {
+          _audioPlayer.resume();
+        }
       }
+    } catch (e) {
+      // If GoRouterState is not found, we just keep the current state
+      // This prevents the "no GoRouterState above current context" error
     }
   }
 

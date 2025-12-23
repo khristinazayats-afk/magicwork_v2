@@ -89,15 +89,16 @@ class MyApp extends StatelessWidget {
                 });
               }
 
-              return AmbientSoundManager(
-                child: MaterialApp.router(
-                  title: AppConfig.appName,
-                  debugShowCheckedModeBanner: false,
-                  theme: AppTheme.lightTheme,
-                  darkTheme: AppTheme.darkTheme,
-                  themeMode: themeProvider.themeMode,
-                  routerConfig: _router,
-                ),
+              return MaterialApp.router(
+                title: AppConfig.appName,
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeProvider.themeMode,
+                routerConfig: _router,
+                builder: (context, child) {
+                  return AmbientSoundManager(child: child ?? const SizedBox.shrink());
+                },
               );
             },
           ),
