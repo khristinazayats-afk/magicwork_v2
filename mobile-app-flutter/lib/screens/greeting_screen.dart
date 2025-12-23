@@ -10,38 +10,66 @@ class GreetingScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFFCF8F2),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Join the magic of calm',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF172223),
-                ),
-                textAlign: TextAlign.center,
+              const Spacer(),
+              const Icon(
+                Icons.self_improvement,
+                size: 80,
+                color: Color(0xFF1e2d2e),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               const Text(
                 'Welcome to MagicWork',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Color(0xFF6B7280),
-                ),
                 textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 48),
-              ElevatedButton(
-                onPressed: () => context.go('/login'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF172223),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                style: TextStyle(
+                  fontSize: 28,
+                  fontFamily: 'HankenGrotesk',
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1e2d2e),
                 ),
-                child: const Text('Get Started'),
               ),
+              const SizedBox(height: 16),
+              const Text(
+                'Personalized mindfulness and meditation for your daily life.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'HankenGrotesk',
+                  color: Color(0xFF1e2d2e),
+                ),
+              ),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: () => context.push('/signup'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1e2d2e),
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: const Text(
+                  'Get Started',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () => context.push('/login'),
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFF1e2d2e),
+                  minimumSize: const Size(double.infinity, 56),
+                ),
+                child: const Text(
+                  'I already have an account',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -49,5 +77,3 @@ class GreetingScreen extends StatelessWidget {
     );
   }
 }
-
-
