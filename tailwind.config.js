@@ -13,12 +13,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        'magicwork-beige': '#fcf8f2',
-        'magicwork-cream': '#f5f0e8',
-        'magicwork-green': '#94d1c4',
-        'magicwork-dark-green': '#1e2d2e',
-        'magicwork-mint': '#94d1c4',
-        'magicwork-orange': '#ffaf42',
+        'magiwork-beige': '#fcf8f2',
+        'magiwork-cream': '#f5f0e8',
+        'magiwork-green': '#94d1c4',
+        'magiwork-dark-green': '#1e2d2e',
+        'magiwork-mint': '#94d1c4',
+        'magiwork-orange': '#ffaf42',
       },
       fontFamily: {
         'actay': ['Actay Wide', 'sans-serif'],

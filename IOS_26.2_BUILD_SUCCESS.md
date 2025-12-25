@@ -71,7 +71,7 @@ end
 ## Build Command
 
 ```bash
-cd /Users/leightonbingham/Downloads/magicwork-main/mobile-app-flutter
+cd /Users/leightonbingham/Downloads/magiwork-main/mobile-app-flutter
 flutter clean
 flutter pub get
 flutter build ios --no-codesign

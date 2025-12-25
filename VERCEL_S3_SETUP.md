@@ -4,7 +4,7 @@ This guide will help you configure AWS S3 access for your Vercel deployment so t
 
 ## Prerequisites
 
-- AWS Account with S3 bucket created (`magicwork-canva-assets`)
+- AWS Account with S3 bucket created (`magiwork-canva-assets`)
 - AWS Access Key ID and Secret Access Key with S3 permissions
 - Vercel project deployed
 
@@ -28,8 +28,8 @@ If you don't have AWS credentials yet:
              "s3:ListBucket"
            ],
            "Resource": [
-             "arn:aws:s3:::magicwork-canva-assets",
-             "arn:aws:s3:::magicwork-canva-assets/*"
+             "arn:aws:s3:::magiwork-canva-assets",
+             "arn:aws:s3:::magiwork-canva-assets/*"
            ]
          }
        ]
@@ -45,7 +45,7 @@ If you don't have AWS credentials yet:
 
 1. **Go to your Vercel Dashboard**
    - Navigate to: https://vercel.com/dashboard
-   - Select your project: `magicwork` (or your project name)
+   - Select your project: `magiwork` (or your project name)
 
 2. **Open Project Settings**
    - Click on your project
@@ -59,7 +59,7 @@ If you don't have AWS credentials yet:
    | `AWS_ACCESS_KEY_ID` | Your AWS Access Key ID | Production, Preview, Development |
    | `AWS_SECRET_ACCESS_KEY` | Your AWS Secret Access Key | Production, Preview, Development |
    | `AWS_REGION` | `eu-north-1` | Production, Preview, Development |
-   | `S3_BUCKET` | `magicwork-canva-assets` | Production, Preview, Development |
+   | `S3_BUCKET` | `magiwork-canva-assets` | Production, Preview, Development |
 
    **Important:**
    - ✅ Check all three environments (Production, Preview, Development)
@@ -122,7 +122,7 @@ npm run setup-s3-cors
 ### Option B: Manual AWS Console Setup
 
 1. **Make Bucket Public:**
-   - Go to AWS S3 Console → `magicwork-canva-assets` bucket
+   - Go to AWS S3 Console → `magiwork-canva-assets` bucket
    - **Permissions** tab → **Block public access**
    - Click **Edit** → Uncheck all boxes → **Save**
    - **Bucket Policy** → Add this policy:
@@ -135,7 +135,7 @@ npm run setup-s3-cors
          "Effect": "Allow",
          "Principal": "*",
          "Action": "s3:GetObject",
-         "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
+         "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
        }
      ]
    }

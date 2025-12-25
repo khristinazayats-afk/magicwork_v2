@@ -25,6 +25,7 @@ export default function SignupScreen() {
           data: {
             name: name,
           },
+          emailRedirectTo: `${window.location.origin}/login`,
         },
       });
 

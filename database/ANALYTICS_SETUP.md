@@ -2,7 +2,7 @@
 
 ## Overview
 
-This setup provides comprehensive user profiles and full analytics tracking for the MagicWork app.
+This setup provides comprehensive user profiles and full analytics tracking for the Magiwork app.
 
 ## Database Tables
 

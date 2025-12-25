@@ -22,8 +22,8 @@ const s3Client = new S3Client({
   },
 });
 
-const BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
-const CDN_BASE = process.env.CDN_BASE_URL || process.env.CDN_BASE || process.env.CDN_DOMAIN || 'https://cdn.magicwork.app';
+const BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
+const CDN_BASE = process.env.CDN_BASE_URL || process.env.CDN_BASE || process.env.CDN_DOMAIN || 'https://cdn.magiwork.app';
 
 /**
  * Get content type based on file extension

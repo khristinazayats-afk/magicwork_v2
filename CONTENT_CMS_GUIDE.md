@@ -1,4 +1,4 @@
-# 🎨 MagicWork Content CMS - Complete Guide
+# 🎨 Magiwork Content CMS - Complete Guide
 
 **Your Sustainable Content Pipeline: Canva → Google Sheets → S3 → CDN → App**
 
@@ -57,7 +57,7 @@ This system lets you manage all your Canva content without ever downloading to y
 ### Step 1: Set Up Your CMS Spreadsheet (2 mins)
 
 1. **Create a new Google Sheet**: https://sheets.google.com
-2. **Name it**: "MagicWork Content CMS"
+2. **Name it**: "Magiwork Content CMS"
 3. **Add these column headers** (Row 1):
 
 ```
@@ -102,7 +102,7 @@ POSTGRES_URL=your_postgres_connection_string
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
 AWS_REGION=us-east-1
-S3_BUCKET=magicwork-canva-assets
+S3_BUCKET=magiwork-canva-assets
 CDN_BASE_URL=https://your-cloudfront-domain.cloudfront.net
 
 # Google Sheets (NEW)

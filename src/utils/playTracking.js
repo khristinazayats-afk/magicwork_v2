@@ -4,7 +4,7 @@
  * Resets automatically on new month
  */
 
-const STORAGE_KEY = 'magicwork_play_tracking';
+const STORAGE_KEY = 'magiwork_play_tracking';
 
 /**
  * Get the current month key (YYYY-MM format)

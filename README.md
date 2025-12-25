@@ -1,4 +1,4 @@
-# 🪄 MagicWork — Shared Calm Experience
+# 🪄 Magiwork — Shared Calm Experience
 
 A minimalist mobile web app that replaces anxious scrolling with moments of shared calm through immersive, sound-based practices.
 
@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) on your mobile device or bro
 ✅ **Swipe Navigation** - Vertical swipe up/down to change tracks  
 ✅ **Smooth Crossfade Transitions** - Seamless audio transitions between tracks  
 ✅ **Mobile-First Design** - Optimized for mobile devices with touch gestures  
-✅ **Brand Design** - Full MagicWork brand colors, fonts, and minimal UI  
+✅ **Brand Design** - Full Magiwork brand colors, fonts, and minimal UI  
 
 ## 🎵 Current Tracks (Generated Placeholders)
 

@@ -3,7 +3,7 @@
 # Helper script to add MP3 file to the project
 # Usage: ./add-mp3.sh /path/to/your/embrace-364091.mp3
 
-echo "🎵 MagicWork - Add MP3 File Helper"
+echo "🎵 Magiwork - Add MP3 File Helper"
 echo "===================================="
 echo ""
 

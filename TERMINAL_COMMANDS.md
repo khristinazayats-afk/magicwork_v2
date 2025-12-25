@@ -132,7 +132,7 @@ curl "https://your-app.vercel.app/api/content-assets?space=Slow%20Morning"
 
 ### Test S3 Video URL
 ```bash
-curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 ```
 
 ## Open Browser

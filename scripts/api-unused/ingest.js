@@ -30,7 +30,7 @@ const REGION = process.env.AWS_REGION;
 const BUCKET = process.env.S3_BUCKET || process.env.AUDIO_BUCKET;
 const CDN_HOST =
   process.env.CDN_HOST ||
-  (process.env.CDN_DOMAIN ? `https://${process.env.CDN_DOMAIN}` : "https://cdn.magicwork.app");
+  (process.env.CDN_DOMAIN ? `https://${process.env.CDN_DOMAIN}` : "https://cdn.magiwork.app");
 
 // Optional ACL toggle (use only if bucket has ACLs enabled)
 const USE_ACL = process.env.S3_USE_ACL === "1";
@@ -150,7 +150,7 @@ export default async function handler(req, res) {
     const uploadUrl = await getSignedUrl(s3, putCmd, { expiresIn: 900 });
 
     // Download source MP3
-    const headers = { "User-Agent": "magicwork-ingest/1.0", Accept: "audio/mpeg,*/*" };
+    const headers = { "User-Agent": "magiwork-ingest/1.0", Accept: "audio/mpeg,*/*" };
     if (/pixabay\.com|cdn\.pixabay\.com/i.test(sourceUrl)) headers.Referer = "https://pixabay.com/";
     const fetchOpts = { headers };
     if (typeof AbortSignal !== "undefined" && typeof AbortSignal.timeout === "function") {

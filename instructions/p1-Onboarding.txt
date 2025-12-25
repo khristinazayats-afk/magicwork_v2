@@ -1,12 +1,12 @@
-🪴 *Goal: Gently welcome the user and spark curiosity about what *magicwork* can do for them.
+🪴 *Goal: Gently welcome the user and spark curiosity about what *magiwork* can do for them.
 
 - 🪞**User state**  
-    **New User:** Curious, slightly overstimulated from typical scrolling habits — exploring what *magicwork* offers.
+    **New User:** Curious, slightly overstimulated from typical scrolling habits — exploring what *magiwork* offers.
     **Returning User:** Restless, seeking a quick sense of calm or sense of togetherness.    
 - 📱Screen 1:  Splash screen / Homescreen
     
     **Screen elements:**
-    - **Logo:** *magicwork* Logo: B&W_Logo Design - MagicWork (V001)-03.png
+    - **Logo:** *magiwork* Logo: B&W_Logo Design - Magiwork (V001)-03.png
     - **Headline:** *Join the magic of calm*
     - **Subheadline:** *Replace anxious scrolling with simple practices that steady your mind*
     - **CTA:** Mint circle (pulsing) with arrow → **“Tap to begin”**

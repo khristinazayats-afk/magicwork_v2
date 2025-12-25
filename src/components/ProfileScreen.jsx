@@ -159,7 +159,7 @@ export default function ProfileScreen({ onBack }) {
             }));
             
             // Merge with local storage (simplified: just use remote for profile)
-            localStorage.setItem('magicwork_sessions', JSON.stringify(mappedSessions));
+            localStorage.setItem('magiwork_sessions', JSON.stringify(mappedSessions));
           }
         }
       } catch (err) {

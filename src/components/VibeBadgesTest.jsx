@@ -104,7 +104,7 @@ export default function VibeBadgesTest() {
             Your Vibe This Week
           </h1>
           <p className="font-hanken text-[#1e2d2e]/70 text-base md:text-lg">
-            Minimal, soft magicwork aesthetics
+            Minimal, soft magiwork aesthetics
           </p>
         </motion.div>
 
@@ -142,7 +142,7 @@ export default function VibeBadgesTest() {
           </h2>
           <p className="font-hanken text-[#1e2d2e]/70 text-sm leading-relaxed">
             Each badge represents a different vibe with playful animal emojis. 
-            The soft, minimal design uses magicwork brand colors and captures the essence of each animal's unique energy.
+            The soft, minimal design uses magiwork brand colors and captures the essence of each animal's unique energy.
           </p>
         </motion.div>
       </div>

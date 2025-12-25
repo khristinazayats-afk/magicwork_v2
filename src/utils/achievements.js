@@ -5,7 +5,7 @@
 
 import { loadSessions, getTotalPracticeTime, getCurrentStreak, getSpacesTriedCount } from './sessionTracking';
 
-const ACHIEVEMENTS_KEY = 'magicwork_achievements';
+const ACHIEVEMENTS_KEY = 'magiwork_achievements';
 
 /**
  * Achievement definitions

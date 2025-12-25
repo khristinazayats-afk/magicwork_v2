@@ -37,7 +37,7 @@ const __dirname = dirname(__filename);
 const envPath = join(__dirname, '..', '.env');
 dotenv.config({ path: envPath });
 
-const S3_BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
+const S3_BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
 const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
 
 const s3Client = new S3Client({

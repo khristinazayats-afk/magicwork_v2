@@ -22,7 +22,7 @@ const __dirname = dirname(__filename);
 const envPath = join(__dirname, '..', '.env');
 dotenv.config({ path: envPath });
 
-const S3_BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
+const S3_BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
 const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
 
 const s3Client = new S3Client({
@@ -90,7 +90,7 @@ async function setupCORS() {
     } else {
       console.error('❌ Error setting CORS:', error.message);
       console.error('\n💡 You can also set this manually in AWS Console:');
-      console.error('   1. Go to S3 → magicwork-canva-assets → Permissions');
+      console.error('   1. Go to S3 → magiwork-canva-assets → Permissions');
       console.error('   2. Scroll to "Cross-origin resource sharing (CORS)"');
       console.error('   3. Paste the CORS config from INGEST_SETUP.md');
     }

@@ -8,7 +8,7 @@
 
 ## ❌ What Couldn't Be Fixed (Insufficient Permissions)
 
-Your AWS user `magicwork-uploader` doesn't have permission to:
+Your AWS user `magiwork-uploader` doesn't have permission to:
 
 1. **❌ Disable Block Public Access**
    - Need: `s3:PutBucketPublicAccessBlock`
@@ -38,7 +38,7 @@ This means either:
 ### Step 1: Find Where clouds.mp4 Actually Is
 
 Check in AWS S3 Console:
-1. Go to: https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets
+1. Go to: https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets
 2. Search for "clouds" in the bucket
 3. Note the exact path
 
@@ -48,7 +48,7 @@ If the file doesn't exist, upload it:
 
 ```bash
 # If you have the file locally
-aws s3 cp /path/to/clouds.mp4 s3://magicwork-canva-assets/video/canva/clouds.mp4 --acl public-read
+aws s3 cp /path/to/clouds.mp4 s3://magiwork-canva-assets/video/canva/clouds.mp4 --acl public-read
 
 # Or use the upload script
 cd /Users/ksvarychevska/git-practice
@@ -59,7 +59,7 @@ npm run upload:s3
 
 Since your AWS credentials don't have permission, you MUST do this in AWS Console:
 
-**Direct Link:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets?region=eu-north-1&tab=permissions
+**Direct Link:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets?region=eu-north-1&tab=permissions
 
 #### A. Disable Block Public Access
 
@@ -83,21 +83,21 @@ Since your AWS credentials don't have permission, you MUST do this in AWS Consol
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
+      "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
     },
     {
       "Sid": "PublicReadGetObjectVideo",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magicwork-canva-assets/video/*"
+      "Resource": "arn:aws:s3:::magiwork-canva-assets/video/*"
     },
     {
       "Sid": "PublicReadGetObjectAudio",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magicwork-canva-assets/audio/*"
+      "Resource": "arn:aws:s3:::magiwork-canva-assets/audio/*"
     }
   ]
 }
@@ -131,7 +131,7 @@ Once the file exists:
 
 ```bash
 aws s3api put-object-acl \
-  --bucket magicwork-canva-assets \
+  --bucket magiwork-canva-assets \
   --key video/canva/clouds.mp4 \
   --acl public-read
 ```
@@ -146,7 +146,7 @@ Or in AWS Console:
 
 ```bash
 # Wait 1-2 minutes after making changes, then test:
-curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 ```
 
 **Expected:** `HTTP/1.1 200 OK`
@@ -167,13 +167,13 @@ curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/c
 
 ## 🔗 Quick Links
 
-- **AWS S3 Console:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets
-- **Bucket Permissions:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets?region=eu-north-1&tab=permissions
+- **AWS S3 Console:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets
+- **Bucket Permissions:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets?region=eu-north-1&tab=permissions
 - **Detailed Guide:** See `IMMEDIATE_S3_FIX.md`
 
 ## ⚠️ Why I Can't Do It Automatically
 
-Your AWS user `arn:aws:iam::849652094098:user/magicwork-uploader` only has permissions to:
+Your AWS user `arn:aws:iam::849652094098:user/magiwork-uploader` only has permissions to:
 - ✅ Upload files (`s3:PutObject`)
 - ✅ Make objects public (`s3:PutObjectAcl`)
 - ❌ Change bucket settings (needs bucket owner/admin)

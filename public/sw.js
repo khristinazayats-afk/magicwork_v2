@@ -1,5 +1,5 @@
 // Increment cache version on each deployment to force cache refresh
-const STATIC_CACHE = 'magicwork-static-v7';
+const STATIC_CACHE = 'magiwork-static-v7';
 const CACHE_VERSION = 'v7';
 
 self.addEventListener('install', (event) => {

@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logos/magicwork-bw.png',
+              'assets/logos/magiwork-bw.png',
               width: 80,
               height: 80,
               errorBuilder: (context, error, stackTrace) {
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 24),
             const Text(
-              'MagicWork',
+              'Magiwork',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

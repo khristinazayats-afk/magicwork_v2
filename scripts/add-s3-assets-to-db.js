@@ -7,7 +7,7 @@
  *   node scripts/add-s3-assets-to-db.js
  * 
  * This script reads S3 file information and adds them to the database
- * so they can be used in the MagicWork app.
+ * so they can be used in the Magiwork app.
  */
 
 import pkg from 'pg';
@@ -34,8 +34,8 @@ const pool = new Pool({
 });
 
 // Configuration - update these based on your S3 setup
-const S3_BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
-const CDN_BASE_URL = process.env.CDN_BASE_URL || process.env.CDN_BASE || process.env.CDN_DOMAIN || 'https://cdn.magicwork.app';
+const S3_BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
+const CDN_BASE_URL = process.env.CDN_BASE_URL || process.env.CDN_BASE || process.env.CDN_DOMAIN || 'https://cdn.magiwork.app';
 const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
 
 /**

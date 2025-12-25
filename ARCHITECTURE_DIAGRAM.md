@@ -1,4 +1,4 @@
-# 🏗️ MagicWork Content CMS - System Architecture
+# 🏗️ Magiwork Content CMS - System Architecture
 
 ## 🎯 High-Level Overview
 
@@ -104,7 +104,7 @@
 │                    APPLICATION LAYER                             │
 │                                                                  │
 │  ┌────────────────────────────────────────────────────────────┐│
-│  │  React App (MagicWork)                                     ││
+│  │  React App (Magiwork)                                     ││
 │  │                                                            ││
 │  │  • Fetches assets from API                                ││
 │  │  • Renders content from CDN                               ││
@@ -185,7 +185,7 @@
     ↓
     Fetch: download_url
     Upload: S3.putObject(bucket, key, stream)
-    Result: s3://magicwork-canva-assets/canva/videos/breathe-to-relax-bg.mp4
+    Result: s3://magiwork-canva-assets/canva/videos/breathe-to-relax-bg.mp4
 
 11. CDN URL GENERATED
     ↓
@@ -356,7 +356,7 @@
 ## 📁 File Structure
 
 ```
-magicwork/
+magiwork/
 │
 ├── 📊 CONTENT MANAGEMENT
 │   └── (external) Google Sheets - Your CMS dashboard

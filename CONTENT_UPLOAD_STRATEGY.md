@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-This guide provides a **manual, cost-effective content pipeline** for managing audio and video assets from multiple sources (Pixabay, Canva, Google Gemini) and making them available in your MagicWork app.
+This guide provides a **manual, cost-effective content pipeline** for managing audio and video assets from multiple sources (Pixabay, Canva, Google Gemini) and making them available in your Magiwork app.
 
 **Strategy**: Manual download → Manual S3 upload → Database registration → App visibility
 
@@ -10,7 +10,7 @@ This guide provides a **manual, cost-effective content pipeline** for managing a
 
 ## 📊 Google Spreadsheet Structure
 
-### Spreadsheet: "MagicWork Content Inventory"
+### Spreadsheet: "Magiwork Content Inventory"
 
 Create a Google Spreadsheet with the following columns:
 
@@ -26,8 +26,8 @@ Create a Google Spreadsheet with the following columns:
 | **H: Format** | File extension | `mp3` / `wav` / `mp4` | ✅ Yes |
 | **I: File Size (MB)** | Size in megabytes | `3.2` | ⚠️ Optional |
 | **J: S3 Key** | S3 path after upload | `audio/pixabay/ambient-spring-forest.mp3` | ✅ Yes |
-| **K: S3 Bucket** | Which bucket | `magicwork-canva-assets` | ✅ Yes |
-| **L: CDN URL** | Final CDN URL | `https://cdn.magicwork.app/audio/...` | ✅ Yes |
+| **K: S3 Bucket** | Which bucket | `magiwork-canva-assets` | ✅ Yes |
+| **L: CDN URL** | Final CDN URL | `https://cdn.magiwork.app/audio/...` | ✅ Yes |
 | **M: Allocated Space** | Which practice space | `Slow Morning` | ✅ Yes |
 | **N: Database ID** | Supabase asset ID | `slow-morning-audio-001` | ✅ Yes |
 | **O: Status** | `downloaded` / `uploaded` / `registered` / `live` | `live` | ✅ Yes |
@@ -49,8 +49,8 @@ File Type: audio
 Format: mp3
 File Size (MB): 2.8
 S3 Key: audio/pixabay/ambient-spring-forest.mp3
-S3 Bucket: magicwork-canva-assets
-CDN URL: https://cdn.magicwork.app/audio/pixabay/ambient-spring-forest.mp3
+S3 Bucket: magiwork-canva-assets
+CDN URL: https://cdn.magiwork.app/audio/pixabay/ambient-spring-forest.mp3
 Allocated Space: Slow Morning
 Database ID: slow-morning-audio-001
 Status: live
@@ -64,12 +64,12 @@ License: Pixabay License
 
 ## 🗂️ S3 Bucket Structure
 
-You have **one S3 bucket** (`magicwork-canva-assets`) organized as follows:
+You have **one S3 bucket** (`magiwork-canva-assets`) organized as follows:
 
-### magicwork-canva-assets (eu-north-1) - Single Bucket for All Content
+### magiwork-canva-assets (eu-north-1) - Single Bucket for All Content
 
 ```
-magicwork-canva-assets/
+magiwork-canva-assets/
 ├── audio/
 │   ├── Pixabay/        ← MP3 files from Pixabay (capitalized)
 │   │   ├── ambient-spring-forest.mp3
@@ -125,14 +125,14 @@ aws s3 ls  # Should list your buckets
 ```bash
 # Check your .env file has these:
 POSTGRES_URL_NON_POOLING="postgres://..."
-S3_BUCKET="magicwork-canva-assets"
-CDN_BASE="https://cdn.magicwork.app"
+S3_BUCKET="magiwork-canva-assets"
+CDN_BASE="https://cdn.magiwork.app"
 ```
 ---
 
 ### Step 2: Create Google Spreadsheet
 
-1. **Create new Google Spreadsheet**: "MagicWork Content Inventory"
+1. **Create new Google Spreadsheet**: "Magiwork Content Inventory"
 2. **Add all columns** from the structure above (A through S)
 3. **Freeze first row** (View → Freeze → 1 row)
 4. **Format header row** (bold, background color)
@@ -152,23 +152,23 @@ CDN_BASE="https://cdn.magicwork.app"
 
 ```bash
 # List current bucket contents
-aws s3 ls s3://magicwork-canva-assets/
+aws s3 ls s3://magiwork-canva-assets/
 
 # Create folder structure (folders are created automatically when files are uploaded)
 # But you can verify structure exists by uploading a placeholder:
 
 # Create audio folders
-echo "" | aws s3 cp - s3://magicwork-canva-assets/audio/Pixabay/.gitkeep
-echo "" | aws s3 cp - s3://magicwork-canva-assets/audio/Gemini/.gitkeep
+echo "" | aws s3 cp - s3://magiwork-canva-assets/audio/Pixabay/.gitkeep
+echo "" | aws s3 cp - s3://magiwork-canva-assets/audio/Gemini/.gitkeep
 
 # Create video folders
-echo "" | aws s3 cp - s3://magicwork-canva-assets/video/canva/.gitkeep
+echo "" | aws s3 cp - s3://magiwork-canva-assets/video/canva/.gitkeep
 ```
 
 **Verify S3 Permissions:**
 ```bash
 # Check bucket policy allows public read (or CloudFront access)
-aws s3api get-bucket-policy --bucket magicwork-canva-assets
+aws s3api get-bucket-policy --bucket magiwork-canva-assets
 ```
 
 ---
@@ -253,30 +253,30 @@ Fill in columns A through I:
 **3. UPLOAD TO S3**
 
 ```bash
-# Example: Upload Pixabay audio (goes to magicwork-canva-assets)
+# Example: Upload Pixabay audio (goes to magiwork-canva-assets)
 aws s3 cp ~/Downloads/pixabay/ambient-spring-forest.mp3 \
-  s3://magicwork-canva-assets/audio/Pixabay/ambient-spring-forest.mp3
+  s3://magiwork-canva-assets/audio/Pixabay/ambient-spring-forest.mp3
 
-# Example: Upload Canva video (goes to magicwork-canva-assets)
+# Example: Upload Canva video (goes to magiwork-canva-assets)
 aws s3 cp ~/Downloads/canva/slow-morning-bg.mp4 \
-  s3://magicwork-canva-assets/video/canva/slow-morning-bg.mp4
+  s3://magiwork-canva-assets/video/canva/slow-morning-bg.mp4
 
-# Example: Upload Canva audio (goes to magicwork-canva-assets)
+# Example: Upload Canva audio (goes to magiwork-canva-assets)
 aws s3 cp ~/Downloads/canva/download.wav \
-  s3://magicwork-canva-assets/audio/download.wav
+  s3://magiwork-canva-assets/audio/download.wav
 
-# Example: Upload Gemini audio (goes to magicwork-canva-assets)
+# Example: Upload Gemini audio (goes to magiwork-canva-assets)
 aws s3 cp ~/Downloads/gemini/generated-track-001.wav \
-  s3://magicwork-canva-assets/audio/Gemini/generated-track-001.wav
+  s3://magiwork-canva-assets/audio/Gemini/generated-track-001.wav
 ```
 
 **Verify upload:**
 ```bash
 # Check all content in single bucket
-aws s3 ls s3://magicwork-canva-assets/video/canva/
-aws s3 ls s3://magicwork-canva-assets/audio/
-aws s3 ls s3://magicwork-canva-assets/audio/Pixabay/
-aws s3 ls s3://magicwork-canva-assets/audio/Gemini/
+aws s3 ls s3://magiwork-canva-assets/video/canva/
+aws s3 ls s3://magiwork-canva-assets/audio/
+aws s3 ls s3://magiwork-canva-assets/audio/Pixabay/
+aws s3 ls s3://magiwork-canva-assets/audio/Gemini/
 ```
 
 **4. UPDATE SPREADSHEET (Row Status: `uploaded`)**
@@ -287,8 +287,8 @@ Fill in columns J through P:
   - For Gemini: `audio/Gemini/generated-track-001.wav` (capitalized)
   - For Canva audio: `audio/download.wav` (directly in audio/)
   - For Canva video: `video/canva/clouds.mp4` (in canva/ subfolder)
-- S3 Bucket: `magicwork-canva-assets` (same for all content)
-- CDN URL: `https://cdn.magicwork.app/[s3-key]`
+- S3 Bucket: `magiwork-canva-assets` (same for all content)
+- CDN URL: `https://cdn.magiwork.app/[s3-key]`
 - Allocated Space: `Slow Morning`
 - Upload Date: Today's date
 
@@ -348,7 +348,7 @@ INSERT INTO content_assets (
   'slow-morning-audio-001',
   'Slow Morning - Spring Forest',
   'audio/pixabay/ambient-spring-forest.mp3',
-  'https://cdn.magicwork.app/audio/pixabay/ambient-spring-forest.mp3',
+  'https://cdn.magiwork.app/audio/pixabay/ambient-spring-forest.mp3',
   'audio',
   'mp3',
   'Slow Morning',
@@ -379,7 +379,7 @@ curl "https://your-app.vercel.app/api/content-assets?set=true&space=Slow%20Morni
 
 **Test CDN URL:**
 ```bash
-curl -I https://cdn.magicwork.app/audio/pixabay/ambient-spring-forest.mp3
+curl -I https://cdn.magiwork.app/audio/pixabay/ambient-spring-forest.mp3
 # Should return: HTTP/2 200
 ```
 
@@ -414,7 +414,7 @@ import fs from 'fs';
 import { execSync } from 'child_process';
 import csv from 'csv-parser';
 
-const S3_BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
+const S3_BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
 
 async function uploadFromCSV(csvPath) {
   const rows = [];
@@ -471,19 +471,19 @@ uploadFromCSV(csvPath);
 
 ```bash
 # List all files in a folder
-aws s3 ls s3://magicwork-canva-assets/audio/pixabay/ --recursive
+aws s3 ls s3://magiwork-canva-assets/audio/pixabay/ --recursive
 
 # Upload single file
-aws s3 cp local-file.mp3 s3://magicwork-canva-assets/audio/Pixabay/file.mp3
+aws s3 cp local-file.mp3 s3://magiwork-canva-assets/audio/Pixabay/file.mp3
 
 # Upload entire folder
-aws s3 sync ~/Downloads/pixabay/ s3://magicwork-canva-assets/audio/Pixabay/
+aws s3 sync ~/Downloads/pixabay/ s3://magiwork-canva-assets/audio/Pixabay/
 
 # Delete a file
-aws s3 rm s3://magicwork-canva-assets/audio/Pixabay/file.mp3
+aws s3 rm s3://magiwork-canva-assets/audio/Pixabay/file.mp3
 
 # Check file exists
-aws s3 ls s3://magicwork-canva-assets/audio/pixabay/file.mp3
+aws s3 ls s3://magiwork-canva-assets/audio/pixabay/file.mp3
 ```
 
 ### Database Operations
@@ -503,10 +503,10 @@ curl "https://your-app.vercel.app/api/content-assets"
 
 ```bash
 # Test CDN URL
-curl -I https://cdn.magicwork.app/audio/pixabay/file.mp3
+curl -I https://cdn.magiwork.app/audio/pixabay/file.mp3
 
 # Download via CDN (test)
-curl -O https://cdn.magicwork.app/audio/pixabay/file.mp3
+curl -O https://cdn.magiwork.app/audio/pixabay/file.mp3
 ```
 
 ---
@@ -516,8 +516,8 @@ curl -O https://cdn.magicwork.app/audio/pixabay/file.mp3
 ### Problem: File uploaded but not visible in app
 
 **Check:**
-1. ✅ File exists in S3: `aws s3 ls s3://magicwork-canva-assets/audio/pixabay/file.mp3`
-2. ✅ CDN URL works: `curl -I https://cdn.magicwork.app/audio/pixabay/file.mp3`
+1. ✅ File exists in S3: `aws s3 ls s3://magiwork-canva-assets/audio/pixabay/file.mp3`
+2. ✅ CDN URL works: `curl -I https://cdn.magiwork.app/audio/pixabay/file.mp3`
 3. ✅ Database entry exists: Check Supabase dashboard
 4. ✅ Status is `live`: `SELECT * FROM content_assets WHERE id = 'your-id';`
 5. ✅ `allocated_space` matches exactly: `SELECT * FROM content_assets WHERE allocated_space = 'Slow Morning';`
@@ -544,7 +544,7 @@ UPDATE content_assets SET allocated_space = 'Slow Morning' WHERE id = 'your-id';
 ```bash
 # Make file publicly readable (if not using CloudFront)
 aws s3api put-object-acl \
-  --bucket magicwork-canva-assets \
+  --bucket magiwork-canva-assets \
   --key audio/pixabay/file.mp3 \
   --acl public-read
 ```
@@ -589,11 +589,11 @@ npm run test-db
 - [ ] Save to organized local folder
 - [ ] Add row to spreadsheet (status: `downloaded`)
 - [ ] Upload to S3 with correct folder structure
-- [ ] Verify upload: `aws s3 ls s3://magicwork-canva-assets/...`
+- [ ] Verify upload: `aws s3 ls s3://magiwork-canva-assets/...`
 - [ ] Update spreadsheet (status: `uploaded`, add S3 key, CDN URL)
 - [ ] Register in database (script or SQL)
 - [ ] Update spreadsheet (status: `registered`, add Database ID)
-- [ ] Test CDN URL: `curl -I https://cdn.magicwork.app/...`
+- [ ] Test CDN URL: `curl -I https://cdn.magiwork.app/...`
 - [ ] Test API: `curl "https://your-app/api/content-assets?space=..."`
 - [ ] Verify in app (navigate to space, check content loads)
 - [ ] Update spreadsheet (status: `live`)

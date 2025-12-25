@@ -58,13 +58,13 @@ Error fetching content set: Error: Failed to fetch content set
 **Issue**: All video assets are failing to load with 403 Forbidden errors
 
 **Affected URLs**:
-- `https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4`
-- `https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4`
+- `https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4`
+- `https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4`
 
 **Error Messages**:
 ```
 Failed to load resource: the server responded with a status of 403 (Forbidden)
-[PracticeCard] Video failed to load: https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/...
+[PracticeCard] Video failed to load: https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/...
 ```
 
 **Impact**:
@@ -194,7 +194,7 @@ Total Audio Elements: 27
 2. **Fix S3 Permissions**:
    ```bash
    # Check current bucket policy
-   aws s3api get-bucket-policy --bucket magicwork-canva-assets
+   aws s3api get-bucket-policy --bucket magiwork-canva-assets
    
    # Update bucket policy to allow public read
    # See S3_BUCKET_POLICY.json

@@ -12,7 +12,7 @@
       "quality": "1080p",
       "size": "335x595",
       "s3Key": "canva/videos/breathe-to-relax-video.mp4",
-      "cdnUrl": "https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/canva/videos/breathe-to-relax-video.mp4",
+      "cdnUrl": "https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/canva/videos/breathe-to-relax-video.mp4",
       "localFallback": "/assets/canva/videos/breathe-to-relax-bg.mp4",
       "usedIn": ["BreatheToRelax.PracticeOfDay"],
       "editUrl": "https://www.canva.com/d/puTk9iP7KIj90WO"

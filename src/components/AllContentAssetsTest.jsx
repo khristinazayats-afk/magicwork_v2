@@ -144,7 +144,7 @@ const ALL_SPACES = [
 
 // Use deployed API URL for local development
 const API_BASE = import.meta.env.DEV 
-  ? (import.meta.env.VITE_API_BASE_URL || 'https://magicwork.vercel.app')
+  ? (import.meta.env.VITE_API_BASE_URL || 'https://magiwork.vercel.app')
   : '';
 
 export default function AllContentAssetsTest() {

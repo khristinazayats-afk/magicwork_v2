@@ -1,6 +1,6 @@
 # Canva Video Assets
 
-This folder contains video exports from Canva for use in the MagicWork app.
+This folder contains video exports from Canva for use in the Magiwork app.
 
 ## 🎬 Required Videos
 

@@ -22,7 +22,7 @@ class GreetingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               const Text(
-                'Welcome to MagicWork',
+                'Welcome to Magiwork',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,

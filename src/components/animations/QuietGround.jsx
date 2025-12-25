@@ -66,7 +66,7 @@ export default function QuietGround({ isActive = true }) {
   if (!isActive) return null;
 
   return (
-    <div className="relative w-full aspect-square max-w-md mx-auto bg-gradient-to-br from-magicwork-cream via-magicwork-beige to-white rounded-3xl overflow-hidden" style={{ boxShadow: '0 8px 32px rgba(30, 45, 46, 0.08)' }}>
+    <div className="relative w-full aspect-square max-w-md mx-auto bg-gradient-to-br from-magiwork-cream via-magiwork-beige to-white rounded-3xl overflow-hidden" style={{ boxShadow: '0 8px 32px rgba(30, 45, 46, 0.08)' }}>
       {/* Soft soil texture base */}
       <div className="absolute inset-0 opacity-40" style={{
         background: `radial-gradient(ellipse at bottom, ${SOIL_COLOR}50 0%, transparent 60%),

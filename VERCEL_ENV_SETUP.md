@@ -23,7 +23,7 @@ postgres://postgres.ejhafhggndirnxmwrtgm:YOUR_PASSWORD@aws-1-eu-central-1.pooler
 ### Step 2: Set Environment Variable in Vercel
 
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
-2. Select your project (`magicwork` or similar)
+2. Select your project (`magiwork` or similar)
 3. Go to **Settings** → **Environment Variables**
 4. Add a new environment variable:
    - **Name**: `POSTGRES_URL`
@@ -44,7 +44,7 @@ After setting the environment variable:
 After redeploying, test the API:
 
 ```bash
-curl "https://magicwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
+curl "https://magiwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
 ```
 
 **Expected Result** (with database working):

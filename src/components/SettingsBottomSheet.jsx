@@ -19,7 +19,7 @@ export default function SettingsBottomSheet({ isOpen, onClose }) {
     { id: 'profile', label: 'My Profile', icon: '👤' },
     { id: 'notifications', label: 'Notifications', icon: '🔔' },
     { id: 'privacy', label: 'Privacy & Safety', icon: '🔒' },
-    { id: 'about', label: 'About MagicWork', icon: '🕯️' },
+    { id: 'about', label: 'About Magiwork', icon: '🕯️' },
     { id: 'logout', label: 'Logout', icon: '🚪', danger: true }
   ];
   
@@ -107,7 +107,7 @@ export default function SettingsBottomSheet({ isOpen, onClose }) {
 
             <div className="p-8 border-t border-[#1e2d2e]/5 text-center">
               <p className="font-hanken text-[11px] text-[#1e2d2e]/30 leading-relaxed uppercase tracking-[0.2em]">
-                Built for humans<br />by MagicWork
+                Built for humans<br />by Magiwork
               </p>
             </div>
           </motion.div>

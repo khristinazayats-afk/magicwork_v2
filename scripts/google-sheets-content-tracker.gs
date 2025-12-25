@@ -1,5 +1,5 @@
 /**
- * Google Apps Script for MagicWork Content Inventory Spreadsheet
+ * Google Apps Script for Magiwork Content Inventory Spreadsheet
  * 
  * Features:
  * - Generate CDN URLs automatically
@@ -16,8 +16,8 @@
 
 // Configuration
 const CONFIG = {
-  S3_BUCKET: 'magicwork-canva-assets',
-  CDN_BASE: 'https://cdn.magicwork.app',
+  S3_BUCKET: 'magiwork-canva-assets',
+  CDN_BASE: 'https://cdn.magiwork.app',
   SPACES: [
     'Slow Morning',
     'Gentle De-Stress',
@@ -288,7 +288,7 @@ function generateDatabaseSQL() {
  */
 function onOpen() {
   const ui = SpreadsheetApp.getUi();
-  ui.createMenu('MagicWork Content')
+  ui.createMenu('Magiwork Content')
     .addItem('Generate All CDN URLs', 'generateAllCDNUrls')
     .addItem('Generate Upload Commands', 'generateUploadCommands')
     .addItem('Generate Database SQL', 'generateDatabaseSQL')

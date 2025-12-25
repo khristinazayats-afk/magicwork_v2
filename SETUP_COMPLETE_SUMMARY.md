@@ -9,7 +9,7 @@
 
 ### 2. ✅ Created `ENV_SETUP_CONTENT.md`
    - Complete guide for environment variables
-   - Shows single bucket: `magicwork-canva-assets` for all content
+   - Shows single bucket: `magiwork-canva-assets` for all content
    - Includes all required variables
 
 ### 3. ✅ Created `NEXT_STEPS_CONTENT_SETUP.md`
@@ -29,8 +29,8 @@
 ### ✅ Completed
 - [x] Google Spreadsheet created: https://docs.google.com/spreadsheets/d/13iAonweyvoDYRCWGQRsd3L9RASSiZEjoUmxfgCBc940/edit
 - [x] S3 bucket organized:
-  - `magicwork-canva-assets/audio/` (for all audio: Canva, Pixabay, Gemini)
-  - `magicwork-canva-assets/video/` (for Canva videos)
+  - `magiwork-canva-assets/audio/` (for all audio: Canva, Pixabay, Gemini)
+  - `magiwork-canva-assets/video/` (for Canva videos)
 - [x] Example row added to spreadsheet
 - [x] Scripts updated to match new structure
 
@@ -52,13 +52,13 @@
 
 4. **Fix spreadsheet example row** (If needed)
    - Your current row shows Pixabay file
-   - Make sure S3 Bucket column says `magicwork-canva-assets` (single bucket for all)
+   - Make sure S3 Bucket column says `magiwork-canva-assets` (single bucket for all)
    - S3 Key should be: `audio/Pixabay/ambient-spring-forest.mp3` (for Pixabay, capitalized)
 
 5. **Upload first file** (Test)
    ```bash
    aws s3 cp /Users/ksvarychevska/Downloads/ambient-spring-forest.mp3 \
-     s3://magicwork-canva-assets/audio/Pixabay/ambient-spring-forest.mp3
+     s3://magiwork-canva-assets/audio/Pixabay/ambient-spring-forest.mp3
    ```
 
 6. **Register in database** (Test)
@@ -72,7 +72,7 @@
 
 ### S3 Bucket Usage
 
-**magicwork-canva-assets** (single bucket for all content):
+**magiwork-canva-assets** (single bucket for all content):
 - Canva Videos: `video/canva/clouds.mp4` (in canva/ subfolder)
 - Canva Audio: `audio/download.wav` (directly in audio/, no subfolder)
 - Pixabay: `audio/Pixabay/file.mp3` (capitalized folder)
@@ -81,9 +81,9 @@
 ### Environment Variables Needed
 
 ```bash
-S3_BUCKET=magicwork-canva-assets        # Single bucket for all content
+S3_BUCKET=magiwork-canva-assets        # Single bucket for all content
 AWS_REGION=eu-north-1
-CDN_BASE=https://cdn.magicwork.app
+CDN_BASE=https://cdn.magiwork.app
 POSTGRES_URL_NON_POOLING=postgres://...
 ```
 
@@ -128,17 +128,17 @@ After setup, verify:
 
 ```bash
 # 1. Test AWS access
-aws s3 ls s3://magicwork-canva-assets/ --recursive
-aws s3 ls s3://magicwork-canva-assets/audio/Pixabay/
-aws s3 ls s3://magicwork-canva-assets/audio/Gemini/
-aws s3 ls s3://magicwork-canva-assets/video/canva/
+aws s3 ls s3://magiwork-canva-assets/ --recursive
+aws s3 ls s3://magiwork-canva-assets/audio/Pixabay/
+aws s3 ls s3://magiwork-canva-assets/audio/Gemini/
+aws s3 ls s3://magiwork-canva-assets/video/canva/
 
 # 2. Test database (no psql needed!)
 npm run test-db
 
 # 3. Test CDN (after uploading file)
-curl -I https://cdn.magicwork.app/audio/Pixabay/ambient-spring-forest.mp3
-curl -I https://cdn.magicwork.app/video/canva/clouds.mp4
+curl -I https://cdn.magiwork.app/audio/Pixabay/ambient-spring-forest.mp3
+curl -I https://cdn.magiwork.app/video/canva/clouds.mp4
 
 # 4. Test API (after registering in database)
 curl "https://your-app.vercel.app/api/content-assets?space=Slow%20Morning"

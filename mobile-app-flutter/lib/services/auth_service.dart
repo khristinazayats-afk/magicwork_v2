@@ -19,6 +19,7 @@ class AuthService {
       return await _supabase.auth.signUp(
         email: email,
         password: password,
+        emailRedirectTo: 'magiwork://auth-callback',
       );
     } catch (e) {
       return null;

@@ -2,7 +2,7 @@
 
 ## The Problem
 ```
-curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 → HTTP/1.1 403 Forbidden
 ```
 
@@ -13,7 +13,7 @@ curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/c
 ## Quick Fix (5 minutes)
 
 ### 1. Go to AWS S3 Console
-**Link:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets?region=eu-north-1&tab=permissions
+**Link:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets?region=eu-north-1&tab=permissions
 
 ### 2. Disable Block Public Access (CRITICAL!)
 
@@ -45,21 +45,21 @@ curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/c
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
+      "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
     },
     {
       "Sid": "PublicReadGetObjectVideo",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magicwork-canva-assets/video/*"
+      "Resource": "arn:aws:s3:::magiwork-canva-assets/video/*"
     },
     {
       "Sid": "PublicReadGetObjectAudio",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magicwork-canva-assets/audio/*"
+      "Resource": "arn:aws:s3:::magiwork-canva-assets/audio/*"
     }
   ]
 }
@@ -85,7 +85,7 @@ curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/c
 Wait 30-60 seconds, then test:
 
 ```bash
-curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 ```
 
 **Expected:** `HTTP/1.1 200 OK`
@@ -107,7 +107,7 @@ import('pg').then(({Pool}) => {
     connectionString: process.env.POSTGRES_URL,
     ssl: { rejectUnauthorized: false }
   });
-  pool.query(\"UPDATE content_assets SET cdn_url = REPLACE(cdn_url, 'magicwork-canva-assets.s3.eu-north-1.amazonaws.com', 'd3hajr7xji31qq.cloudfront.net') WHERE cdn_url LIKE '%s3.eu-north-1.amazonaws.com%'\").then(() => {
+  pool.query(\"UPDATE content_assets SET cdn_url = REPLACE(cdn_url, 'magiwork-canva-assets.s3.eu-north-1.amazonaws.com', 'd3hajr7xji31qq.cloudfront.net') WHERE cdn_url LIKE '%s3.eu-north-1.amazonaws.com%'\").then(() => {
     console.log('✅ Updated URLs to CloudFront');
     pool.end();
   });
@@ -125,5 +125,5 @@ import('pg').then(({Pool}) => {
 
 ## Direct AWS Console Links
 
-- **Bucket Permissions:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets?region=eu-north-1&tab=permissions
-- **Block Public Access:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets?region=eu-north-1&tab=permissions&bucketPolicy=true
+- **Bucket Permissions:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets?region=eu-north-1&tab=permissions
+- **Block Public Access:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets?region=eu-north-1&tab=permissions&bucketPolicy=true

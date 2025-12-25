@@ -1,5 +1,5 @@
 // api/pixabay-lookup.js
-// Safe Pixabay lookup for magicwork: never crash, best-effort author/title.
+// Safe Pixabay lookup for magiwork: never crash, best-effort author/title.
 
 export const config = { runtime: "nodejs" };
 
@@ -24,7 +24,7 @@ async function tryFetchHtml(url) {
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (magicwork)",
+        "User-Agent": "Mozilla/5.0 (magiwork)",
         "Accept": "text/html,application/xhtml+xml",
         "Referer": "https://pixabay.com/"
       }

@@ -3,7 +3,7 @@
 ## 🎉 SUCCESS: Video is Now Accessible!
 
 ```bash
-curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
+curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
 → HTTP/1.1 200 OK ✅
 ```
 
@@ -43,7 +43,7 @@ The videos are already working, but for complete S3 access, update bucket settin
 
 ### Quick Fix (5 minutes in AWS Console):
 
-1. **Go to:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets?region=eu-north-1&tab=permissions
+1. **Go to:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets?region=eu-north-1&tab=permissions
 
 2. **Disable Block Public Access:**
    - Permissions → Block public access → Edit
@@ -65,7 +65,7 @@ The videos are already working, but for complete S3 access, update bucket settin
 
 ```bash
 # Test video access
-curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
+curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
 → HTTP/1.1 200 OK ✅
 ```
 

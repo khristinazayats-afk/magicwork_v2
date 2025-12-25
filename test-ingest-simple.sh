@@ -1,11 +1,11 @@
 #!/bin/bash
 # Simple test for ingest endpoint
 # Usage: ./test-ingest-simple.sh <your-domain>
-# Example: ./test-ingest-simple.sh magicwork.app
+# Example: ./test-ingest-simple.sh magiwork.app
 
 if [ -z "$1" ]; then
   echo "Usage: ./test-ingest-simple.sh <your-domain>"
-  echo "Example: ./test-ingest-simple.sh magicwork.app"
+  echo "Example: ./test-ingest-simple.sh magiwork.app"
   exit 1
 fi
 

@@ -17,7 +17,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'https://magicwork-25ako2pyo-khristinazayats-afks-projects.vercel.app',
+        target: 'https://magiwork.vercel.app',
         changeOrigin: true,
         secure: true
       }

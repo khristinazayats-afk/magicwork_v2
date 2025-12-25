@@ -1,5 +1,5 @@
 // Favorites system for practices in localStorage
-const STORAGE_KEY = 'magicwork_practiceFavorites';
+const STORAGE_KEY = 'magiwork_practiceFavorites';
 
 // Load favorites from localStorage
 export function loadFavorites() {

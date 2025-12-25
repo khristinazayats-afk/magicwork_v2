@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ========================================
-# MagicWork S3 Upload Script
+# Magiwork S3 Upload Script
 # ========================================
 # Upload Canva exports to S3 and get CDN URL
 #
@@ -78,7 +78,7 @@ esac
 
 # Build S3 paths
 S3_KEY="canva/${FOLDER}/${ASSET_ID}.${EXTENSION}"
-S3_URI="s3://magicwork-canva-assets/${S3_KEY}"
+S3_URI="s3://magiwork-canva-assets/${S3_KEY}"
 CDN_URL="https://d3hajr7xji31qq.cloudfront.net/${S3_KEY}"
 
 # Get file size
@@ -135,7 +135,7 @@ else
     echo ""
     echo "Check:"
     echo "1. AWS credentials are configured (run: aws configure)"
-    echo "2. You have access to bucket: magicwork-canva-assets"
+    echo "2. You have access to bucket: magiwork-canva-assets"
     echo "3. Region is correct: eu-north-1"
     echo ""
     exit 1

@@ -61,7 +61,7 @@ export async function getAssetById(id) {
  * Get mock videos array for "Drift into Sleep" - always available fallback
  */
 function getDriftIntoSleepMockVideos() {
-  const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+  const s3BaseUrl = 'https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com';
   return [
     {
       id: 'drift-clouds-video',
@@ -184,7 +184,7 @@ export async function getAssetsBySpace(space) {
  * Get mock data for "Drift into Sleep" - always available fallback
  */
 function getDriftIntoSleepMockData() {
-  const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+  const s3BaseUrl = 'https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com';
   return {
     visual: {
       id: 'drift-clouds-video',

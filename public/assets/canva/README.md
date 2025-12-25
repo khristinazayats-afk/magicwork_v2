@@ -1,6 +1,6 @@
 # Canva Assets
 
-This folder contains exported designs from Canva for use in the MagicWork app.
+This folder contains exported designs from Canva for use in the Magiwork app.
 
 ## 📁 Folder Structure
 

@@ -15,12 +15,12 @@ AWS_SECRET_ACCESS_KEY=your-aws-secret-key
 AWS_REGION=eu-north-1
 
 # S3 Bucket (single bucket for all content)
-S3_BUCKET=magicwork-canva-assets
+S3_BUCKET=magiwork-canva-assets
 
 # CDN Configuration
-CDN_BASE=https://cdn.magicwork.app
-CDN_BASE_URL=https://cdn.magicwork.app
-CDN_DOMAIN=https://cdn.magicwork.app
+CDN_BASE=https://cdn.magiwork.app
+CDN_BASE_URL=https://cdn.magiwork.app
+CDN_DOMAIN=https://cdn.magiwork.app
 
 # Database (Supabase)
 POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
@@ -37,19 +37,19 @@ Add these for **Production**, **Preview**, and **Development**:
 AWS_ACCESS_KEY_ID=your-aws-access-key
 AWS_SECRET_ACCESS_KEY=your-aws-secret-key
 AWS_REGION=eu-north-1
-S3_BUCKET=magicwork-canva-assets
-CDN_BASE=https://cdn.magicwork.app
-CDN_BASE_URL=https://cdn.magicwork.app
+S3_BUCKET=magiwork-canva-assets
+CDN_BASE=https://cdn.magiwork.app
+CDN_BASE_URL=https://cdn.magiwork.app
 POSTGRES_URL_NON_POOLING=postgres://...
 POSTGRES_URL=postgres://...
 ```
 
 ## S3 Bucket Structure
 
-### magicwork-canva-assets (eu-north-1) - Single Bucket for All Content
+### magiwork-canva-assets (eu-north-1) - Single Bucket for All Content
 
 ```
-magicwork-canva-assets/
+magiwork-canva-assets/
 ├── audio/
 │   ├── Pixabay/        ← MP3 files from Pixabay (capitalized)
 │   │   └── *.mp3
@@ -63,7 +63,7 @@ magicwork-canva-assets/
 
 ## Important Notes
 
-1. **S3_BUCKET** is used for all content (default: `magicwork-canva-assets`)
+1. **S3_BUCKET** is used for all content (default: `magiwork-canva-assets`)
 2. **CDN_BASE** should point to your CloudFront distribution
 3. Bucket is in **eu-north-1** (Stockholm) region
 4. All content types (Canva, Pixabay, Gemini) go into the same bucket
@@ -74,19 +74,19 @@ Test your environment variables:
 
 ```bash
 # Check AWS credentials and bucket structure
-aws s3 ls s3://magicwork-canva-assets/ --recursive
+aws s3 ls s3://magiwork-canva-assets/ --recursive
 
 # List audio files
-aws s3 ls s3://magicwork-canva-assets/audio/
+aws s3 ls s3://magiwork-canva-assets/audio/
 
 # List Pixabay audio
-aws s3 ls s3://magicwork-canva-assets/audio/Pixabay/
+aws s3 ls s3://magiwork-canva-assets/audio/Pixabay/
 
 # List Gemini audio
-aws s3 ls s3://magicwork-canva-assets/audio/Gemini/
+aws s3 ls s3://magiwork-canva-assets/audio/Gemini/
 
 # List video files
-aws s3 ls s3://magicwork-canva-assets/video/canva/
+aws s3 ls s3://magiwork-canva-assets/video/canva/
 
 # Test database connection
 psql $POSTGRES_URL_NON_POOLING -c "SELECT 1;"

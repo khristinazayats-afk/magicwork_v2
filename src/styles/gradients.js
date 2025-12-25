@@ -1,4 +1,4 @@
-// Semantic gradient system for magicwork feed screens
+// Semantic gradient system for magiwork feed screens
 // Linear gradients: 180deg (top → bottom) with 4 color stops
 // Source: feed_gradient.txt
 // Colors: Mint=#94D1C4, Orange=#FFAF42, Purple=#BDB2CD

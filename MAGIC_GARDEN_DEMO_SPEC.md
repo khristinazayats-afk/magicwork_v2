@@ -9,7 +9,7 @@ An internal demo screen that visually showcases the 5 garden states representing
 
 ### Overall Container
 - **Orientation**: Vertical mobile-first layout
-- **Background**: MagicWork beige (`#fcf8f2`) with soft gradient overlay
+- **Background**: Magiwork beige (`#fcf8f2`) with soft gradient overlay
 - **Spacing**: Generous padding, breathing room between sections
 - **Max Width**: Mobile full-width, tablet/desktop max 700px centered
 
@@ -564,7 +564,7 @@ An internal demo screen that visually showcases the 5 garden states representing
 This demo screen successfully communicates:
 1. ✅ Clear visual progression from minimal → rich across 5 states
 2. ✅ Each state feels distinct and emotionally resonant
-3. ✅ Visuals align with MagicWork brand (calm, minimal, organic)
+3. ✅ Visuals align with Magiwork brand (calm, minimal, organic)
 4. ✅ Elements feel magical but adult (no childish imagery)
 5. ✅ Founder can easily compare states side-by-side mentally
 6. ✅ Visuals can be adapted for reuse in production screens

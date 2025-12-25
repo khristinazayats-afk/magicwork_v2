@@ -113,6 +113,7 @@ class MyApp extends StatelessWidget {
     await Supabase.initialize(
       url: AppConfig.supabaseUrl,
       anonKey: AppConfig.supabaseAnonKey,
+      debug: false,
     );
     
     // Set system UI overlay style

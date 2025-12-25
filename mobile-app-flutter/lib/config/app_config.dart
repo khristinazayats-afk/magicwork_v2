@@ -4,11 +4,11 @@ class AppConfig {
   static const String supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZnd2ZGN2b2hteWt3ZGZnaXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2NDYzNDksImV4cCI6MjA4MjIyMjM0OX0.iqqtfeXxSFPkGjRHAYWi3F1sOuT-RA34DpsM8PzM7_g';
   
   // Deep Link Configuration
-  static const String deepLinkScheme = 'magicwork';
+  static const String deepLinkScheme = 'magiwork';
   static const String authCallbackPath = '/auth-callback';
   
   // API Configuration
-  static const String apiBaseUrl = 'https://magicwork.vercel.app/api';
+  static const String apiBaseUrl = 'https://magiwork.vercel.app/api';
   
   // OpenAI Configuration
   static const String openaiApiKey = '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';
@@ -21,6 +21,6 @@ class AppConfig {
   // static const String runwayApiKey = ''; // For video generation (alternative to Sora)
   
   // App Info
-  static const String appName = 'MagicWork';
+  static const String appName = 'Magiwork';
   static const String appVersion = '1.0.0';
 }

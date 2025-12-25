@@ -29,7 +29,7 @@ SUPABASE_JWT_SECRET="scZGdXghTBVlhjoNbd7AHad1zQNz7i7Pz1EwTiHnlqYFtK+54up9ghZ8+yQ
 AWS_ACCESS_KEY_ID=AKIA4LUZWCSJJ5IOFWFS
 AWS_SECRET_ACCESS_KEY=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
 AWS_REGION=eu-north-1
-S3_BUCKET=magicwork-canva-assets
+S3_BUCKET=magiwork-canva-assets
 
 # ----------------------------------------
 # CloudFront CDN (✅ READY)
@@ -38,7 +38,7 @@ S3_BUCKET=magicwork-canva-assets
 CDN_BASE_URL=https://d3hajr7xji31qq.cloudfront.net
 
 # Custom domain (if configured with SSL)
-# CDN_BASE_URL=https://cdn.magicwork.app
+# CDN_BASE_URL=https://cdn.magiwork.app
 
 # ----------------------------------------
 # Google Sheets CMS (✅ READY)

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // Use deployed API URL for local development since serverless functions don't run locally
 // Try to use proxy first, fallback to deployed API
 const API_BASE = import.meta.env.DEV 
-  ? (import.meta.env.VITE_API_BASE_URL || 'https://magicwork.vercel.app')
+  ? (import.meta.env.VITE_API_BASE_URL || 'https://magiwork.vercel.app')
   : '';
 
 /**
@@ -48,7 +48,7 @@ export function useContentSet(spaceName) {
           // If API fails (500 or any error), use fallback mock data for supported spaces
           if (spaceName === 'Drift into Sleep' || spaceName === 'Slow Morning') {
             console.warn(`API returned ${setResponse.status}, using fallback data for ${spaceName}`);
-            const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+            const s3BaseUrl = 'https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com';
             
             if (spaceName === 'Slow Morning') {
               // Fallback for Slow Morning - use clouds video
@@ -171,7 +171,7 @@ export function useContentSet(spaceName) {
         if (spaceName === 'Drift into Sleep') {
           if (finalVisuals.length < 4) {
             console.warn(`Only ${finalVisuals.length} video(s) found for Drift into Sleep, using mock data with 4 videos`);
-            const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+            const s3BaseUrl = 'https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com';
             finalVisuals = [
               {
                 id: 'drift-clouds-video',
@@ -220,7 +220,7 @@ export function useContentSet(spaceName) {
         // Use mock data as fallback for supported spaces when API fails
         if (spaceName === 'Drift into Sleep' || spaceName === 'Slow Morning') {
           console.warn(`Using fallback data due to API error for ${spaceName}`);
-          const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+          const s3BaseUrl = 'https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com';
           
           if (spaceName === 'Slow Morning') {
             // Fallback for Slow Morning - use clouds video

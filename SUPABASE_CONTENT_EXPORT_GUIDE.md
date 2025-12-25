@@ -21,7 +21,7 @@ http://localhost:5173/?test=all-content-assets
 
 Or on production:
 ```
-https://magicwork.vercel.app/?test=all-content-assets
+https://magiwork.vercel.app/?test=all-content-assets
 ```
 
 This shows:
@@ -252,7 +252,7 @@ This shows all spaces and their content.
 
 4. **Check API:**
    ```bash
-   curl "https://magicwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
+   curl "https://magiwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
    ```
 
 ### Content Not Loading for Specific Space
