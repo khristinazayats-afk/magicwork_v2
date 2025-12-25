@@ -52,18 +52,26 @@ class _LoginScreenState extends State<LoginScreen> {
         final userId = authProvider.user?.id;
         
         if (userId != null) {
-          // Initialize analytics for logged-in user
-          await analyticsProvider.initialize(userId);
-          
-          // Load user profile
-          await profileProvider.loadProfile(userId);
-          
-          // Track login event
-          await analyticsProvider.trackAction(
-            actionName: 'login_success',
-            userId: userId,
-            screenName: 'Login',
-          );
+          try {
+            // Initialize analytics for logged-in user
+            await analyticsProvider.initialize(userId);
+            
+            // Load user profile - if table is missing, this will fail but shouldn't stop login
+            await profileProvider.loadProfile(userId);
+            
+            if (profileProvider.error != null && profileProvider.error!.contains('relation "public.user_profiles" does not exist')) {
+              print('⚠️ Database table user_profiles missing. Profile features will be limited.');
+            }
+            
+            // Track login event
+            await analyticsProvider.trackAction(
+              actionName: 'login_success',
+              userId: userId,
+              screenName: 'Login',
+            );
+          } catch (e) {
+            print('Error during post-login tasks: $e');
+          }
         }
 
         ScaffoldMessenger.of(context).showSnackBar(

@@ -5,6 +5,7 @@ import HomeScreenSummary from './HomeScreenSummary';
 import ProfileScreen from './ProfileScreen';
 import PracticeCard from './PracticeCard';
 import FirstTimeGuide from './FirstTimeGuide';
+import ProgressStats from './ProgressStats';
 import stationsData from '../data/stations.json';
 
 export default function Feed({ onBack }) {
@@ -409,19 +410,19 @@ export default function Feed({ onBack }) {
 
       <div 
         ref={scrollContainerRef}
-        className={`full-viewport w-full ${activeSpaceIndex === null ? 'overflow-y-scroll snap-y snap-mandatory' : 'overflow-hidden'}`}
+        className={`full-viewport w-full ${activeSpaceIndex === null ? 'overflow-y-scroll md:overflow-y-auto' : 'overflow-hidden'}`}
         style={{ 
           margin: 0, 
           padding: 0,
           backgroundColor: '#fcf8f2'
         }}
       >
-        {/* Hamburger Menu - Top Left */}
+        {/* Mobile-only Hamburger Menu - Top Left (Hidden on Desktop because of AppLayout Sidebar) */}
         {activeSpaceIndex === null && (
           <motion.button
             onClick={() => setShowSettings(true)}
             whileTap={{ scale: 0.9 }}
-            className="fixed top-4 left-4 z-40 p-3 rounded-full pointer-events-auto bg-white/80 backdrop-blur-sm shadow-sm"
+            className="md:hidden fixed top-4 left-4 z-40 p-3 rounded-full pointer-events-auto bg-white/80 backdrop-blur-sm shadow-sm"
             aria-label="Menu"
             style={{ marginTop: 'env(safe-area-inset-top, 0)' }}
           >
@@ -431,18 +432,56 @@ export default function Feed({ onBack }) {
           </motion.button>
         )}
 
-        {/* HomeScreen Summary - Brief excerpt at top (sticky) */}
+        {/* Dashboard Header - Shows on Desktop, replaced HomeScreenSummary */}
         {activeSpaceIndex === null && (
-          <div 
-            className="w-full flex-shrink-0 sticky top-0 z-30 snap-start snap-always bg-[#fcf8f2]"
-            style={{ margin: 0, padding: 0 }}
-          >
-            <HomeScreenSummary onVibeClick={() => setShowProfile(true)} />
+          <div className="w-full px-6 py-8 md:px-12 md:py-16">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-12"
+            >
+              <h1 className="font-hanken font-bold text-[32px] md:text-[48px] text-[#1e2d2e] mb-4">
+                Good afternoon
+              </h1>
+              
+              <ProgressStats />
+
+              <div className="flex flex-col md:flex-row gap-4 md:items-center">
+                <HomeScreenSummary variant="white" onVibeClick={() => setShowProfile(true)} />
+              </div>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {spaces.map((space, index) => (
+                <motion.div
+                  key={`grid-${space.name}-${index}`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleJoin(index)}
+                  className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-[#1e2d2e]/5 group-hover:from-white/20 transition-all" />
+                  <div className="relative z-10">
+                    <h3 className="font-hanken font-bold text-2xl text-[#1e2d2e] mb-2">{space.name}</h3>
+                    <p className="font-hanken text-[#1e2d2e]/60 text-sm mb-4 line-clamp-2">
+                      {space.description || "A quiet space for presence."}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[#E52431] animate-pulse" />
+                      <span className="text-[10px] font-hanken font-semibold text-[#1e2d2e]/40 uppercase tracking-widest">
+                        Live Now
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Feed cards - Space cards with gradient backgrounds */}
-        {infiniteSpaces.map((space, index) => {
+        {/* Mobile-only infinite scroll - Hidden on desktop */}
+        <div className="md:hidden">
+          {infiniteSpaces.map((space, index) => {
           const normalizedIndex = index % spaces.length;
           // Track if user has interacted with this specific card instance
           // For "Get in the Flow State", check if any instance of this card has been interacted with
@@ -478,6 +517,7 @@ export default function Feed({ onBack }) {
           );
         })}
       </div>
+    </div>
       
       {/* Settings Bottom Sheet */}
       <SettingsBottomSheet isOpen={showSettings} onClose={() => setShowSettings(false)} />

@@ -3,6 +3,8 @@
  * Tracks completed practice sessions with full details
  */
 
+import { supabase } from '../lib/supabase';
+
 const SESSIONS_KEY = 'magicwork_sessions';
 
 /**
@@ -13,8 +15,9 @@ const SESSIONS_KEY = 'magicwork_sessions';
  * @param {string} session.mode - 'guided' or 'ambient'
  * @param {number} [session.heartsSent] - Number of hearts sent (ambient mode)
  */
-export function saveSession({ spaceName, duration, mode, heartsSent = 0 }) {
+export async function saveSession({ spaceName, duration, mode, heartsSent = 0 }) {
   try {
+    // 1. Save to LocalStorage (for offline/immediate UI)
     const sessions = loadSessions();
     const newSession = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -28,6 +31,20 @@ export function saveSession({ spaceName, duration, mode, heartsSent = 0 }) {
     
     sessions.push(newSession);
     localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+
+    // 2. Save to Supabase (if logged in)
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from('practice_sessions').insert({
+        user_id: user.id,
+        space_name: spaceName,
+        duration_seconds: duration,
+        mode: mode,
+        hearts_sent: heartsSent,
+        completed_at: new Date().toISOString()
+      });
+      console.log('[SessionTracking] Session synced to Supabase');
+    }
     
     return newSession;
   } catch (error) {

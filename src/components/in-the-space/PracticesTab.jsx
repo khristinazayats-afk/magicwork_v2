@@ -26,8 +26,12 @@ export default function PracticesTab({
   const [emotionalState, setEmotionalState] = useState(null);
   const [selectedIntent, setSelectedIntent] = useState(null);
   const [generatedScript, setGeneratedScript] = useState(null);
+  const [narrationUrl, setNarrationUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isGeneratingVoice, setIsGeneratingVoice] = useState(false);
   const [error, setError] = useState(null);
+
+  const narrationAudioRef = useRef(new Audio());
 
   const countdownIntervalRef = useRef(null);
   const videoRef = useRef(null);
@@ -79,6 +83,32 @@ export default function PracticesTab({
 
       const data = await response.json();
       setGeneratedScript(data.content);
+      
+      // Generate voice narration
+      setIsGeneratingVoice(true);
+      try {
+        const voiceResponse = await fetch('/api/generate-voice', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            text: data.content,
+            voice: emotionalState === 'calm' ? 'shimmer' : 'nova'
+          }),
+        });
+
+        if (voiceResponse.ok) {
+          const blob = await voiceResponse.blob();
+          const url = URL.createObjectURL(blob);
+          setNarrationUrl(url);
+          narrationAudioRef.current.src = url;
+          narrationAudioRef.current.play().catch(e => console.log('Narration autoplay blocked:', e));
+        }
+      } catch (voiceErr) {
+        console.error('Voice generation error:', voiceErr);
+      } finally {
+        setIsGeneratingVoice(false);
+      }
+
       setFlowFlowStep('practice');
       
       // Notify parent
@@ -116,6 +146,15 @@ export default function PracticesTab({
     if (countdownIntervalRef.current) {
       clearInterval(countdownIntervalRef.current);
     }
+    
+    // Stop narration
+    narrationAudioRef.current.pause();
+    narrationAudioRef.current.src = '';
+    if (narrationUrl) {
+      URL.revokeObjectURL(narrationUrl);
+      setNarrationUrl(null);
+    }
+
     setIsExpanded(false);
     if (onExpandedViewChange) {
       onExpandedViewChange(false);
@@ -347,45 +386,53 @@ export default function PracticesTab({
     };
 
     return (
-      <div className="w-full h-full relative">
-        {/* Video Background */}
-        {videoUrl && !assetsLoading && (
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover -z-10"
-            style={{ opacity: 0.3, pointerEvents: 'none' }}
-            src={videoUrl}
-          />
-        )}
-
+      <div className="w-full h-full relative flex flex-col">
         {/* Practice Content */}
-        <div className="w-full h-full flex flex-col p-6 overflow-y-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="font-hanken text-xl font-bold text-[#1e2d2e]">
-              {practice.title}
-            </h2>
-            <div className="text-2xl font-hanken font-bold text-[#1e2d2e]">
+        <div className="flex-1 flex flex-col p-6 overflow-y-auto">
+          <div className="flex justify-between items-center mb-8 bg-white/40 backdrop-blur-md p-4 rounded-2xl sticky top-0 z-10">
+            <div>
+              <h2 className="font-hanken text-xl font-bold text-[#1e2d2e]">
+                {practice.title}
+              </h2>
+              <div className="flex items-center gap-2">
+                <p className="text-[#1e2d2e]/60 text-xs uppercase tracking-widest font-bold">
+                  {isGeneratingVoice ? 'Generating Voice...' : 'Session Active'}
+                </p>
+                {!isGeneratingVoice && narrationUrl && (
+                  <div className="flex items-center gap-1">
+                    <div className="w-1 h-1 bg-[#4CAF50] rounded-full animate-pulse" />
+                    <span className="text-[10px] text-[#4CAF50] font-bold uppercase tracking-widest">Audio Live</span>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="text-3xl font-hanken font-bold text-[#1e2d2e]">
               {formatTime(timeRemaining)}
             </div>
           </div>
           
-          <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 mb-8 border border-white/20 shadow-xl">
-            <p className="text-[#1e2d2e] font-hanken text-lg leading-relaxed whitespace-pre-wrap">
-              {generatedScript || practice.description}
-            </p>
+          <div className="flex-1 max-w-2xl mx-auto w-full">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white/80 backdrop-blur-lg rounded-[40px] p-8 md:p-12 mb-8 border border-white/40 shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 p-8 text-4xl opacity-10 select-none">✨</div>
+              <p className="text-[#1e2d2e] font-hanken text-lg md:text-xl leading-relaxed whitespace-pre-wrap relative z-10">
+                {generatedScript || practice.description}
+              </p>
+            </motion.div>
           </div>
 
-          <button
-            onClick={handleCompletePractice}
-            className="w-full py-4 rounded-full bg-[#1e2d2e] text-white font-hanken font-bold shadow-lg mt-auto mb-24"
-          >
-            Complete Practice
-          </button>
+          <div className="max-w-md mx-auto w-full pb-32">
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={handleCompletePractice}
+              className="w-full py-5 rounded-full bg-[#1e2d2e] text-white font-hanken font-bold text-lg shadow-xl shadow-[#1e2d2e]/20"
+            >
+              Complete Practice
+            </motion.button>
+          </div>
         </div>
       </div>
     );

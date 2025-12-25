@@ -2,7 +2,7 @@
 
 ## Configuration Status
 
-✅ **Supabase URL**: `https://pujvtikwdmxlfrqfsjpu.supabase.co`
+✅ **Supabase URL**: `https://tbfwvdcvohmykwdfgiqy.supabase.co`
 ✅ **Anon Key**: Configured (matches Vercel)
 ✅ **Initialization**: In `main.dart` `_initializeApp()`
 
@@ -10,7 +10,7 @@
 
 ### 1. Verify Configuration
 The app is configured to use the same Supabase instance as Vercel:
-- URL: `pujvtikwdmxlfrqfsjpu.supabase.co`
+- URL: `tbfwvdcvohmykwdfgiqy.supabase.co`
 - This matches the Vercel environment variables
 
 ### 2. Test in App
@@ -33,7 +33,7 @@ The app is configured to use the same Supabase instance as Vercel:
 **If connection fails:**
 1. Check internet connection
 2. Verify Supabase URL is accessible
-3. Check Supabase Dashboard: https://supabase.com/dashboard/project/pujvtikwdmxlfrqfsjpu
+3. Check Supabase Dashboard: https://supabase.com/dashboard/project/tbfwvdcvohmykwdfgiqy
 4. Verify anon key is correct
 5. Check Xcode console for detailed error messages
 
@@ -46,7 +46,7 @@ The app is configured to use the same Supabase instance as Vercel:
 ## Verification
 
 To verify the connection is working:
-1. Go to Supabase Dashboard: https://supabase.com/dashboard/project/pujvtikwdmxlfrqfsjpu
+1. Go to Supabase Dashboard: https://supabase.com/dashboard/project/tbfwvdcvohmykwdfgiqy
 2. Navigate to Authentication → Users
 3. Try creating an account in the app
 4. Check if the user appears in the Supabase Dashboard
@@ -57,4 +57,6 @@ To verify the connection is working:
 ✅ Supabase initialized in app startup
 ✅ Error handling improved with detailed logging
 ⏳ Ready to test connection in app
+
+
 

@@ -44,46 +44,40 @@ const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
  */
 const ASSETS_TO_ADD = [
   // Videos
-  // Note: S3 structure is video/canva/ for Canva videos
   {
-    id: 'drift-into-sleep-video-1',
     name: 'Drift into Sleep - Background Video 1',
-    s3Key: 'video/canva/breathe-to-relax-video.mp4',
+    s3Key: 'videos/canva/breathe-to-relax-video.mp4',
     type: 'video',
     format: 'mp4',
     allocatedSpace: 'Drift into Sleep',
     notes: 'Main background video for sleep practice'
   },
   {
-    id: 'drift-clouds-video',
-    name: 'Clouds Video',
-    s3Key: 'video/canva/clouds.mp4',
+    name: 'Slow Morning - Clouds',
+    s3Key: 'videos/canva/clouds.mp4',
     type: 'video',
     format: 'mp4',
-    allocatedSpace: 'Drift into Sleep',
-    notes: 'Clouds background video for sleep'
+    allocatedSpace: 'Slow Morning',
+    notes: 'Clouds background for morning'
   },
   {
-    id: 'drift-rain-video',
-    name: 'Rain Video',
-    s3Key: 'video/canva/rain.mp4',
+    name: 'Breathe To Relax - Nature',
+    s3Key: 'videos/canva/rain.mp4',
     type: 'video',
     format: 'mp4',
-    allocatedSpace: 'Drift into Sleep',
-    notes: 'Rain background video for sleep'
+    allocatedSpace: 'Breathe To Relax',
+    notes: 'Rain background for breathing'
   },
   {
-    id: 'drift-waves-video',
-    name: 'Waves Video',
-    s3Key: 'video/canva/waves.mp4',
+    name: 'Deep Focus - Waves',
+    s3Key: 'videos/canva/waves.mp4',
     type: 'video',
     format: 'mp4',
-    allocatedSpace: 'Drift into Sleep',
-    notes: 'Waves background video for sleep'
+    allocatedSpace: 'Deep Focus',
+    notes: 'Waves background for focus'
   },
   // Audio
   {
-    id: 'drift-into-sleep-audio',
     name: 'Drift into Sleep - Audio Track',
     s3Key: 'audio/download.wav',
     type: 'audio',
@@ -91,6 +85,14 @@ const ASSETS_TO_ADD = [
     allocatedSpace: 'Drift into Sleep',
     notes: 'Ambient audio for sleep practice'
   },
+  {
+    name: 'Meditation Bells',
+    s3Key: 'audio/Pixabay/meditation-bells.mp3',
+    type: 'audio',
+    format: 'mp3',
+    allocatedSpace: 'Breathe To Relax',
+    notes: 'Bells for meditation'
+  }
 ];
 
 /**
@@ -107,74 +109,71 @@ async function addAsset(asset) {
   const cdnUrl = getCdnUrl(asset.s3Key);
   
   try {
-    // Check if asset already exists
+    // Check if asset already exists by S3 key (more reliable than generated ID)
+    // In our schema, the S3 key might be in metadata or we might use the URL
     const existing = await pool.query(
-      'SELECT id FROM content_assets WHERE id = $1',
-      [asset.id]
+      'SELECT id FROM content_assets WHERE url = $1',
+      [cdnUrl]
     );
     
     if (existing.rows.length > 0) {
-      console.log(`⚠️  Asset ${asset.id} already exists. Updating...`);
+      console.log(`⚠️  Asset with URL ${cdnUrl} already exists. Updating...`);
       
       // Update existing asset
       await pool.query(`
         UPDATE content_assets SET
-          name = $1,
-          s3_key = $2,
-          cdn_url = $3,
-          type = $4,
-          format = $5,
-          allocated_space = $6,
-          dimensions = $7,
-          notes = $8,
+          title = $1,
+          type = $2,
+          metadata = $3,
           status = 'live',
-          updated_at = NOW(),
-          published_at = COALESCE(published_at, NOW())
-        WHERE id = $9
+          allocated_space = $4,
+          cdn_url = $5
+        WHERE url = $6
       `, [
         asset.name,
-        asset.s3Key,
-        cdnUrl,
         asset.type,
-        asset.format,
-        asset.allocatedSpace || null,
-        asset.dimensions || null,
-        asset.notes || null,
-        asset.id
+        JSON.stringify({ 
+          s3Key: asset.s3Key, 
+          format: asset.format, 
+          allocatedSpace: asset.allocatedSpace,
+          notes: asset.notes 
+        }),
+        asset.allocatedSpace,
+        cdnUrl,
+        cdnUrl
       ]);
       
       console.log(`   ✅ Updated: ${asset.name}`);
     } else {
       // Insert new asset
-      await pool.query(`
+      const result = await pool.query(`
         INSERT INTO content_assets (
-          id,
-          name,
-          s3_key,
-          cdn_url,
+          title,
+          url,
           type,
-          format,
-          allocated_space,
-          dimensions,
-          notes,
+          metadata,
           status,
-          created_at,
-          updated_at,
-          published_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'live', NOW(), NOW(), NOW())
+          allocated_space,
+          cdn_url
+        ) VALUES ($1, $2, $3, $4, 'live', $5, $6)
+        RETURNING id
       `, [
-        asset.id,
         asset.name,
-        asset.s3Key,
         cdnUrl,
         asset.type,
-        asset.format,
-        asset.allocatedSpace || null,
-        asset.dimensions || null,
-        asset.notes || null
+        JSON.stringify({ 
+          s3Key: asset.s3Key, 
+          format: asset.format, 
+          allocatedSpace: asset.allocatedSpace,
+          notes: asset.notes 
+        }),
+        asset.allocatedSpace,
+        cdnUrl
       ]);
       
-      console.log(`   ✅ Added: ${asset.name}`);
+      const newId = result.rows[0].id;
+      console.log(`   ✅ Added: ${asset.name} (ID: ${newId})`);
+      asset.id = newId;
     }
     
     return {
@@ -265,18 +264,18 @@ async function main() {
     console.log('🧪 Testing database query...\n');
     try {
       const testResult = await pool.query(`
-        SELECT id, name, cdn_url, allocated_space, status 
+        SELECT id, title, url, type, metadata
         FROM content_assets 
-        WHERE status = 'live'
         ORDER BY created_at DESC
         LIMIT 5
       `);
       
       console.log('Recent live assets:');
       testResult.rows.forEach(row => {
-        console.log(`   - ${row.name} (${row.id})`);
-        console.log(`     Space: ${row.allocated_space || 'None'}`);
-        console.log(`     CDN: ${row.cdn_url}`);
+        const meta = row.metadata || {};
+        console.log(`   - ${row.title} (${row.id})`);
+        console.log(`     Space: ${meta.allocatedSpace || 'None'}`);
+        console.log(`     URL: ${row.url}`);
       });
     } catch (error) {
       console.error('Error testing query:', error.message);

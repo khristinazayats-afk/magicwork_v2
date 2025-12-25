@@ -385,6 +385,23 @@ export default function ResultsScreen({
           transition={{ delay: 0.8 }}
         >
           <motion.button
+            onClick={() => {
+              const text = `I'm vibing as ${currentVibe.vibe.name} today on MagicWork ✨ Join me in stillness!`;
+              if (navigator.share) {
+                navigator.share({ title: 'MagicWork Vibe', text, url: window.location.origin });
+              } else {
+                navigator.clipboard.writeText(text);
+                alert('Vibe copied to clipboard! 📋');
+              }
+            }}
+            whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.02 }}
+            className="w-full h-14 rounded-full bg-[#E52431] text-white font-hanken font-bold text-base shadow-lg shadow-[#E52431]/20"
+          >
+            Share Your Vibe ✨
+          </motion.button>
+
+          <motion.button
             onClick={() => setShowHistory(true)}
             whileTap={{ scale: 0.96 }}
             whileHover={{ scale: 1.02 }}

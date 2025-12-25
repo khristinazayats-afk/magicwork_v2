@@ -444,106 +444,129 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
 
       {/* Center Content - hide when showing tabs, shareouts, or results */}
       {!showTabs && !showShareouts && !showSummary && (
-        <div className={`sticky top-0 full-viewport flex flex-col justify-center items-center px-8 text-center z-10 ${joined ? 'pb-48 md:pb-32' : 'pb-32'}`}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="w-full max-w-md mx-auto"
-          >
-            {/* Title - hidden when showing summary */}
-            {!showSummary && (
-              <div className="flex flex-col items-center gap-2 mb-6">
-              <motion.h1 
-                  className="font-hanken font-bold text-[#1e2d2e] text-[32px] md:text-[40px] leading-tight text-center"
-                initial={{ scale: 0.95 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
+        <div className={`sticky top-0 h-screen flex flex-col md:flex-row justify-center items-center z-10 ${joined ? 'pb-48 md:pb-0' : 'pb-32 md:pb-0'}`}>
+          {/* Left Column: Visuals & Large Title (Desktop Only) */}
+          <div className="hidden md:flex flex-1 flex-col justify-center items-center px-12 border-r border-[#1e2d2e]/5 h-full">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center"
+            >
+              <h1 className="font-hanken font-bold text-[#1e2d2e] text-[64px] leading-tight mb-8">
                 {station.name}
-              </motion.h1>
-              </div>
-            )}
-
-          {/* Timer or Cue */}
-          <AnimatePresence mode="wait">
-            {joined && practiceMode === 'ambient' && (
-              <motion.div
-                key="timer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="mb-6"
-              >
-                {/* Timer - large in ambient mode - show countdown if timer is set, otherwise count up */}
-                <div className="font-hanken font-bold text-[#1e2d2e] text-[56px] md:text-[64px] leading-none mb-4">
-                  {practiceDuration !== null && timeRemaining !== null 
-                    ? `${String(Math.floor(timeRemaining / 60)).padStart(2, '0')}:${String(Math.floor(timeRemaining % 60)).padStart(2, '0')}`
-                    : `${mm}:${ss}`}
-                </div>
-                {/* Timer remaining text */}
-                {practiceDuration !== null && timeRemaining !== null && (
-                  <p className="font-hanken text-[#1e2d2e]/60 text-sm mb-2">
-                    {timeRemaining > 0 ? `${Math.floor(timeRemaining)} seconds remaining` : 'Timer finished'}
-                  </p>
-                )}
-                {/* Cue */}
-                <p className="font-hanken text-[#1e2d2e]/80 text-base md:text-lg leading-relaxed">
-                  {cue}
+              </h1>
+              <div className="flex items-center justify-center gap-4">
+                <span className="w-12 h-0.5 bg-[#1e2d2e]/10" />
+                <p className="font-hanken text-[#1e2d2e]/40 uppercase tracking-widest text-sm font-bold">
+                  Collective Stillness
                 </p>
-                {/* Artist Credit (local music) or Radio Label */}
-                {currentTrackInfo ? (
-                  <ArtistCredit 
-                    artist={currentTrackInfo.artist}
-                    title={currentTrackInfo.title}
-                    source={currentTrackInfo.source}
-                  />
-                ) : (
+                <span className="w-12 h-0.5 bg-[#1e2d2e]/10" />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column: Practice Content & Controls */}
+          <div className="flex-1 flex flex-col justify-center items-center px-8 md:px-16 text-center h-full overflow-y-auto pt-24 pb-48 md:py-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="w-full max-w-lg mx-auto"
+            >
+              {/* Title - Mobile only */}
+              {!showSummary && (
+                <div className="md:hidden flex flex-col items-center gap-2 mb-6">
+                <motion.h1 
+                    className="font-hanken font-bold text-[#1e2d2e] text-[32px] md:text-[40px] leading-tight text-center"
+                  initial={{ scale: 0.95 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {station.name}
+                </motion.h1>
+                </div>
+              )}
+
+              {/* Timer or Cue */}
+              <AnimatePresence mode="wait">
+                {joined && practiceMode === 'ambient' && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    key="timer"
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4 }}
-                    className="mt-3"
+                    className="mb-8"
                   >
-                    <div className="inline-flex items-center gap-2 rounded-full bg-[#1e2d2e]/10 backdrop-blur-sm px-4 py-2">
-                      <svg 
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="flex-shrink-0"
-                      >
-                        <circle cx="12" cy="12" r="10" stroke="#1e2d2e" strokeWidth="2" opacity="0.6"/>
-                        <circle cx="12" cy="12" r="3" fill="#1e2d2e" opacity="0.6"/>
-                      </svg>
-                      <div className="text-[#1e2d2e]/70 font-hanken leading-tight text-xs">
-                        {station.label}
-                      </div>
+                    {/* Timer - large in ambient mode - show countdown if timer is set, otherwise count up */}
+                    <div className="font-hanken font-bold text-[#1e2d2e] text-[64px] md:text-[80px] leading-none mb-6">
+                      {practiceDuration !== null && timeRemaining !== null 
+                        ? `${String(Math.floor(timeRemaining / 60)).padStart(2, '0')}:${String(Math.floor(timeRemaining % 60)).padStart(2, '0')}`
+                        : `${mm}:${ss}`}
                     </div>
+                    {/* Timer remaining text */}
+                    {practiceDuration !== null && timeRemaining !== null && (
+                      <p className="font-hanken text-[#1e2d2e]/60 text-sm mb-4">
+                        {timeRemaining > 0 ? `${Math.floor(timeRemaining)} seconds remaining` : 'Timer finished'}
+                      </p>
+                    )}
+                    {/* Cue */}
+                    <p className="font-hanken text-[#1e2d2e]/80 text-lg md:text-2xl font-medium leading-relaxed mb-8">
+                      {cue}
+                    </p>
+                    {/* Artist Credit (local music) or Radio Label */}
+                    {currentTrackInfo ? (
+                      <ArtistCredit 
+                        artist={currentTrackInfo.artist}
+                        title={currentTrackInfo.title}
+                        source={currentTrackInfo.source}
+                      />
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="mt-3"
+                      >
+                        <div className="inline-flex items-center gap-2 rounded-full bg-[#1e2d2e]/10 backdrop-blur-sm px-4 py-2">
+                          <svg 
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="flex-shrink-0"
+                          >
+                            <circle cx="12" cy="12" r="10" stroke="#1e2d2e" strokeWidth="2" opacity="0.6"/>
+                            <circle cx="12" cy="12" r="3" fill="#1e2d2e" opacity="0.6"/>
+                          </svg>
+                          <div className="text-[#1e2d2e]/70 font-hanken leading-tight text-xs">
+                            {station.label}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
                   </motion.div>
                 )}
-              </motion.div>
-            )}
 
 
-            {!joined && !showSummary && (
-              <motion.p 
-                key="description"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="font-hanken text-[#1e2d2e]/80 text-base md:text-lg leading-relaxed text-center mb-6"
-              >
-                {description}
-              </motion.p>
-            )}
+                {!joined && !showSummary && (
+                  <motion.p 
+                    key="description"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="font-hanken text-[#1e2d2e]/80 text-lg md:text-xl leading-relaxed text-center mb-12"
+                  >
+                    {description}
+                  </motion.p>
+                )}
 
-          </AnimatePresence>
-        </motion.div>
-      </div>
+              </AnimatePresence>
+            </motion.div>
+          </div>
+        </div>
       )}
 
       {/* SwipeHint - positioned exactly in middle between description and participant counter, only for Get in the Flow State */}
@@ -581,7 +604,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
       {!showTabs && !showShareouts && !showSummary && (
         <>
           {/* Button container - positioned at cta-bottom, adjusted for mobile when joined */}
-          <div className={`absolute left-0 right-0 px-8 z-20 ${joined ? 'cta-bottom-joined' : 'cta-bottom'}`}>
+          <div className={`absolute md:relative left-0 right-0 px-8 z-20 ${joined ? 'cta-bottom-joined' : 'cta-bottom'} md:bottom-0 md:mt-auto md:pb-16 w-full flex justify-center`}>
             <div className="w-full max-w-md mx-auto flex flex-col items-center gap-3">
               {/* Participant Counter - positioned above button, closer to Join CTA */}
               {!joined && !showSummary && (
@@ -589,7 +612,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
-                  className="font-hanken text-[#1e2d2e]/60 text-sm flex items-center justify-center gap-2"
+                  className="font-hanken text-[#1e2d2e]/60 text-sm flex items-center justify-center gap-2 mb-2"
                 >
                   <span className="relative flex h-1.5 w-1.5">
                     {/* Multiple pulsing rings for microparticle effect */}

@@ -1,4 +1,9 @@
 ---
+description: Defines AI-driven meditation practice generation system with emotional processing and personalization
+---
+
+# === USER INSTRUCTIONS ===
+---
 description: Technical implementation of AI-driven practice content generation for meditation and mindfulness exercises
 ---
 
@@ -53,6 +58,52 @@ Key aspects:
 - Sophisticated audio layering with precise timing
 - Personalized content delivery system
 - Integrated emotional state processing
+
+$END$
+
+ If you're using this file in context, clearly say in italics in one small line that "Context added by Giga practice-generation" along with specifying exactly what information was used from this file in a human-friendly way, instead of using kebab-case use normal sentence case.
+# === END USER INSTRUCTIONS ===
+
+# practice-generation
+
+Core Practice Generation Components:
+
+1. Emotional State Processing
+- 5-level emotional state assessment (calm to very anxious)
+- Maps user state to practice customization parameters
+- Adjusts content pacing based on anxiety levels:
+  * Anxious: 120 words/minute
+  * Calm: 60 words/minute
+Importance Score: 85
+
+2. Intent-Based Customization
+- 6 distinct meditation goals with specialized parameters
+- Maps intents to specific guidance styles
+- Contextual mapping between emotional states and practice intents
+- Structures content with opening, main practice, and closing sections
+Importance Score: 90
+
+3. Content Orchestration
+- Multi-layered audio management with narration and ambient sounds
+- Space-based content organization for meditation practices
+- Fallback content management for specific spaces
+- Dynamic volume adjustment during practice phases
+Importance Score: 75
+
+4. Personalization Algorithm
+- AI-driven script generation based on emotional state
+- Intent-specific guidance adaptation
+- Custom prompt engineering for meditation context
+- Adaptive content pacing based on user state
+Importance Score: 90
+
+Key Integration Points:
+- Emotional state influences content pacing and structure
+- Intent selection drives practice format and guidance style
+- Space context affects content selection and delivery
+- User state determines audio orchestration parameters
+
+The system uniquely combines emotional assessment, intent mapping, and AI content generation to create personalized meditation experiences.
 
 $END$
 

@@ -16,7 +16,7 @@ const __dirname = dirname(__filename);
 
 // Get Postgres URL from environment or use the one from Vercel config
 const POSTGRES_URL = process.env.POSTGRES_URL || 
-  'postgres://postgres.pujvtikwdmxlfrqfsjpu:eKKGH2JiMc6u8rT0@aws-1-eu-central-2.pooler.supabase.com:5432/postgres?sslmode=require';
+  'postgres://postgres.tbfwvdcvohmykwdfgiqy:Hc3XQx7t5gVQjJyX@aws-1-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require';
 
 async function pushSchema() {
   let pool;
@@ -167,7 +167,7 @@ async function pushSchema() {
   } catch (error) {
     console.error('\n❌ Error pushing schema:', error.message);
     console.error('\n📋 Alternative: Run SQL manually in Supabase Dashboard:');
-    console.error('   1. Go to: https://supabase.com/dashboard/project/pujvtikwdmxlfrqfsjpu/sql');
+    console.error('   1. Go to: https://supabase.com/dashboard/project/tbfwvdcvohmykwdfgiqy/sql');
     console.error('   2. Open: database/setup_complete_schema.sql');
     console.error('   3. Copy and paste the entire SQL script');
     console.error('   4. Click "Run" to execute\n');

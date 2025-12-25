@@ -16,6 +16,7 @@ import 'screens/splash_screen.dart';
 import 'screens/greeting_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
+import 'screens/forgot_password_screen.dart';
 import 'screens/profile_setup_screen.dart';
 import 'screens/feed_screen.dart';
 import 'screens/practice_personalization_screen.dart';
@@ -143,6 +144,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/signup',
       builder: (context, state) => const SignupScreen(),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      builder: (context, state) => const ForgotPasswordScreen(),
     ),
     GoRoute(
       path: '/profile-setup',

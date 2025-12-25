@@ -1,4 +1,9 @@
 ---
+description: Handles user progression tracking, achievements, rewards and gamification mechanics for meditation practices
+---
+
+# === USER INSTRUCTIONS ===
+---
 description: Progression and achievement system logic including vibe levels, streaks, and rewards for mindfulness tracking
 ---
 
@@ -48,6 +53,58 @@ Monthly tier system with 5 levels based on:
   - Community engagement
 
 Importance Score: 95/100
+
+$END$
+
+ If you're using this file in context, clearly say in italics in one small line that "Context added by Giga progression-system" along with specifying exactly what information was used from this file in a human-friendly way, instead of using kebab-case use normal sentence case.
+# === END USER INSTRUCTIONS ===
+
+# progression-system
+
+Core progression mechanics centered around a 10-level "vibe" system tracking meditation progress:
+
+## Vibe Progression System
+- 10 distinct emotional/mental states mapped to practice consistency
+- Progression based on:
+  - Weekly practice minutes
+  - Consecutive practice days
+  - Current streak length
+- Each level unlocks new meditation content and capabilities
+- Animal-themed state representations provide metaphorical feedback
+
+## Achievement Tracking
+- 8 achievement categories monitoring:
+  - Practice session completions
+  - Streak maintenance 
+  - Space exploration diversity
+  - Community participation
+- Milestone-based triggers with scientific benefit descriptions
+- Custom calculations for minutes practiced, days active, space variety
+
+## Light Points (LP) System
+- Daily reward mechanics:
+  - Practice completion bonuses
+  - Listening time accumulation
+  - Community participation rewards
+- Daily earning caps and thresholds
+- Automatic daily reset mechanism
+- Weekly rollover bonuses for consistent engagement
+
+## Monthly Tier System
+- 5-tier progression based on:
+  - Monthly practice frequency
+  - Consecutive practice days
+  - Session quality metrics
+  - Community involvement
+- Tier-specific content access and features
+- Scientific benefit unlocks at each tier
+
+## Integration Points
+- Unified session tracking feeds all progression systems
+- Interconnected rewards across achievement, LP and tier systems
+- Progressive difficulty scaling 
+- Timezone-aware streak calculations
+- Community count integration for social elements
 
 $END$
 

@@ -154,3 +154,10 @@ All AI functionality is now directly in the iOS/Android app!
 *AI agents are now fully integrated in the Flutter mobile app*
 
 
+
+
+
+
+
+
+

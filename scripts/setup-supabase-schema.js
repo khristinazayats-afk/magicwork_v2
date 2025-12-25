@@ -14,9 +14,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Supabase credentials (from Vercel env or config)
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://pujvtikwdmxlfrqfsjpu.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tbfwvdcvohmykwdfgiqy.supabase.co';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1anZ0aWt3ZG14bGZycWZzanB1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTY0NTE3MiwiZXhwIjoyMDgxMjIxMTcyfQ.gEWs5GoTZtyC3-mCOmrnnQaAwXtBc5xJTLaAVn6l-XM';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZnd2ZGN2b2hteWt3ZGZnaXF5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjY0NjM0OSwiZXhwIjoyMDgyMjIyMzQ5fQ.kD2Mi0_UjH7PiAir2vBAgu0B-Rl8N_elBkhaa1H8T3o';
 
 // Create Supabase client with service role key (has admin access)
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
@@ -75,7 +75,7 @@ async function setupSchema() {
     console.log(`\n📝 Found ${statements.length} SQL statements to execute`);
     console.log('⚠️  Note: Supabase JS client cannot execute raw SQL directly.');
     console.log('   Please run the SQL manually in Supabase Dashboard:\n');
-    console.log('   1. Go to: https://supabase.com/dashboard/project/pujvtikwdmxlfrqfsjpu/sql');
+    console.log('   1. Go to: https://supabase.com/dashboard/project/tbfwvdcvohmykwdfgiqy/sql');
     console.log('   2. Copy the contents of: database/setup_complete_schema.sql');
     console.log('   3. Paste and click Run\n');
 
@@ -164,4 +164,6 @@ async function setupSchema() {
 }
 
 setupSchema();
+
+
 

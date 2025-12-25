@@ -102,3 +102,10 @@ The code now has proper error handling to prevent crashes. If SIGTERM still occu
 
 The app will now handle these scenarios gracefully without crashing.
 
+
+
+
+
+
+
+

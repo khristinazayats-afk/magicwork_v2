@@ -203,6 +203,33 @@ class AuthProvider extends ChangeNotifier {
     }
   }
   
+  Future<bool> sendPasswordResetEmail(String email) async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+      
+      await _supabase.auth.resetPasswordForEmail(
+        email.trim(),
+        redirectTo: '${AppConfig.deepLinkScheme}://${AppConfig.authCallbackPath}',
+      );
+      
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } on AuthException catch (e) {
+      _error = e.message;
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _error = 'Failed to send reset email. Please try again.';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+  
   Future<bool> signInWithOAuth(OAuthProvider provider) async {
     try {
       _isLoading = true;

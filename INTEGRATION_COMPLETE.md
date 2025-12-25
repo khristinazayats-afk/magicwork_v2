@@ -159,3 +159,10 @@ Successfully integrated analytics tracking and user profile management throughou
 
 All analytics and user profile features are now fully integrated into the Flutter app UI. The app is ready to track user behavior and manage user profiles.
 
+
+
+
+
+
+
+

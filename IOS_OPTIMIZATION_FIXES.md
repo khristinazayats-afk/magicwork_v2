@@ -120,3 +120,10 @@ flutter build ios
 
 The app is now optimized for iOS 15+ with proper SceneDelegate support, better error handling, and performance optimizations.
 
+
+
+
+
+
+
+

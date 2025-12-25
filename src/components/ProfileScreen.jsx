@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 import { loadSessions } from '../utils/sessionTracking';
 import { getWeeklyStats, getCurrentWeekKey } from '../utils/weeklyTracking';
 import { calculateCurrentVibe, getVibeById, getAllVibes, getWeeklyMinutes } from '../utils/vibeSystem';
@@ -122,43 +123,89 @@ function calculateWeekVibe(weekSessions, weekStart) {
 export default function ProfileScreen({ onBack }) {
   const [monthlyData, setMonthlyData] = useState([]);
   const [showAllVibes, setShowAllVibes] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const allWeeks = getAllWeeksWithData();
-    const grouped = groupWeeksByMonth(allWeeks);
-    
-    const monthly = grouped.map(monthGroup => {
-      const weeks = monthGroup.weeks.map(week => {
-        const vibe = calculateWeekVibe(week.sessions, week.startDate);
-        const totalMinutes = Math.floor(
-          week.sessions.reduce((sum, s) => sum + (s.duration || 0), 0) / 60
-        );
-        const daysPracticed = new Set(
-          week.sessions.map(s => new Date(s.timestamp).toDateString())
-        ).size;
+    async function fetchProfileAndSessions() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Fetch profile
+          const { data: profile } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+          setUserProfile(profile);
+
+          // Fetch sessions from Supabase to sync local storage if needed
+          const { data: remoteSessions } = await supabase
+            .from('practice_sessions')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('completed_at', { ascending: false });
+
+          if (remoteSessions && remoteSessions.length > 0) {
+            // Map remote sessions to local format
+            const mappedSessions = remoteSessions.map(s => ({
+              id: s.id,
+              spaceName: s.space_name,
+              duration: s.duration_seconds,
+              mode: s.mode,
+              heartsSent: s.hearts_sent,
+              completedAt: s.completed_at,
+              timestamp: new Date(s.completed_at).getTime()
+            }));
+            
+            // Merge with local storage (simplified: just use remote for profile)
+            localStorage.setItem('magicwork_sessions', JSON.stringify(mappedSessions));
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching profile:', err);
+      } finally {
+        setLoading(false);
+      }
+
+      // Process sessions for display
+      const allWeeks = getAllWeeksWithData();
+      const grouped = groupWeeksByMonth(allWeeks);
+      
+      const monthly = grouped.map(monthGroup => {
+        const weeks = monthGroup.weeks.map(week => {
+          const vibe = calculateWeekVibe(week.sessions, week.startDate);
+          const totalMinutes = Math.floor(
+            week.sessions.reduce((sum, s) => sum + (s.duration || 0), 0) / 60
+          );
+          const daysPracticed = new Set(
+            week.sessions.map(s => new Date(s.timestamp).toDateString())
+          ).size;
+          
+          return {
+            ...week,
+            vibe,
+            totalMinutes,
+            daysPracticed
+          };
+        });
+        
+        const totalMinutes = weeks.reduce((sum, w) => sum + w.totalMinutes, 0);
+        const totalDays = weeks.reduce((sum, w) => sum + w.daysPracticed, 0);
+        const avgDaysPerWeek = weeks.length > 0 ? (totalDays / weeks.length).toFixed(1) : 0;
         
         return {
-          ...week,
-          vibe,
+          month: monthGroup.month,
           totalMinutes,
-          daysPracticed
+          avgDaysPerWeek: parseFloat(avgDaysPerWeek),
+          weeks
         };
       });
       
-      // Calculate monthly totals
-      const totalMinutes = weeks.reduce((sum, w) => sum + w.totalMinutes, 0);
-      const totalDays = weeks.reduce((sum, w) => sum + w.daysPracticed, 0);
-      const avgDaysPerWeek = weeks.length > 0 ? (totalDays / weeks.length).toFixed(1) : 0;
-      
-      return {
-        month: monthGroup.month,
-        totalMinutes,
-        avgDaysPerWeek: parseFloat(avgDaysPerWeek),
-        weeks
-      };
-    });
-    
-    setMonthlyData(monthly);
+      setMonthlyData(monthly);
+    }
+
+    fetchProfileAndSessions();
   }, []);
   
   // Get current week info
@@ -188,12 +235,43 @@ export default function ProfileScreen({ onBack }) {
             </svg>
           </button>
           <h1 className="font-actay font-bold text-[#1e2d2e] text-[20px]">Profile</h1>
-          <div className="w-10" /> {/* Spacer for centering */}
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+            }}
+            className="font-hanken text-[#1e2d2e]/60 text-sm font-semibold hover:text-[#1e2d2e]"
+          >
+            Logout
+          </button>
         </div>
       </div>
       
       {/* Content */}
-      <div className="h-screen overflow-y-auto pt-24 pb-8 px-6">
+      <div className="h-screen overflow-y-auto pt-24 pb-8 px-6 max-w-2xl mx-auto">
+        {/* User Profile Header */}
+        {userProfile && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center mb-10 text-center"
+          >
+            <div className="w-24 h-24 rounded-full bg-[#1e2d2e]/10 border-2 border-[#1e2d2e]/20 flex items-center justify-center text-4xl mb-4">
+              👤
+            </div>
+            <h2 className="font-actay font-bold text-[#1e2d2e] text-[28px] mb-1">
+              {userProfile.display_name}
+            </h2>
+            <p className="font-hanken text-[#1e2d2e]/60 text-base mb-3">
+              @{userProfile.username}
+            </p>
+            {userProfile.bio && (
+              <p className="font-hanken text-[#1e2d2e]/80 text-sm max-w-md mx-auto italic">
+                "{userProfile.bio}"
+              </p>
+            )}
+          </motion.div>
+        )}
+
         {/* Current Week Summary */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

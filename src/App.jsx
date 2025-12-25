@@ -1,4 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
 import Feed from './components/Feed';
@@ -21,19 +22,22 @@ import VibeBadgesTest from './components/VibeBadgesTest';
 import ContentAssetsTest from './components/ContentAssetsTest';
 import AllContentAssetsTest from './components/AllContentAssetsTest';
 
-// Lazy load Feed to avoid loading Tone.js before user interaction
-// const Feed = lazy(() => import('./components/Feed'));
+// Auth & New Screens
+import GreetingScreen from './components/screens/GreetingScreen';
+import LoginScreen from './components/auth/LoginScreen';
+import SignupScreen from './components/auth/SignupScreen';
+import ForgotPasswordScreen from './components/auth/ForgotPasswordScreen';
+import ProfileSetupScreen from './components/screens/ProfileSetupScreen';
+import WhatToExpectScreen from './components/screens/WhatToExpectScreen';
+import AuthGuard from './components/auth/AuthGuard';
+import AmbientSoundManager from './components/AmbientSoundManager';
+import AppLayout from './components/AppLayout';
+import ProfileScreen from './components/ProfileScreen';
 
 function App() {
-  console.log('[App] Component rendering');
-  const [started, setStarted] = useState(false);
-  const [sawSteps, setSawSteps] = useState(false);
-  
-  useEffect(() => {
-    console.log('[App] State changed:', { started, sawSteps });
-  }, [started, sawSteps]);
-  
-  // Check if we're in test mode via URL (accepts both singular and plural)
+  const [showSplash, setShowSplash] = useState(true);
+
+  // Check if we're in test mode via URL
   const isTestMode = window.location.search.includes('test=animation');
   const isShareoutsTest = window.location.search.includes('test=shareouts');
   const isBoomerangTest = window.location.search.includes('test=boomerang');
@@ -52,132 +56,52 @@ function App() {
   const isVibeBadgesTest = window.location.search.includes('test=vibe-badges');
   const isContentAssetsTest = window.location.search.includes('test=content-assets');
   const isAllContentAssetsTest = window.location.search.includes('test=all-content-assets');
-  
-  // Debug: log URL check
-  if (isGardenStatesDemo) {
-    console.log('🌱 Garden States Demo detected in URL');
+
+  // Render test environments (Legacy logic)
+  if (isTestMode) return <AnimationTest />;
+  if (isShareoutsTest) return <ShareoutsTestSimple />;
+  if (isBoomerangTest) return <BoomerangLab />;
+  if (isRoadmap) return <AuraDemoPage />;
+  if (isAuraProgression) return <AuraProgressionDemo />;
+  if (isPracticeComplete) return <PracticeCompleteScreen />;
+  if (isAuraRingDemo) return <AuraRingDemo />;
+  if (isAuraGlowDemo) return <AuraGlowDemo />;
+  if (isHomeScreen) return <div className="bg-[#fcf8f2] min-h-screen"><HomeScreen /></div>;
+  if (isGardenStatesDemo) return <GardenStatesDemo />;
+  if (isTreeGrowthDemo) return <TreeGrowthDemo />;
+  if (isLottieTest) return <LottieTest />;
+  if (isCanvaDemo) return <CanvaDesignsDemo />;
+  if (isCanvaExamples) return <CanvaIntegrationExamples />;
+  if (isVideoTest) return <SimpleVideoTest />;
+  if (isVibeBadgesTest) return <VibeBadgesTest />;
+  if (isContentAssetsTest) return <ContentAssetsTest />;
+  if (isAllContentAssetsTest) return <AllContentAssetsTest />;
+
+  if (showSplash) {
+    return <SplashScreen onEnter={() => setShowSplash(false)} />;
   }
 
-  const handleStart = () => {
-    setStarted(true);
-  };
-
-  const handleBackToSplash = () => {
-    setStarted(false);
-    setSawSteps(false);
-  };
-
-  const handleBackToSteps = () => {
-    setSawSteps(false);
-  };
-
-  // Render test environment
-  if (isTestMode) {
-    return <AnimationTest />;
-  }
-
-  // Render shareouts test environment
-  if (isShareoutsTest) {
-    return <ShareoutsTestSimple />;
-  }
-
-  // Render boomerang lab
-  if (isBoomerangTest) {
-    return <BoomerangLab />;
-  }
-
-  // Render aura demo
-  if (isRoadmap) {
-    return <AuraDemoPage />;
-  }
-
-  // Render aura progression demo
-  if (isAuraProgression) {
-    return <AuraProgressionDemo />;
-  }
-
-  // Render practice complete screen
-  if (isPracticeComplete) {
-    return <PracticeCompleteScreen />;
-  }
-
-  // Render aura ring demo
-  if (isAuraRingDemo) {
-    return <AuraRingDemo />;
-  }
-
-  // Render aura glow demo
-  if (isAuraGlowDemo) {
-    return <AuraGlowDemo />;
-  }
-
-  // Render HomeScreen test
-  if (isHomeScreen) {
-    return (
-      <div className="w-full h-screen bg-[#fcf8f2] overflow-y-auto">
-        <HomeScreen onExplore={() => {
-          console.log('Explore clicked');
-        }} />
-      </div>
-    );
-  }
-
-  // Render Garden States Demo - must be checked before other state checks
-  if (isGardenStatesDemo) {
-    return <GardenStatesDemo />;
-  }
-
-  // Render Tree Growth Demo
-  if (isTreeGrowthDemo) {
-    return <TreeGrowthDemo />;
-  }
-
-  // Render Lottie Test
-  if (isLottieTest) {
-    return <LottieTest />;
-  }
-
-  // Render Canva Designs Demo
-  if (isCanvaDemo) {
-    return <CanvaDesignsDemo />;
-  }
-
-  // Render Canva Integration Examples
-  if (isCanvaExamples) {
-    return <CanvaIntegrationExamples />;
-  }
-
-  // Render Video Test
-  if (isVideoTest) {
-    return <SimpleVideoTest />;
-  }
-
-  // Render Vibe Badges Test
-  if (isVibeBadgesTest) {
-    return <VibeBadgesTest />;
-  }
-
-  // Render Content Assets Test
-  if (isContentAssetsTest) {
-    return <ContentAssetsTest />;
-  }
-
-  // Render All Content Assets Test
-  if (isAllContentAssetsTest) {
-    return <AllContentAssetsTest />;
-  }
-
-  if (!started) {
-    return <SplashScreen onEnter={handleStart} />;
-  }
-
-  if (!sawSteps) {
-    return <StepsScreen onContinue={() => setSawSteps(true)} onBack={handleBackToSplash} />;
-  }
-
-  console.log('App: Rendering Feed directly (no Suspense)');
-  
-  return <Feed onBack={handleBackToSteps} />;
+  return (
+    <Router>
+      <AmbientSoundManager />
+      <Routes>
+        <Route path="/" element={<Navigate to="/greeting" replace />} />
+        <Route path="/greeting" element={<GreetingScreen />} />
+        <Route path="/login" element={<LoginScreen />} />
+        <Route path="/signup" element={<SignupScreen />} />
+        <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+        
+        {/* Protected Routes */}
+        <Route path="/profile-setup" element={<AuthGuard><ProfileSetupScreen /></AuthGuard>} />
+        <Route path="/what-to-expect" element={<AuthGuard><WhatToExpectScreen /></AuthGuard>} />
+        <Route path="/feed" element={<AuthGuard><AppLayout><Feed onBack={() => {}} /></AppLayout></AuthGuard>} />
+        <Route path="/profile" element={<AuthGuard><AppLayout><ProfileScreen onBack={() => window.history.back()} /></AppLayout></AuthGuard>} />
+        
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/feed" replace />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

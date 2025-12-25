@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../providers/auth_provider.dart';
 import '../providers/analytics_provider.dart';
 
@@ -55,24 +56,55 @@ class _SignupScreenState extends State<SignupScreen> {
         final userId = authProvider.user?.id;
         
         if (userId != null) {
-          // Initialize analytics for new user
-          await analyticsProvider.initialize(userId);
-          
-          // Track signup event
-          await analyticsProvider.trackAction(
-            actionName: 'signup_success',
-            userId: userId,
-            screenName: 'Sign Up',
-          );
+          try {
+            // Initialize analytics for new user
+            await analyticsProvider.initialize(userId);
+            
+            // Track signup event
+            await analyticsProvider.trackAction(
+              actionName: 'signup_success',
+              userId: userId,
+              screenName: 'Sign Up',
+            );
+          } catch (e) {
+            print('Error during post-signup tasks: $e');
+          }
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Account created successfully!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        context.go('/profile-setup');
+        // Check if session exists (if not, email confirmation is likely required)
+        final hasSession = Supabase.instance.client.auth.currentSession != null;
+
+        if (hasSession) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Account created successfully!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          context.go('/profile-setup');
+        } else {
+          // No session - email confirmation is likely required
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: const Text('Verify Your Email'),
+              content: const Text(
+                'Account created! We\'ve sent a verification link to your email. '
+                'Please confirm your email address to continue to the app.'
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    context.go('/login');
+                  },
+                  child: const Text('Go to Login'),
+                ),
+              ],
+            ),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

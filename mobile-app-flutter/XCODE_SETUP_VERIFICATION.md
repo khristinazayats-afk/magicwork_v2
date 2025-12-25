@@ -189,3 +189,10 @@ open ios/Runner.xcworkspace
 *The Xcode project is fully configured and ready for development. You can now build, run, and debug the app directly from Xcode.*
 
 
+
+
+
+
+
+
+
