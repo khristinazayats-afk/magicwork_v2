@@ -12,7 +12,13 @@ export default function GreetingScreen() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md"
       >
-        <div className="text-6xl mb-12">🕯️</div>
+        <div className="flex justify-center mb-12">
+          <img 
+            src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
+            alt="Magicwork Logo"
+            className="h-20 w-20"
+          />
+        </div>
         
         <h1 className="font-hanken text-[40px] font-bold text-[#1e2d2e] leading-tight mb-6">
           Welcome to<br />Magicwork

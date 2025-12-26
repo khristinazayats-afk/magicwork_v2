@@ -15,10 +15,13 @@ class GreetingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              const Icon(
-                Icons.self_improvement,
-                size: 80,
-                color: Color(0xFF1e2d2e),
+              Image.asset(
+                'assets/logos/magicwork-bw.png',
+                width: 80,
+                height: 80,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.self_improvement, size: 80, color: Color(0xFF1e2d2e));
+                },
               ),
               const SizedBox(height: 32),
               const Text(
