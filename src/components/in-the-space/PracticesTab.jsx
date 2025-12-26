@@ -13,7 +13,8 @@ export default function PracticesTab({
   onToggleFavorite,
   onExpandedViewChange,
   onStartPractice,
-  onComplete
+  onComplete,
+  onVideoGenerated // New callback for AI backgrounds
 }) {
   const [activePracticeId, setActivePracticeId] = useState(null);
   const [practiceDuration, setPracticeDuration] = useState(null);
@@ -27,8 +28,10 @@ export default function PracticesTab({
   const [selectedIntent, setSelectedIntent] = useState(null);
   const [generatedScript, setGeneratedScript] = useState(null);
   const [narrationUrl, setNarrationUrl] = useState(null);
+  const [journeyVideos, setJourneyVideos] = useState({ start: null, end: null });
   const [isGenerating, setIsGenerating] = useState(false);
   const [isGeneratingVoice, setIsGeneratingVoice] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
   const [error, setError] = useState(null);
 
   const narrationAudioRef = useRef(new Audio());
@@ -36,9 +39,12 @@ export default function PracticesTab({
   const countdownIntervalRef = useRef(null);
   const videoRef = useRef(null);
 
-  // Fetch video content for this space
+  // Fetch video content for this space (Library backup)
   const { contentSet, loading: assetsLoading } = useContentSet(station?.name);
-  const videoUrl = contentSet?.visual?.cdn_url || null;
+  const libraryVideoUrl = contentSet?.visual?.cdn_url || null;
+  
+  // Use generated video if available, otherwise fallback to library
+  const activeVideoUrl = generatedVideoUrl || libraryVideoUrl;
 
   // Get practices for this station
   const stationPractices = availablePractices.filter(p => 
@@ -69,6 +75,7 @@ export default function PracticesTab({
     setFlowFlowStep('generating');
 
     try {
+      // 1. Generate meditation script
       const response = await fetch('/api/generate-practice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -84,7 +91,41 @@ export default function PracticesTab({
       const data = await response.json();
       setGeneratedScript(data.content);
       
-      // Generate voice narration
+      // 2. Generate cinematic AI Journey (Start & End stages)
+      setIsGeneratingVideo(true);
+      
+      const generateStage = (stage) => 
+        fetch('/api/generate-video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            emotionalState,
+            intent: selectedIntent,
+            spaceName: station?.name,
+            stage
+          }),
+        }).then(res => res.ok ? res.json() : null);
+
+      // Call both in parallel
+      Promise.all([generateStage('start'), generateStage('end')])
+        .then(([startData, endData]) => {
+          const newVideos = {
+            start: startData?.videoUrl || null,
+            end: endData?.videoUrl || null
+          };
+          
+          console.log('[AI] Generated visual journey videos:', newVideos);
+          setJourneyVideos(newVideos);
+          
+          if (onVideoGenerated) {
+            // Send the journey object to the parent
+            onVideoGenerated(newVideos);
+          }
+        })
+        .catch(err => console.error('Journey generation error:', err))
+        .finally(() => setIsGeneratingVideo(false));
+
+      // 3. Generate voice narration
       setIsGeneratingVoice(true);
       try {
         const voiceResponse = await fetch('/api/generate-voice', {

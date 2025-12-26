@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // Use deployed API URL for local development since serverless functions don't run locally
 // Try to use proxy first, fallback to deployed API
 const API_BASE = import.meta.env.DEV 
-  ? (import.meta.env.VITE_API_BASE_URL || 'https://magicwork.vercel.app')
+  ? (import.meta.env.VITE_API_BASE_URL || 'https://magicwork-six.vercel.app')
   : '';
 
 /**

@@ -8,7 +8,7 @@ class AppConfig {
   static const String authCallbackPath = '/auth-callback';
   
   // API Configuration
-  static const String apiBaseUrl = 'https://magicwork.vercel.app/api';
+  static const String apiBaseUrl = 'https://magicwork-six.vercel.app/api';
   
   // OpenAI Configuration
   static const String openaiApiKey = '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';

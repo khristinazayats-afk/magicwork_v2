@@ -71,8 +71,18 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   const [isTrialUser, setIsTrialUser] = useState(false);
   const [trialLimit, setTrialLimit] = useState(420);
   const [totalPreExistingTime, setTotalPreExistingTime] = useState(0);
+  const [aiJourneyVideos, setAiJourneyVideos] = useState({ start: null, end: null });
 
-  // Check trial status on mount
+  // Calculate journey progress (0 to 1)
+  const journeyProgress = useMemo(() => {
+    if (!practiceDuration || practiceDuration === 0) return 0;
+    // If timer is set, progress is (duration - remaining) / duration
+    if (timeRemaining !== null) {
+      return (practiceDuration - timeRemaining) / practiceDuration;
+    }
+    // If no timer, we can base it on a default "journey window" e.g. 10 minutes
+    return Math.min(1, secondsElapsed / 600); 
+  }, [practiceDuration, timeRemaining, secondsElapsed]);
   useEffect(() => {
     async function checkTrial() {
       const { data: { user } } = await supabase.auth.getUser();
@@ -95,9 +105,9 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   const countdownIntervalRef = useRef(null);
   const videoRef = useRef(null); // Video background ref
   
-  // Fetch video content for this space
+  // Fetch video content for this space (Static library base)
   const { contentSet, loading: assetsLoading } = useContentSet(station?.name || null);
-  const videoUrl = contentSet?.visual?.cdn_url || null;
+  const libraryVideoUrl = contentSet?.visual?.cdn_url || null;
 
   const mm = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
   const ss = String(secondsElapsed % 60).padStart(2, '0');
@@ -209,7 +219,8 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
     try {
       if (onJoin) onJoin(); // Notify Feed that this station is now active
       
-      // Don't auto-play - user must press play button
+      // Clear previous AI journey to allow fresh creation
+      setAiJourneyVideos({ start: null, end: null });
       
       setSecondsElapsed(0);
       setJoinedAt(Date.now());
@@ -420,10 +431,9 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
         </div>
       )}
 
-      {/* Video Background - if available */}
-      {videoUrl && !assetsLoading && !showTabs && (
+      {/* 1. Base Library Video */}
+      {libraryVideoUrl && !assetsLoading && !showTabs && (
         <video
-          ref={videoRef}
           autoPlay
           loop
           muted
@@ -431,15 +441,48 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover -z-10"
           style={{ 
-            opacity: 0.3,
+            opacity: aiJourneyVideos.start ? 0.1 : 0.3, // Dim when AI journey starts
+            transition: 'opacity 3s ease-in-out',
             pointerEvents: 'none',
             touchAction: 'none'
           }}
-          src={videoUrl}
-          onError={(e) => {
-            console.error('[PracticeCard] Video failed to load:', e.target.src);
-            e.target.style.display = 'none';
+          src={libraryVideoUrl}
+        />
+      )}
+
+      {/* 2. AI Journey: START State (Where you are) */}
+      {aiJourneyVideos.start && !showTabs && (
+        <motion.video
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: (1 - journeyProgress) * 0.4 // Fades out as journey progresses
           }}
+          transition={{ duration: 3 }}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover -z-10"
+          style={{ pointerEvents: 'none' }}
+          src={aiJourneyVideos.start}
+        />
+      )}
+
+      {/* 3. AI Journey: END State (Where you want to be) */}
+      {aiJourneyVideos.end && !showTabs && (
+        <motion.video
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: journeyProgress * 0.4 // Fades in as journey progresses
+          }}
+          transition={{ duration: 3 }}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover -z-10"
+          style={{ pointerEvents: 'none' }}
+          src={aiJourneyVideos.end}
         />
       )}
 
@@ -491,6 +534,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
             audioRef={audioRef}
             presenceSeconds={secondsElapsed}
             onComplete={handleCompleteFromSounds}
+            onVideoGenerated={(journey) => setAiJourneyVideos(journey)}
           />
         )}
       </AnimatePresence>

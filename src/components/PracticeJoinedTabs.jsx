@@ -15,7 +15,8 @@ export default function PracticeJoinedTabs({
   audioRef,
   onActiveTabChange,
   presenceSeconds = 0,
-  onComplete
+  onComplete,
+  onVideoGenerated
 }) {
   const [showToast, setShowToast] = useState(null);
   const [isExpandedView, setIsExpandedView] = useState(false);
@@ -122,6 +123,7 @@ export default function PracticeJoinedTabs({
           }}
           onStartPractice={onStartPractice}
           onComplete={handleComplete}
+          onVideoGenerated={onVideoGenerated}
         />
       </main>
 
