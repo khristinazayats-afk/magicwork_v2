@@ -8,7 +8,7 @@
  * - GET /api/content-sets/:id - Get specific content set by ID
  */
 
-import { sql } from '@vercel/postgres';
+import { sql } from './db/client.js';
 
 /**
  * Get content set for a specific space

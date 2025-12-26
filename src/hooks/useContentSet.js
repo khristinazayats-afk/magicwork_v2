@@ -48,7 +48,7 @@ export function useContentSet(spaceName) {
           // If API fails (500 or any error), use fallback mock data for supported spaces
           if (spaceName === 'Drift into Sleep' || spaceName === 'Slow Morning') {
             console.warn(`API returned ${setResponse.status}, using fallback data for ${spaceName}`);
-            const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+            const cdnBaseUrl = 'https://d3hajr7xji31qq.cloudfront.net';
             
             if (spaceName === 'Slow Morning') {
               // Fallback for Slow Morning - use clouds video
@@ -56,7 +56,7 @@ export function useContentSet(spaceName) {
                 visual: {
                   id: 'slow-morning-clouds-video',
                   name: 'Slow Morning - Clouds Video',
-                  cdn_url: `${s3BaseUrl}/videos/canva/clouds.mp4`,
+                  cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                   type: 'video',
                   format: 'mp4',
                   s3_key: 'videos/canva/clouds.mp4',
@@ -66,7 +66,7 @@ export function useContentSet(spaceName) {
                   {
                     id: 'slow-morning-clouds-video',
                     name: 'Slow Morning - Clouds Video',
-                    cdn_url: `${s3BaseUrl}/videos/canva/clouds.mp4`,
+                    cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                     type: 'video',
                     format: 'mp4',
                     s3_key: 'videos/canva/clouds.mp4'
@@ -83,50 +83,50 @@ export function useContentSet(spaceName) {
                 visual: {
                   id: 'drift-clouds-video',
                   name: 'Clouds Video',
-                  cdn_url: `${s3BaseUrl}/video/canva/clouds.mp4`,
+                  cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                   type: 'video',
                   format: 'mp4',
-                  s3_key: 'video/canva/clouds.mp4',
+                  s3_key: 'videos/canva/clouds.mp4',
                   allocated_space: 'Drift into Sleep'
                 },
                 visuals: [
                   {
                     id: 'drift-clouds-video',
                     name: 'Clouds Video',
-                    cdn_url: `${s3BaseUrl}/video/canva/clouds.mp4`,
+                    cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                     type: 'video',
                     format: 'mp4',
-                    s3_key: 'video/canva/clouds.mp4'
+                    s3_key: 'videos/canva/clouds.mp4'
                   },
                   {
                     id: 'drift-rain-video',
                     name: 'Rain Video',
-                    cdn_url: `${s3BaseUrl}/video/canva/rain.mp4`,
+                    cdn_url: `${cdnBaseUrl}/videos/canva/rain.mp4`,
                     type: 'video',
                     format: 'mp4',
-                    s3_key: 'video/canva/rain.mp4'
+                    s3_key: 'videos/canva/rain.mp4'
                   },
                   {
                     id: 'drift-waves-video',
                     name: 'Waves Video',
-                    cdn_url: `${s3BaseUrl}/video/canva/waves.mp4`,
+                    cdn_url: `${cdnBaseUrl}/videos/canva/waves.mp4`,
                     type: 'video',
                     format: 'mp4',
-                    s3_key: 'video/canva/waves.mp4'
+                    s3_key: 'videos/canva/waves.mp4'
                   },
                   {
                     id: 'drift-into-sleep-video-1',
                     name: 'Drift into Sleep - Background Video 1',
-                    cdn_url: `${s3BaseUrl}/video/canva/breathe-to-relax-video.mp4`,
+                    cdn_url: `${cdnBaseUrl}/videos/canva/breathe-to-relax-video.mp4`,
                     type: 'video',
                     format: 'mp4',
-                    s3_key: 'video/canva/breathe-to-relax-video.mp4'
+                    s3_key: 'videos/canva/breathe-to-relax-video.mp4'
                   }
                 ],
                 audio: {
                   id: 'drift-into-sleep-audio',
                   name: 'Drift into Sleep - Audio Track',
-                  cdn_url: `${s3BaseUrl}/audio/download.wav`,
+                  cdn_url: `${cdnBaseUrl}/audio/download.wav`,
                   type: 'audio',
                   format: 'wav',
                   s3_key: 'audio/download.wav',
@@ -171,39 +171,39 @@ export function useContentSet(spaceName) {
         if (spaceName === 'Drift into Sleep') {
           if (finalVisuals.length < 4) {
             console.warn(`Only ${finalVisuals.length} video(s) found for Drift into Sleep, using mock data with 4 videos`);
-            const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+            const cdnBaseUrl = 'https://d3hajr7xji31qq.cloudfront.net';
             finalVisuals = [
               {
                 id: 'drift-clouds-video',
                 name: 'Clouds Video',
-                cdn_url: `${s3BaseUrl}/video/canva/clouds.mp4`,
+                cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                 type: 'video',
                 format: 'mp4',
-                s3_key: 'video/canva/clouds.mp4'
+                s3_key: 'videos/canva/clouds.mp4'
               },
               {
                 id: 'drift-rain-video',
                 name: 'Rain Video',
-                cdn_url: `${s3BaseUrl}/video/canva/rain.mp4`,
+                cdn_url: `${cdnBaseUrl}/videos/canva/rain.mp4`,
                 type: 'video',
                 format: 'mp4',
-                s3_key: 'video/canva/rain.mp4'
+                s3_key: 'videos/canva/rain.mp4'
               },
               {
                 id: 'drift-waves-video',
                 name: 'Waves Video',
-                cdn_url: `${s3BaseUrl}/video/canva/waves.mp4`,
+                cdn_url: `${cdnBaseUrl}/videos/canva/waves.mp4`,
                 type: 'video',
                 format: 'mp4',
-                s3_key: 'video/canva/waves.mp4'
+                s3_key: 'videos/canva/waves.mp4'
               },
               {
                 id: 'drift-into-sleep-video-1',
                 name: 'Drift into Sleep - Background Video 1',
-                cdn_url: `${s3BaseUrl}/video/canva/breathe-to-relax-video.mp4`,
+                cdn_url: `${cdnBaseUrl}/videos/canva/breathe-to-relax-video.mp4`,
                 type: 'video',
                 format: 'mp4',
-                s3_key: 'video/canva/breathe-to-relax-video.mp4'
+                s3_key: 'videos/canva/breathe-to-relax-video.mp4'
               }
             ];
           } else {
@@ -220,7 +220,7 @@ export function useContentSet(spaceName) {
         // Use mock data as fallback for supported spaces when API fails
         if (spaceName === 'Drift into Sleep' || spaceName === 'Slow Morning') {
           console.warn(`Using fallback data due to API error for ${spaceName}`);
-          const s3BaseUrl = 'https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com';
+          const cdnBaseUrl = 'https://d3hajr7xji31qq.cloudfront.net';
           
           if (spaceName === 'Slow Morning') {
             // Fallback for Slow Morning - use clouds video
@@ -228,7 +228,7 @@ export function useContentSet(spaceName) {
               visual: {
                 id: 'slow-morning-clouds-video',
                 name: 'Slow Morning - Clouds Video',
-                cdn_url: `${s3BaseUrl}/videos/canva/clouds.mp4`,
+                cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                 type: 'video',
                 format: 'mp4',
                 s3_key: 'videos/canva/clouds.mp4',
@@ -238,7 +238,7 @@ export function useContentSet(spaceName) {
                 {
                   id: 'slow-morning-clouds-video',
                   name: 'Slow Morning - Clouds Video',
-                  cdn_url: `${s3BaseUrl}/videos/canva/clouds.mp4`,
+                  cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                   type: 'video',
                   format: 'mp4',
                   s3_key: 'videos/canva/clouds.mp4'
@@ -252,50 +252,50 @@ export function useContentSet(spaceName) {
               visual: {
                 id: 'drift-clouds-video',
                 name: 'Clouds Video',
-                cdn_url: `${s3BaseUrl}/video/canva/clouds.mp4`,
+                cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                 type: 'video',
                 format: 'mp4',
-                s3_key: 'video/canva/clouds.mp4',
+                s3_key: 'videos/canva/clouds.mp4',
                 allocated_space: 'Drift into Sleep'
               },
               visuals: [
                 {
                   id: 'drift-clouds-video',
                   name: 'Clouds Video',
-                  cdn_url: `${s3BaseUrl}/video/canva/clouds.mp4`,
+                  cdn_url: `${cdnBaseUrl}/videos/canva/clouds.mp4`,
                   type: 'video',
                   format: 'mp4',
-                  s3_key: 'video/canva/clouds.mp4'
+                  s3_key: 'videos/canva/clouds.mp4'
                 },
                 {
                   id: 'drift-rain-video',
                   name: 'Rain Video',
-                  cdn_url: `${s3BaseUrl}/video/canva/rain.mp4`,
+                  cdn_url: `${cdnBaseUrl}/videos/canva/rain.mp4`,
                   type: 'video',
                   format: 'mp4',
-                  s3_key: 'video/canva/rain.mp4'
+                  s3_key: 'videos/canva/rain.mp4'
                 },
                 {
                   id: 'drift-waves-video',
                   name: 'Waves Video',
-                  cdn_url: `${s3BaseUrl}/video/canva/waves.mp4`,
+                  cdn_url: `${cdnBaseUrl}/videos/canva/waves.mp4`,
                   type: 'video',
                   format: 'mp4',
-                  s3_key: 'video/canva/waves.mp4'
+                  s3_key: 'videos/canva/waves.mp4'
                 },
                 {
                   id: 'drift-into-sleep-video-1',
                   name: 'Drift into Sleep - Background Video 1',
-                  cdn_url: `${s3BaseUrl}/video/canva/breathe-to-relax-video.mp4`,
+                  cdn_url: `${cdnBaseUrl}/videos/canva/breathe-to-relax-video.mp4`,
                   type: 'video',
                   format: 'mp4',
-                  s3_key: 'video/canva/breathe-to-relax-video.mp4'
+                  s3_key: 'videos/canva/breathe-to-relax-video.mp4'
                 }
               ],
               audio: {
                 id: 'drift-into-sleep-audio',
                 name: 'Drift into Sleep - Audio Track',
-                cdn_url: `${s3BaseUrl}/audio/download.wav`,
+                cdn_url: `${cdnBaseUrl}/audio/download.wav`,
                 type: 'audio',
                 format: 'wav',
                 s3_key: 'audio/download.wav',

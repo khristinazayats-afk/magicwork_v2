@@ -4,7 +4,6 @@ import SettingsBottomSheet from './SettingsBottomSheet';
 import HomeScreenSummary from './HomeScreenSummary';
 import ProfileScreen from './ProfileScreen';
 import PracticeCard from './PracticeCard';
-import FirstTimeGuide from './FirstTimeGuide';
 import ProgressStats from './ProgressStats';
 import stationsData from '../data/stations.json';
 
@@ -37,15 +36,7 @@ export default function Feed({ onBack }) {
   const [showProfile, setShowProfile] = useState(false);
   const [activeSpaceIndex, setActiveSpaceIndex] = useState(null);
   // Check sessionStorage to see if user has seen the hint before
-  const [showHint, setShowHint] = useState(() => {
-    return !sessionStorage.getItem('hasSeenFeedGuide');
-  });
-  const [interactedCards, setInteractedCards] = useState(new Set()); // Track which cards have been interacted with
-  // SwipeHint should appear immediately if FirstTimeGuide is not showing and we're on "Get in the Flow State"
-  const [swipeHintReady, setSwipeHintReady] = useState(() => {
-    // Show SwipeHint immediately if FirstTimeGuide won't show (user has seen it before)
-    return !!sessionStorage.getItem('hasSeenFeedGuide');
-  });
+  const [swipeHintReady, setSwipeHintReady] = useState(true);
   const scrollContainerRef = useRef(null);
   const isScrollingRef = useRef(false);
   const hasInitializedScrollRef = useRef(false);
@@ -56,165 +47,6 @@ export default function Feed({ onBack }) {
   const hintDismissedTimeRef = useRef(null); // Track when hint was dismissed to prevent immediate interaction tracking
   const isScrollingToSwipeHintRef = useRef(false); // Prevent interaction tracking during programmatic scroll to SwipeHint
 
-  // Keep ref in sync with state
-  useEffect(() => {
-    showHintRef.current = showHint;
-    // When FirstTimeGuide is dismissed, SwipeHint should appear
-    if (!showHint) {
-      setSwipeHintReady(true);
-      console.log('[Feed] FirstTimeGuide dismissed, setting swipeHintReady to true');
-    } else {
-      setSwipeHintReady(false);
-      console.log('[Feed] FirstTimeGuide showing, resetting swipeHintReady to false');
-    }
-  }, [showHint]);
-  
-  // Also set SwipeHint ready when feed loads if FirstTimeGuide won't show
-  useEffect(() => {
-    if (!showHint && spaces.length > 0) {
-      // Small delay to ensure card is rendered
-      setTimeout(() => {
-        setSwipeHintReady(true);
-        console.log('[Feed] Feed loaded, FirstTimeGuide not showing, setting swipeHintReady to true');
-      }, 100);
-    }
-  }, [spaces.length, showHint]);
-
-  // Scroll to "Get in the Flow State" card when feed loads and hint should be shown
-  useEffect(() => {
-    if (!showHint || hasScrolledToGetInFlowStateRef.current || !scrollContainerRef.current || spaces.length === 0) return;
-    
-    // Find index of "Get in the Flow State" in the stations array
-    const getInFlowStateIndex = spaces.findIndex(space => space.name === 'Get in the Flow State');
-    if (getInFlowStateIndex === -1) return;
-    
-    // Wait for DOM to be ready, then scroll to "Get in the Flow State" in the middle set
-    const scrollToGetInFlowState = () => {
-      if (!scrollContainerRef.current || hasScrolledToGetInFlowStateRef.current) return;
-      
-      hasScrolledToGetInFlowStateRef.current = true;
-      hintReadyRef.current = true; // Mark hint as ready to be dismissed
-      
-      const middleSetStart = spaces.length;
-      const getInFlowStateCardIndex = middleSetStart + getInFlowStateIndex;
-      
-      // Scroll to the "Get in the Flow State" card
-      // children[0] is HomeScreenSummary, so card index is getInFlowStateCardIndex + 1
-      const card = scrollContainerRef.current.children[getInFlowStateCardIndex + 1];
-      if (card) {
-        isScrollingRef.current = true;
-        card.scrollIntoView({ behavior: 'instant', block: 'start' });
-        requestAnimationFrame(() => {
-          isScrollingRef.current = false;
-        });
-      }
-    };
-    
-    // Try immediately, then fallback with timeout to ensure DOM is ready
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        scrollToGetInFlowState();
-        // Fallback in case requestAnimationFrame doesn't work
-        setTimeout(scrollToGetInFlowState, 50);
-      });
-    });
-  }, [showHint, spaces]);
-
-  // Initialize scroll position for infinite scroll - but only after hint is dismissed
-  useEffect(() => {
-    // Don't initialize scroll if hint is showing - wait for user to dismiss it first
-    if (showHint || hasInitializedScrollRef.current) return;
-    
-    if (spaces.length > 0 && scrollContainerRef.current && !isScrollingRef.current) {
-      requestAnimationFrame(() => {
-        if (!scrollContainerRef.current || showHint) return;
-        
-        hasInitializedScrollRef.current = true;
-        isScrollingRef.current = true;
-        const middleSetStart = spaces.length;
-        const lastCardIndex = middleSetStart + spaces.length - 1;
-        
-        const card = scrollContainerRef.current.children[lastCardIndex + 1];
-        if (card) {
-          card.scrollIntoView({ behavior: 'instant', block: 'start' });
-        }
-        
-        requestAnimationFrame(() => {
-          isScrollingRef.current = false;
-        });
-      });
-    }
-  }, [spaces.length, showHint]);
-
-  // Dismiss hint function - accessible from both scroll handlers and button click
-  const dismissHint = useCallback(() => {
-    // Use ref to check current state (avoids closure issues)
-    if (showHintRef.current) {
-      console.log('[Feed] Dismissing hint screen - button clicked');
-      showHintRef.current = false;
-      setShowHint(false);
-      hintDismissedTimeRef.current = Date.now(); // Record dismissal time
-      sessionStorage.setItem('hasSeenFeedGuide', 'true');
-      
-      // Reset scroll tracking ref so we can scroll again
-      hasScrolledToGetInFlowStateRef.current = false;
-      // swipeHintReady will be set to true by the useEffect that watches showHint
-      
-      // Reset interaction state for "Get in the Flow State" card so SwipeHint can appear
-      const getInFlowStateIndex = spaces.findIndex(space => space.name === 'Get in the Flow State');
-      if (getInFlowStateIndex !== -1) {
-        setInteractedCards(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(getInFlowStateIndex); // Remove from interacted set
-          console.log('[Feed] Reset interaction for Get in the Flow State, index:', getInFlowStateIndex, 'remaining:', Array.from(newSet), 'showHint:', showHintRef.current);
-          return newSet;
-        });
-      }
-      
-      // SwipeHint readiness is already handled by the useEffect that watches showHint
-      // Wait for exit animation to complete (400ms) before scrolling to "Get in the Flow State"
-      setTimeout(() => {
-        if (scrollContainerRef.current) {
-          // Set protection flags BEFORE scrolling to prevent interaction tracking
-          isScrollingRef.current = true;
-          isScrollingToSwipeHintRef.current = true;
-          console.log('[Feed] Setting scroll protection flags before scrolling to SwipeHint');
-          
-          requestAnimationFrame(() => {
-            if (!scrollContainerRef.current) return;
-            hasScrolledToGetInFlowStateRef.current = true;
-            
-            // Find "Get in the Flow State" card and scroll to it
-            const getInFlowStateIndex = spaces.findIndex(space => space.name === 'Get in the Flow State');
-            console.log('[Feed] Found Get in the Flow State at index:', getInFlowStateIndex);
-            if (getInFlowStateIndex !== -1) {
-              const middleSetStart = spaces.length;
-              const getInFlowStateCardIndex = middleSetStart + getInFlowStateIndex;
-              const card = scrollContainerRef.current.children[getInFlowStateCardIndex + 1];
-              console.log('[Feed] Scrolling to card index:', getInFlowStateCardIndex + 1, 'card exists:', !!card);
-              if (card) {
-                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                console.log('[Feed] Scroll initiated to Get in the Flow State card');
-              }
-            }
-            
-            // Release scroll lock after scroll completes
-            setTimeout(() => {
-              isScrollingRef.current = false;
-              console.log('[Feed] Scroll completed, SwipeHint should be visible');
-            }, 800);
-            
-            setTimeout(() => {
-              isScrollingToSwipeHintRef.current = false;
-              console.log('[Feed] Releasing SwipeHint protection, interaction tracking can resume');
-            }, 3000); // Keep protection for 3 seconds total
-          });
-        }
-      }, 500); // Wait for FirstTimeGuide exit animation
-    } else {
-      console.log('[Feed] dismissHint called but showHintRef.current is false');
-    }
-  }, [spaces]);
 
   // Handle infinite scroll - seamlessly loop when reaching edges
   // Also dismiss hint when user scrolls
@@ -420,13 +252,7 @@ export default function Feed({ onBack }) {
   
   return (
     <>
-      {/* First Time Hint Screen - shows on Get in the Flow State card */}
-      <AnimatePresence>
-        {shouldShowHint && (
-          <FirstTimeGuide key="first-time-guide" onDismiss={dismissHint} />
-        )}
-      </AnimatePresence>
-
+      {/* Infinite Scroll Container */}
       <div 
         ref={scrollContainerRef}
         className={`full-viewport w-full ${activeSpaceIndex === null ? 'overflow-y-scroll md:overflow-y-auto' : 'overflow-hidden'}`}
@@ -552,9 +378,9 @@ export default function Feed({ onBack }) {
               <PracticeCard
                 station={space}
                 isActive={index === spaces.length}
-                hasInteracted={hasInteracted}
-                showFirstTimeHint={showHint}
-                swipeHintReady={swipeHintReady && !showHint}
+                hasInteracted={true}
+                showFirstTimeHint={false}
+                swipeHintReady={true}
                 key={`card-${index}`}
                 onBack={handleLeave}
                 currentIndex={(normalizedIndex) + 1}

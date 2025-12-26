@@ -26,9 +26,9 @@ dotenv.config({ path: envPath });
 // PostgreSQL connection
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL,
-  ssl: process.env.POSTGRES_URL?.includes('sslmode=require') ? {
+  ssl: {
     rejectUnauthorized: false
-  } : false
+  }
 });
 
 function formatTable(data) {
@@ -73,10 +73,8 @@ async function viewDatabase() {
         id,
         name,
         type,
-        format,
         allocated_space,
         status,
-        s3_key,
         LEFT(cdn_url, 50) as cdn_url_short,
         created_at::text as created_at
       FROM content_assets
@@ -162,7 +160,7 @@ async function viewDatabase() {
     if (cdnInfo.missing_cdn > 0) {
       console.log('\n   ⚠️  Assets missing CDN URLs:');
       const missing = await pool.query(`
-        SELECT id, name, s3_key
+        SELECT id, name, allocated_space
         FROM content_assets
         WHERE status = 'live'
         AND (cdn_url IS NULL OR cdn_url = '');
@@ -171,8 +169,6 @@ async function viewDatabase() {
     }
     
     console.log('\n' + '='.repeat(80) + '\n');
-    console.log('💡 Tip: For a visual interface, use Supabase Dashboard:');
-    console.log('   https://supabase.com/dashboard/project/ejhafhggndirnxmwrtgm/editor\n');
     
   } catch (error) {
     console.error('\n❌ Error viewing database:');
@@ -187,8 +183,3 @@ viewDatabase().catch(error => {
   console.error('\n❌ Unexpected error:', error);
   process.exit(1);
 });
-
-
-
-
-

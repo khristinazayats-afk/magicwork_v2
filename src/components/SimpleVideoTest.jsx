@@ -4,7 +4,7 @@ export default function SimpleVideoTest() {
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
-  const videoUrl = "https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/canva/videos/breathe-to-relax-video.mp4";
+  const videoUrl = "https://d3hajr7xji31qq.cloudfront.net/videos/canva/breathe-to-relax-video.mp4";
 
   return (
     <div className="p-8 max-w-2xl mx-auto">

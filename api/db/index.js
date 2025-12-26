@@ -1,5 +1,5 @@
 // Database utilities for gamification
-import { sql } from '@vercel/postgres';
+import { sql } from './client.js';
 
 // Get user ID (mock in dev, real in prod)
 const DEV_MODE = process.env.NODE_ENV === 'development';
