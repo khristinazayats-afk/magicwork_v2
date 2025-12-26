@@ -18,6 +18,13 @@ export default function AmbientSoundManager() {
     audio.loop = true;
     audio.volume = 0.15; // Low volume for ambient background
 
+    // Handle audio loading errors gracefully
+    const handleError = () => {
+      console.log('Ambient sound failed to load, skipping');
+      audio.pause();
+    };
+    audio.addEventListener('error', handleError);
+
     // Only play on main navigation screens
     const ambientRoutes = ['/feed', '/greeting', '/what-to-expect'];
     const shouldPlay = ambientRoutes.includes(location.pathname);
@@ -28,13 +35,17 @@ export default function AmbientSoundManager() {
         const randomIndex = Math.floor(Math.random() * AMBIENT_SOUNDS.length);
         setCurrentSoundIndex(randomIndex);
         audio.src = AMBIENT_SOUNDS[randomIndex];
-        audio.play().catch(err => console.log('Ambient audio autoplay blocked:', err));
+        audio.play().catch(err => {
+          // Silently handle autoplay errors - they're expected
+          console.log('Ambient audio autoplay blocked:', err);
+        });
       }
     } else {
       audio.pause();
     }
 
     return () => {
+      audio.removeEventListener('error', handleError);
       audio.pause();
     };
   }, [location.pathname]);
