@@ -1,19 +1,52 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// Ambient sounds using CloudFront CDN
-const CDN_BASE = 'https://d3hajr7xji31qq.cloudfront.net';
-const AMBIENT_SOUNDS = [
-  `${CDN_BASE}/ambient/soft-rain.mp3`,
-  `${CDN_BASE}/ambient/gentle-waves.mp3`,
-  `${CDN_BASE}/ambient/forest-birds.mp3`,
-  `${CDN_BASE}/ambient/white-noise.mp3`
+// Ambient sound types available for AI generation
+const AMBIENT_TYPES = [
+  'soft-rain',
+  'gentle-waves',
+  'forest-birds',
+  'white-noise',
+  'breathing-space',
+  'temple-bells'
 ];
 
 export default function AmbientSoundManager() {
   const audioRef = useRef(new Audio());
   const location = useLocation();
   const [currentSoundIndex, setCurrentSoundIndex] = useState(0);
+  const [generatedSounds, setGeneratedSounds] = useState({});
+
+  // Generate ambient sound on demand using AI
+  const generateAmbientSound = async (type) => {
+    try {
+      // Check if we already generated this type (cache it)
+      if (generatedSounds[type]) {
+        return generatedSounds[type];
+      }
+
+      const response = await fetch('/api/generate-ambient', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate ambient sound');
+      }
+
+      const data = await response.json();
+      const audioUrl = data.audioUrl;
+      
+      // Cache the generated sound URL
+      setGeneratedSounds(prev => ({ ...prev, [type]: audioUrl }));
+      
+      return audioUrl;
+    } catch (error) {
+      console.error('Error generating ambient sound:', error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -22,8 +55,10 @@ export default function AmbientSoundManager() {
 
     // Handle audio loading errors gracefully
     const handleError = () => {
-      console.log('Ambient sound failed to load, skipping');
-      audio.pause();
+      console.log('Ambient sound failed to load, trying next');
+      // Try next sound type
+      const nextIndex = (currentSoundIndex + 1) % AMBIENT_TYPES.length;
+      setCurrentSoundIndex(nextIndex);
     };
     audio.addEventListener('error', handleError);
 
@@ -31,15 +66,20 @@ export default function AmbientSoundManager() {
     const ambientRoutes = ['/feed', '/greeting', '/what-to-expect'];
     const shouldPlay = ambientRoutes.includes(location.pathname);
 
-    if (shouldPlay && AMBIENT_SOUNDS.length > 0) {
-      // Pick a random sound if not already playing
+    if (shouldPlay && AMBIENT_TYPES.length > 0) {
+      // Generate and play a random ambient sound if not already playing
       if (audio.paused) {
-        const randomIndex = Math.floor(Math.random() * AMBIENT_SOUNDS.length);
-        setCurrentSoundIndex(randomIndex);
-        audio.src = AMBIENT_SOUNDS[randomIndex];
-        audio.play().catch(err => {
-          // Silently handle autoplay errors - they're expected
-          console.log('Ambient audio autoplay blocked:', err);
+        const randomType = AMBIENT_TYPES[currentSoundIndex];
+        
+        // Generate the sound (or use cached version)
+        generateAmbientSound(randomType).then((soundUrl) => {
+          if (soundUrl && audio.paused) {
+            audio.src = soundUrl;
+            audio.play().catch(err => {
+              // Silently handle autoplay errors - they're expected
+              console.log('Ambient audio autoplay blocked:', err);
+            });
+          }
         });
       }
     } else {
@@ -49,8 +89,14 @@ export default function AmbientSoundManager() {
     return () => {
       audio.removeEventListener('error', handleError);
       audio.pause();
+      // Clean up blob URLs
+      Object.values(generatedSounds).forEach(url => {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
     };
-  }, [location.pathname]);
+  }, [location.pathname, currentSoundIndex, generatedSounds]);
 
   return null;
 }
