@@ -26,19 +26,23 @@ function walk(dir, callback) {
 
 const rootDir = path.join(__dirname, '..');
 
-console.log('Branding update: Magiwork -> Magiwork');
+console.log('Branding update: Fixing MagicWork (capital W) -> MagicWork');
 
 walk(rootDir, (filepath) => {
   try {
     let content = fs.readFileSync(filepath, 'utf8');
     let changed = false;
 
-    if (content.includes('Magiwork')) {
-      content = content.replace(/Magiwork/g, 'Magiwork');
+    if (content.includes('MagicWork')) {
+      content = content.replace(/MagicWork/g, 'MagicWork');
       changed = true;
     }
-    if (content.includes('magiwork')) {
-      content = content.replace(/magiwork/g, 'magiwork');
+    if (content.includes('MagicWork')) {
+      content = content.replace(/MagicWork/g, 'MagicWork');
+      changed = true;
+    }
+    if (content.includes('magicwork')) {
+      content = content.replace(/magicwork/g, 'magicwork');
       changed = true;
     }
 
@@ -52,4 +56,3 @@ walk(rootDir, (filepath) => {
 });
 
 console.log('Branding update complete.');
-

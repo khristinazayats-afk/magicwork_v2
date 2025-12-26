@@ -12,7 +12,7 @@ These variables are **essential** and the app will not work without them:
 | `AWS_ACCESS_KEY_ID` | AWS Access Key for S3 access | S3 file operations, scripts | `AKIA...` |
 | `AWS_SECRET_ACCESS_KEY` | AWS Secret Key for S3 access | S3 file operations, scripts | `xxx...` |
 | `AWS_REGION` | AWS region where S3 bucket is located | S3 client configuration | `eu-north-1` |
-| `S3_BUCKET` | S3 bucket name for content assets | S3 operations, URL generation | `magiwork-canva-assets` |
+| `S3_BUCKET` | S3 bucket name for content assets | S3 operations, URL generation | `magicwork-canva-assets` |
 
 ## 🟡 Important (Recommended)
 
@@ -20,9 +20,9 @@ These variables improve functionality but have defaults:
 
 | Variable | Description | Default Value | Where Used |
 |----------|-------------|---------------|------------|
-| `CDN_BASE_URL` | CloudFront CDN URL for assets | `https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com` | Asset URL generation |
+| `CDN_BASE_URL` | CloudFront CDN URL for assets | `https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com` | Asset URL generation |
 | `CDN_BASE` | Alternative CDN URL variable | Same as CDN_BASE_URL | Asset URL generation |
-| `CDN_DOMAIN` | CDN domain name | `cdn.magiwork.app` | Asset URL generation |
+| `CDN_DOMAIN` | CDN domain name | `cdn.magicwork.app` | Asset URL generation |
 
 ## 🟢 Optional (Development/Advanced Features)
 
@@ -51,7 +51,7 @@ These variables are only needed for specific features:
 - [ ] `AWS_ACCESS_KEY_ID` - Your AWS Access Key
 - [ ] `AWS_SECRET_ACCESS_KEY` - Your AWS Secret Key
 - [ ] `AWS_REGION` - Set to `eu-north-1` (or your bucket region)
-- [ ] `S3_BUCKET` - Set to `magiwork-canva-assets`
+- [ ] `S3_BUCKET` - Set to `magicwork-canva-assets`
 
 ### Step 3: CDN Configuration (Optional but Recommended)
 - [ ] `CDN_BASE_URL` - Your CloudFront CDN URL (if using CloudFront)
@@ -112,7 +112,7 @@ Based on your codebase, here's what should be set:
 - `AWS_ACCESS_KEY_ID` - **Needs to be set**
 - `AWS_SECRET_ACCESS_KEY` - **Needs to be set**
 - `AWS_REGION` - **Needs to be set** (should be `eu-north-1`)
-- `S3_BUCKET` - **Needs to be set** (should be `magiwork-canva-assets`)
+- `S3_BUCKET` - **Needs to be set** (should be `magicwork-canva-assets`)
 
 ### 🔵 Optional (Can be added later)
 - `CDN_BASE_URL` - For CloudFront CDN (optional)

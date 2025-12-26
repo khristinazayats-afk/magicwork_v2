@@ -6,7 +6,7 @@ Since your AWS credentials don't have permission to update bucket policies, you 
 
 1. **Go to AWS Console:**
    - Open: https://console.aws.amazon.com/s3/
-   - Click on bucket: `magiwork-canva-assets`
+   - Click on bucket: `magicwork-canva-assets`
 
 2. **Open Permissions Tab:**
    - Click **Permissions** tab (at the top)
@@ -26,21 +26,21 @@ Since your AWS credentials don't have permission to update bucket policies, you 
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
     },
     {
       "Sid": "PublicReadGetObjectVideo",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/video/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/video/*"
     },
     {
       "Sid": "PublicReadGetObjectAudio",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/audio/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/audio/*"
     }
   ]
 }
@@ -105,7 +105,7 @@ Since your AWS credentials don't have permission to update bucket policies, you 
 After saving, test the video URL:
 
 ```bash
-curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 ```
 
 **Expected Result:**
@@ -151,6 +151,6 @@ HTTP/1.1 200 OK
 If S3 direct access continues to have issues, you can use CloudFront CDN URLs instead. Update the database to use CloudFront URLs:
 
 - CloudFront URL: `https://d3hajr7xji31qq.cloudfront.net/video/canva/clouds.mp4`
-- Instead of: `https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4`
+- Instead of: `https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4`
 
 CloudFront URLs don't require bucket public access and are faster.

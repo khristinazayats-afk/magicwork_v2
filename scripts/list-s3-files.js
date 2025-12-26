@@ -14,7 +14,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
+const BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
 const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
 
 const s3Client = new S3Client({

@@ -167,7 +167,7 @@ import meditationAnim from '../assets/lottie/meditation.json';
             Canva Designs Integration
           </h1>
           <p className="text-lg text-gray-600">
-            Your latest Canva designs and how to use them in magiwork
+            Your latest Canva designs and how to use them in magicwork
           </p>
         </div>
 

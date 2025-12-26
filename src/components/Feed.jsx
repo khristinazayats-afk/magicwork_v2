@@ -11,8 +11,27 @@ import stationsData from '../data/stations.json';
 export default function Feed({ onBack }) {
   console.log('Feed: Component rendering');
   
-  // Use all spaces for scrollable feed (9 spaces)
   const [spaces] = useState(stationsData.stations || []);
+  const [greeting, setGreeting] = useState('Good afternoon');
+  const [recommendedSpace, setRecommendedSpace] = useState(null);
+
+  // Update greeting and recommendation based on time of day
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) {
+      setGreeting('Good morning');
+      setRecommendedSpace(spaces.find(s => s.name === 'Slow Morning'));
+    } else if (hour >= 12 && hour < 17) {
+      setGreeting('Good afternoon');
+      setRecommendedSpace(spaces.find(s => s.name === 'Get in the Flow State'));
+    } else if (hour >= 17 && hour < 21) {
+      setGreeting('Good evening');
+      setRecommendedSpace(spaces.find(s => s.name === 'Gentle De-Stress'));
+    } else {
+      setGreeting('Good night');
+      setRecommendedSpace(spaces.find(s => s.name === 'Drift into Sleep'));
+    }
+  }, [spaces]);
   
   const [showSettings, setShowSettings] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -441,14 +460,45 @@ export default function Feed({ onBack }) {
               className="mb-12"
             >
               <h1 className="font-hanken font-bold text-[32px] md:text-[48px] text-[#1e2d2e] mb-4">
-                Good afternoon
+                {greeting}
               </h1>
               
-              <ProgressStats />
-
-              <div className="flex flex-col md:flex-row gap-4 md:items-center">
+              <div className="flex flex-col md:flex-row gap-6 mb-12">
+                <ProgressStats />
                 <HomeScreenSummary variant="white" onVibeClick={() => setShowProfile(true)} />
               </div>
+
+              {recommendedSpace && (
+                <div className="mb-12">
+                  <h2 className="text-sm font-hanken font-bold text-[#1e2d2e]/40 uppercase tracking-widest mb-4">
+                    Recommended for you
+                  </h2>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    onClick={() => handleJoin(spaces.indexOf(recommendedSpace))}
+                    className="bg-[#94d1c4]/20 rounded-[32px] p-8 border-2 border-[#94d1c4]/30 cursor-pointer flex items-center justify-between group overflow-hidden relative"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="px-3 py-1 rounded-full bg-[#94d1c4] text-white text-[10px] font-bold uppercase tracking-wider">
+                          Quick Start
+                        </span>
+                        <h3 className="font-hanken font-bold text-2xl text-[#1e2d2e]">{recommendedSpace.name}</h3>
+                      </div>
+                      <p className="font-hanken text-[#1e2d2e]/60">
+                        {recommendedSpace.description || "The perfect way to spend a few moments right now."}
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 rounded-full bg-[#1e2d2e] flex items-center justify-center text-white relative z-10 shadow-lg group-hover:bg-[#1e2d2e]/90 transition-colors">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 5l8 7-8 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

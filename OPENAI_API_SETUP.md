@@ -13,7 +13,7 @@ Three new API endpoints have been created:
 ### Step 1: Add API Key to Vercel
 
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
-2. Select your project (`magiwork` or similar)
+2. Select your project (`magicwork` or similar)
 3. Go to **Settings** → **Environment Variables**
 4. Add a new environment variable:
    - **Name**: `OPENAI_API_KEY`
@@ -110,7 +110,7 @@ When OpenAI releases video generation, this endpoint will be updated.
 ### Test Practice Generation
 
 ```bash
-curl -X POST https://magiwork.vercel.app/api/generate-practice \
+curl -X POST https://magicwork.vercel.app/api/generate-practice \
   -H "Content-Type: application/json" \
   -d '{
     "emotionalState": "anxious",
@@ -121,7 +121,7 @@ curl -X POST https://magiwork.vercel.app/api/generate-practice \
 ### Test Image Generation
 
 ```bash
-curl -X POST https://magiwork.vercel.app/api/generate-image \
+curl -X POST https://magicwork.vercel.app/api/generate-image \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "peaceful meditation garden"

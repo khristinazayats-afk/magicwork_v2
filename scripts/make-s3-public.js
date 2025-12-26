@@ -22,7 +22,7 @@ const __dirname = dirname(__filename);
 const envPath = join(__dirname, '..', '.env');
 dotenv.config({ path: envPath });
 
-const S3_BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
+const S3_BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
 const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
 
 const s3Client = new S3Client({
@@ -102,7 +102,7 @@ async function makeBucketPublic() {
     } else {
       console.error('❌ Error setting bucket policy:', error.message);
       console.error('\n💡 You can also set this manually in AWS Console:');
-      console.error('   1. Go to S3 → magiwork-canva-assets → Permissions');
+      console.error('   1. Go to S3 → magicwork-canva-assets → Permissions');
       console.error('   2. Scroll to "Bucket policy"');
       console.error('   3. Paste the policy from FIX_S3_PUBLIC_ACCESS.md');
     }

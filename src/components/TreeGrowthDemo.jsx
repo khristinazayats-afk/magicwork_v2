@@ -526,17 +526,17 @@ function Stage5_QuietPeace() {
 function StageCard({ stage, index, children }) {
   return (
     <div className="flex flex-col items-center space-y-4">
-      <div className="relative w-full aspect-square max-w-[280px] bg-gradient-to-br from-magiwork-cream via-magiwork-beige to-white rounded-3xl overflow-hidden shadow-lg"
+      <div className="relative w-full aspect-square max-w-[280px] bg-gradient-to-br from-magicwork-cream via-magicwork-beige to-white rounded-3xl overflow-hidden shadow-lg"
         style={{ boxShadow: '0 8px 32px rgba(30, 45, 46, 0.08)' }}>
         <div className="absolute inset-0 p-6">
           {children}
         </div>
       </div>
       <div className="text-center">
-        <div className="font-hanken text-sm font-medium text-magiwork-dark-green/60">
+        <div className="font-hanken text-sm font-medium text-magicwork-dark-green/60">
           Stage {index + 1}
         </div>
-        <div className="font-hanken text-xs text-magiwork-dark-green/40 mt-1">
+        <div className="font-hanken text-xs text-magicwork-dark-green/40 mt-1">
           {stage.name}
         </div>
       </div>
@@ -574,7 +574,7 @@ const TREE_STAGES = [
 
 export default function TreeGrowthDemo() {
   return (
-    <div className="min-h-screen bg-magiwork-beige overflow-y-auto">
+    <div className="min-h-screen bg-magicwork-beige overflow-y-auto">
       {/* Header */}
       <div 
         className="sticky top-0 z-40 bg-gradient-to-b from-[rgba(252,248,242,0.98)] to-transparent backdrop-blur-md pb-6 pt-6" 
@@ -582,7 +582,7 @@ export default function TreeGrowthDemo() {
       >
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="font-actay font-bold text-3xl md:text-4xl text-magiwork-dark-green">
+            <h1 className="font-actay font-bold text-3xl md:text-4xl text-magicwork-dark-green">
               Tree Growth Demo
             </h1>
             <button
@@ -614,7 +614,7 @@ export default function TreeGrowthDemo() {
 
         {/* Bottom Note */}
         <div className="max-w-2xl mx-auto text-center">
-          <p className="font-hanken text-base md:text-lg text-magiwork-dark-green/70 leading-relaxed">
+          <p className="font-hanken text-base md:text-lg text-magicwork-dark-green/70 leading-relaxed">
             Visual exploration of how the user's inner world evolves.
           </p>
         </div>

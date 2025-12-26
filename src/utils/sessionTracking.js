@@ -5,7 +5,7 @@
 
 import { supabase } from '../lib/supabase';
 
-const SESSIONS_KEY = 'magiwork_sessions';
+const SESSIONS_KEY = 'magicwork_sessions';
 
 /**
  * Save a completed practice session

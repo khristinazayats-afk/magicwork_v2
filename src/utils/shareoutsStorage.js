@@ -3,7 +3,7 @@
  * Manages user shareouts in localStorage
  */
 
-const SHAREOUTS_KEY = 'magiwork_shareouts';
+const SHAREOUTS_KEY = 'magicwork_shareouts';
 
 /**
  * Save a shareout

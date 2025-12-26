@@ -5,7 +5,7 @@
 
 set -e
 
-BUCKET="magiwork-canva-assets"
+BUCKET="magicwork-canva-assets"
 REGION="eu-north-1"
 
 echo "🚀 Fixing S3 Issues for: $BUCKET"
@@ -44,21 +44,21 @@ cat > /tmp/bucket-policy.json << 'EOF'
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
     },
     {
       "Sid": "PublicReadGetObjectVideo",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/video/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/video/*"
     },
     {
       "Sid": "PublicReadGetObjectAudio",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/audio/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/audio/*"
     }
   ]
 }

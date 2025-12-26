@@ -2,11 +2,11 @@
 
 ## What You've Completed
 
-✅ Created Google Spreadsheet: [Magiwork Content Inventory](https://docs.google.com/spreadsheets/d/13iAonweyvoDYRCWGQRsd3L9RASSiZEjoUmxfgCBc940/edit?gid=0#gid=0)
+✅ Created Google Spreadsheet: [MagicWork Content Inventory](https://docs.google.com/spreadsheets/d/13iAonweyvoDYRCWGQRsd3L9RASSiZEjoUmxfgCBc940/edit?gid=0#gid=0)
 
 ✅ Set up S3 bucket structure:
-- `magiwork-canva-assets/audio/` - For all audio files (Canva, Pixabay, Gemini)
-- `magiwork-canva-assets/video/` - For Canva video files
+- `magicwork-canva-assets/audio/` - For all audio files (Canva, Pixabay, Gemini)
+- `magicwork-canva-assets/video/` - For Canva video files
 
 ✅ Added example row in spreadsheet (slow-morning-audio-001)
 
@@ -29,9 +29,9 @@ Or create `.env` manually with:
 AWS_ACCESS_KEY_ID=your-aws-access-key
 AWS_SECRET_ACCESS_KEY=your-aws-secret-key
 AWS_REGION=eu-north-1
-S3_BUCKET=magiwork-canva-assets
-CDN_BASE=https://cdn.magiwork.app
-CDN_BASE_URL=https://cdn.magiwork.app
+S3_BUCKET=magicwork-canva-assets
+CDN_BASE=https://cdn.magicwork.app
+CDN_BASE_URL=https://cdn.magicwork.app
 POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXXdV@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
 ```
 
@@ -45,23 +45,23 @@ POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXX
 2. Go to **Extensions → Apps Script**
 3. Paste code from `scripts/google-sheets-content-tracker.gs`
 4. Save and authorize
-5. Refresh spreadsheet - you should see "Magiwork Content" menu
+5. Refresh spreadsheet - you should see "MagicWork Content" menu
 
 ### 3. Update Spreadsheet Example Row
 
 Your current row has:
 - S3 Key: `audio/pixabay/ambient-spring-forest.mp3`
-- CDN URL: `https://cdn.magiwork.app/audio/pixabay/ambient-spring-forest.mp3`
+- CDN URL: `https://cdn.magicwork.app/audio/pixabay/ambient-spring-forest.mp3`
 
-**If this is a Pixabay file**, it goes in `magiwork-canva-assets` bucket:
+**If this is a Pixabay file**, it goes in `magicwork-canva-assets` bucket:
 - S3 Key: `audio/Pixabay/ambient-spring-forest.mp3` (capitalized folder)
-- S3 Bucket: `magiwork-canva-assets`
-- CDN URL: `https://cdn.magiwork.app/audio/Pixabay/ambient-spring-forest.mp3`
+- S3 Bucket: `magicwork-canva-assets`
+- CDN URL: `https://cdn.magicwork.app/audio/Pixabay/ambient-spring-forest.mp3`
 
-**If this is a Canva file**, it goes in `magiwork-canva-assets` bucket:
+**If this is a Canva file**, it goes in `magicwork-canva-assets` bucket:
 - S3 Key: `audio/ambient-spring-forest.mp3` (directly in audio/) or `video/canva/clouds.mp4` (in canva/ subfolder)
-- S3 Bucket: `magiwork-canva-assets`
-- CDN URL: `https://cdn.magiwork.app/audio/ambient-spring-forest.mp3` or `https://cdn.magiwork.app/video/canva/clouds.mp4`
+- S3 Bucket: `magicwork-canva-assets`
+- CDN URL: `https://cdn.magicwork.app/audio/ambient-spring-forest.mp3` or `https://cdn.magicwork.app/video/canva/clouds.mp4`
 
 ### 4. Verify S3 Structure
 
@@ -69,12 +69,12 @@ Check your buckets:
 
 ```bash
 # List all content in single bucket
-aws s3 ls s3://magiwork-canva-assets/ --recursive
+aws s3 ls s3://magicwork-canva-assets/ --recursive
 ```
 
 Expected structure:
 ```
-magiwork-canva-assets/
+magicwork-canva-assets/
 ├── audio/
 │   ├── Pixabay/     ← Pixabay MP3 files (capitalized)
 │   ├── Gemini/      ← Gemini WAV files (capitalized)
@@ -103,17 +103,17 @@ If table doesn't exist, run SQL from `database/schema/content_assets.sql` in Sup
 Based on your spreadsheet example:
 
 ```bash
-# If it's a Pixabay file (goes to magiwork-canva-assets)
+# If it's a Pixabay file (goes to magicwork-canva-assets)
 aws s3 cp /Users/ksvarychevska/Downloads/ambient-spring-forest.mp3 \
-  s3://magiwork-canva-assets/audio/Pixabay/ambient-spring-forest.mp3
+  s3://magicwork-canva-assets/audio/Pixabay/ambient-spring-forest.mp3
 
-# If it's a Canva audio file (goes to magiwork-canva-assets)
+# If it's a Canva audio file (goes to magicwork-canva-assets)
 aws s3 cp /Users/ksvarychevska/Downloads/download.wav \
-  s3://magiwork-canva-assets/audio/download.wav
+  s3://magicwork-canva-assets/audio/download.wav
 
-# If it's a Canva video file (goes to magiwork-canva-assets)
+# If it's a Canva video file (goes to magicwork-canva-assets)
 aws s3 cp /Users/ksvarychevska/Downloads/clouds.mp4 \
-  s3://magiwork-canva-assets/video/canva/clouds.mp4
+  s3://magicwork-canva-assets/video/canva/clouds.mp4
 ```
 
 ### 7. Register in Database
@@ -143,8 +143,8 @@ node scripts/add-s3-assets-to-db.js
 
 ```bash
 # Test CDN URL
-curl -I https://cdn.magiwork.app/audio/Pixabay/ambient-spring-forest.mp3
-curl -I https://cdn.magiwork.app/video/canva/clouds.mp4
+curl -I https://cdn.magicwork.app/audio/Pixabay/ambient-spring-forest.mp3
+curl -I https://cdn.magicwork.app/video/canva/clouds.mp4
 
 # Test API
 curl "https://your-app.vercel.app/api/content-assets?space=Slow%20Morning"
@@ -171,7 +171,7 @@ curl "https://your-app.vercel.app/api/content-assets?space=Slow%20Morning"
 ## 🐛 Common Issues
 
 ### Issue: Script can't find S3_BUCKET
-**Fix:** Make sure `.env` has `S3_BUCKET=magiwork-canva-assets`
+**Fix:** Make sure `.env` has `S3_BUCKET=magicwork-canva-assets`
 
 ### Issue: CDN URL returns 403
 **Fix:** Check S3 bucket permissions and CloudFront configuration

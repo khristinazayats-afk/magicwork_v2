@@ -15,7 +15,7 @@
 
 ### 2. S3 403 Forbidden Errors
 **Problem:** Videos getting 403 errors when loading from S3:
-- `https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4` → 403
+- `https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4` → 403
 
 **Fix:**
 - Updated S3 bucket policy script to allow `video/*` and `audio/*` paths (not just `canva/*`)
@@ -50,7 +50,7 @@ The script needs AWS credentials with `s3:PutBucketPolicy` permission. If you do
 
 The S3 bucket policy needs to be updated manually in AWS Console:
 
-1. **Go to AWS S3 Console** → `magiwork-canva-assets` bucket
+1. **Go to AWS S3 Console** → `magicwork-canva-assets` bucket
 2. **Permissions** tab → **Bucket policy**
 3. **Replace with this policy:**
 
@@ -63,21 +63,21 @@ The S3 bucket policy needs to be updated manually in AWS Console:
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
     },
     {
       "Sid": "PublicReadGetObjectVideo",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/video/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/video/*"
     },
     {
       "Sid": "PublicReadGetObjectAudio",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/audio/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/audio/*"
     }
   ]
 }
@@ -98,7 +98,7 @@ Ensure these are set in Vercel:
 - ✅ `AWS_ACCESS_KEY_ID` - S3 access
 - ✅ `AWS_SECRET_ACCESS_KEY` - S3 access
 - ✅ `AWS_REGION` - `eu-north-1`
-- ✅ `S3_BUCKET` - `magiwork-canva-assets`
+- ✅ `S3_BUCKET` - `magicwork-canva-assets`
 
 ### Step 3: Test After Deployment
 
@@ -112,7 +112,7 @@ After Vercel deploys:
 
 2. **Test S3 video access:**
    ```bash
-   curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+   curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
    ```
    Should return `200 OK` (not `403 Forbidden`)
 

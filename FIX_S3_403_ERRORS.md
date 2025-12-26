@@ -2,7 +2,7 @@
 
 ## Problem
 Videos are getting 403 Forbidden errors when trying to load from S3:
-- `https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4` → 403
+- `https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4` → 403
 
 ## Root Cause
 The S3 bucket policy only allows access to `canva/*` but videos are stored at `video/canva/*` and `audio/*`.
@@ -32,7 +32,7 @@ npm run setup-s3-cors
 
 If scripts don't work, manually update in AWS Console:
 
-1. Go to **AWS S3 Console** → `magiwork-canva-assets` bucket
+1. Go to **AWS S3 Console** → `magicwork-canva-assets` bucket
 2. **Permissions** tab → **Bucket policy**
 3. Replace with this policy:
 
@@ -45,21 +45,21 @@ If scripts don't work, manually update in AWS Console:
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
     },
     {
       "Sid": "PublicReadGetObjectVideo",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/video/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/video/*"
     },
     {
       "Sid": "PublicReadGetObjectAudio",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/audio/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/audio/*"
     }
   ]
 }
@@ -76,7 +76,7 @@ If scripts don't work, manually update in AWS Console:
 After updating, test the URLs:
 
 ```bash
-curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 ```
 
 Should return `200 OK` instead of `403 Forbidden`.
@@ -89,4 +89,4 @@ The database should store CloudFront URLs like:
 - `https://d3hajr7xji31qq.cloudfront.net/video/canva/clouds.mp4`
 
 Instead of:
-- `https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4`
+- `https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4`

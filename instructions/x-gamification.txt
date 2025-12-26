@@ -1,4 +1,4 @@
-You are updating the **magiwork** app’s reward system.
+You are updating the **magicwork** app’s reward system.
 
 The previous “Aura” system is removed.
 
@@ -17,7 +17,7 @@ Your job:
 
 Produce **UI/UX specifications** and **content layouts** for all these areas.
 
-Use magiwork brand language:
+Use magicwork brand language:
 
 calm, warm, modern, quiet, friendly, premium.
 
@@ -272,7 +272,7 @@ Generate **UX/UI specifications** (not code) for:
 - Layout details + spacing suggestions
 - Any necessary annotations
 
-Follow the visual direction of magiwork:
+Follow the visual direction of magicwork:
 
 minimal, calm, warm, organic, non-childish, premium.
 

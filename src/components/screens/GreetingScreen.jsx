@@ -15,7 +15,7 @@ export default function GreetingScreen() {
         <div className="text-6xl mb-12">🕯️</div>
         
         <h1 className="font-hanken text-[40px] font-bold text-[#1e2d2e] leading-tight mb-6">
-          Welcome to<br />Magiwork
+          Welcome to<br />MagicWork
         </h1>
         
         <p className="font-hanken text-lg text-[#1e2d2e]/70 mb-16 leading-relaxed">

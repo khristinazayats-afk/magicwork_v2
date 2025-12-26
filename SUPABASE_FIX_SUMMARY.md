@@ -9,7 +9,7 @@ The API was returning mock data instead of content from the Supabase database be
    - Any database error occurred
    - Database queries returned empty results
 
-2. **Mock Data Instead of Real Data**: The mock data used S3 URLs (`magiwork-canva-assets.s3.eu-north-1.amazonaws.com`) instead of the actual CDN URLs from the database (`d3hajr7xji31qq.cloudfront.net`)
+2. **Mock Data Instead of Real Data**: The mock data used S3 URLs (`magicwork-canva-assets.s3.eu-north-1.amazonaws.com`) instead of the actual CDN URLs from the database (`d3hajr7xji31qq.cloudfront.net`)
 
 3. **Silent Failures**: Database errors were being caught and hidden by returning mock data, making it difficult to diagnose the root cause
 
@@ -61,10 +61,10 @@ After deploying, test the API endpoints:
 
 ```bash
 # Test content set endpoint
-curl "https://magiwork.vercel.app/api/content-assets?set=true&space=Drift%20into%20Sleep"
+curl "https://magicwork.vercel.app/api/content-assets?set=true&space=Drift%20into%20Sleep"
 
 # Test all assets for a space
-curl "https://magiwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
+curl "https://magicwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
 ```
 
 ### Expected Results

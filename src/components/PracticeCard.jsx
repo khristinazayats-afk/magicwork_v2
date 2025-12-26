@@ -445,17 +445,34 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
 
       {/* Breathing Pulse Overlay */}
       {joined && !showTabs && !showSummary && (
-        <motion.div 
-          className="absolute inset-0 z-0 pointer-events-none"
-          animate={{ 
-            backgroundColor: isPlaying ? ["rgba(255,255,255,0)", "rgba(255,255,255,0.05)", "rgba(255,255,255,0)"] : "rgba(255,255,255,0)" 
-          }}
-          transition={{ 
-            duration: 8, 
-            repeat: Infinity, 
-            ease: "easeInOut" 
-          }}
-        />
+        <>
+          <motion.div 
+            className="absolute inset-0 z-0 pointer-events-none"
+            animate={{ 
+              backgroundColor: isPlaying ? ["rgba(255,255,255,0)", "rgba(255,255,255,0.08)", "rgba(255,255,255,0)"] : "rgba(255,255,255,0)" 
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
+          <motion.div 
+            className="absolute inset-0 z-0 pointer-events-none mix-blend-soft-light"
+            animate={{ 
+              scale: isPlaying ? [1, 1.05, 1] : 1,
+              opacity: isPlaying ? [0.3, 0.6, 0.3] : 0
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            style={{
+              background: 'radial-gradient(circle at center, rgba(148, 209, 196, 0.2) 0%, transparent 70%)'
+            }}
+          />
+        </>
       )}
 
       {/* New Tabbed Interface - shown when user joins */}

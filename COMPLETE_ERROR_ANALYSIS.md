@@ -75,7 +75,7 @@ Error fetching content set: Error: Failed to fetch content set
 ```
 HTTP/1.1 403 Forbidden
 Failed to load resource: the server responded with a status of 403 (Forbidden)
-[PracticeCard] Video failed to load: https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/...
+[PracticeCard] Video failed to load: https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/...
 ```
 
 **Affected URLs**: All S3 video URLs return 403
@@ -104,7 +104,7 @@ This only allows CloudFront, but the app is using direct S3 URLs.
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/*"
     }
   ]
 }
@@ -198,7 +198,7 @@ This only allows CloudFront, but the app is using direct S3 URLs.
 
 4. **Verify**:
    ```bash
-   curl "https://magiwork.vercel.app/api/content-assets?space=Slow%20Morning"
+   curl "https://magicwork.vercel.app/api/content-assets?space=Slow%20Morning"
    ```
    Should return 200 OK with JSON data
 
@@ -207,7 +207,7 @@ This only allows CloudFront, but the app is using direct S3 URLs.
 **Option A: Quick Fix - Make S3 Public**
 
 1. **AWS Console**:
-   - Go to: S3 → `magiwork-canva-assets` bucket
+   - Go to: S3 → `magicwork-canva-assets` bucket
    - Permissions → Bucket policy → Edit
    - Replace with public read policy (see above)
    - Save
@@ -219,7 +219,7 @@ This only allows CloudFront, but the app is using direct S3 URLs.
 
 3. **Test**:
    ```bash
-   curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+   curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
    ```
    Should return: `HTTP/1.1 200 OK`
 

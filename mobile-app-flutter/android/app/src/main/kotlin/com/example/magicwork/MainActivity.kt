@@ -1,4 +1,4 @@
-package com.example.magiwork
+package com.example.magicwork
 
 import io.flutter.embedding.android.FlutterActivity
 

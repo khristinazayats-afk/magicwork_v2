@@ -1,11 +1,11 @@
-# Magiwork Whitepaper: Shared Calm Experience
+# MagicWork Whitepaper: Shared Calm Experience
 **Date:** December 26, 2025  
 **Version:** 1.0.0 (Production Ready)
 
 ---
 
 ## 1. Executive Summary
-Magiwork is a high-performance mindfulness platform designed to replace anxious scrolling with immersive, sound-based meditation practices. It leverages generative AI, real-time physiological visualizations, and a gamified progression system to help users achieve a state of "Shared Calm."
+MagicWork is a high-performance mindfulness platform designed to replace anxious scrolling with immersive, sound-based meditation practices. It leverages generative AI, real-time physiological visualizations, and a gamified progression system to help users achieve a state of "Shared Calm."
 
 ## 2. Core Business Systems
 
@@ -42,14 +42,14 @@ Includes an 8-tier achievement tracking system and "Light Points" (LP) mechanics
 
 ### 🏗️ Content Pipeline
 We have established a cost-effective, manual content CMS using Google Spreadsheets integrated via Apps Script. This allows for seamless management of assets from Pixabay, Canva, and Google Gemini.
-*   **CDN:** Assets are served through `https://cdn.magiwork.app`.
+*   **CDN:** Assets are served through `https://cdn.magicwork.app`.
 
 ---
 
 ## 4. Recent Accomplishments & Readiness
 
 ### ✅ Branding Alignment
-Successfully completed a global migration from "MagicWork" to **"Magiwork"** across the entire ecosystem, including bundle IDs, deep link schemes (`magiwork://`), and AWS resource references.
+Successfully completed a global migration from "MagicWork" to **"MagicWork"** across the entire ecosystem, including bundle IDs, deep link schemes (`magicwork://`), and AWS resource references.
 
 ### ✅ Database & API Restoration
 Resolved critical schema mismatches. The `content_assets` table is now fully aligned with the production API, enabling real-time content delivery for all meditation spaces.
@@ -66,8 +66,8 @@ Created dedicated branches (`ios-app` and `android-app`) to manage platform-spec
 ---
 
 ## 6. Conclusion
-Magiwork is functionally complete and ready for production deployment. The architecture is scalable, the branding is cohesive, and the core AI-driven value proposition is fully implemented.
+MagicWork is functionally complete and ready for production deployment. The architecture is scalable, the branding is cohesive, and the core AI-driven value proposition is fully implemented.
 
 ---
-*Private and Confidential — Magiwork MVP 2025*
+*Private and Confidential — MagicWork MVP 2025*
 

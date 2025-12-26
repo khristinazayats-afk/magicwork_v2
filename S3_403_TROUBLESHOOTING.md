@@ -2,7 +2,7 @@
 
 ## Current Status
 ```
-curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 → HTTP/1.1 403 Forbidden
 ```
 
@@ -12,7 +12,7 @@ curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/cl
 
 1. **Go to AWS S3 Console:**
    - https://console.aws.amazon.com/s3/
-   - Click: `magiwork-canva-assets`
+   - Click: `magicwork-canva-assets`
 
 2. **Check Bucket Policy:**
    - **Permissions** tab → **Bucket policy**
@@ -70,7 +70,7 @@ Make sure the file actually exists at that path:
 After making changes, wait 30-60 seconds, then test:
 
 ```bash
-curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
+curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/video/canva/clouds.mp4
 ```
 
 Expected: `HTTP/1.1 200 OK`
@@ -81,10 +81,10 @@ If you have AWS CLI installed with proper permissions:
 
 ```bash
 # Make bucket public
-aws s3api put-bucket-policy --bucket magiwork-canva-assets --policy file://bucket-policy.json
+aws s3api put-bucket-policy --bucket magicwork-canva-assets --policy file://bucket-policy.json
 
 # Make objects public
-aws s3 cp s3://magiwork-canva-assets/video/canva/clouds.mp4 s3://magiwork-canva-assets/video/canva/clouds.mp4 --acl public-read
+aws s3 cp s3://magicwork-canva-assets/video/canva/clouds.mp4 s3://magicwork-canva-assets/video/canva/clouds.mp4 --acl public-read
 ```
 
 ## Alternative Solution: Use CloudFront CDN
@@ -112,7 +112,7 @@ import('pg').then(({Pool}) => {
     connectionString: process.env.POSTGRES_URL,
     ssl: { rejectUnauthorized: false }
   });
-  pool.query(\"UPDATE content_assets SET cdn_url = REPLACE(cdn_url, 'magiwork-canva-assets.s3.eu-north-1.amazonaws.com', 'd3hajr7xji31qq.cloudfront.net') WHERE cdn_url LIKE '%s3.eu-north-1.amazonaws.com%'\").then(() => {
+  pool.query(\"UPDATE content_assets SET cdn_url = REPLACE(cdn_url, 'magicwork-canva-assets.s3.eu-north-1.amazonaws.com', 'd3hajr7xji31qq.cloudfront.net') WHERE cdn_url LIKE '%s3.eu-north-1.amazonaws.com%'\").then(() => {
     console.log('✅ Updated all S3 URLs to CloudFront');
     pool.end();
   });

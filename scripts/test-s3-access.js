@@ -18,7 +18,7 @@ const __dirname = dirname(__filename);
 const envPath = join(__dirname, '..', '.env');
 dotenv.config({ path: envPath });
 
-const S3_BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
+const S3_BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
 const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
 // Use S3 direct URL for testing (CloudFront might still be blocked)
 const CDN_BASE_URL = process.env.CDN_BASE_URL || `https://${S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com`;

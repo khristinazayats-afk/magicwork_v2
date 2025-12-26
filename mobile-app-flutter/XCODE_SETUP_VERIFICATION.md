@@ -21,7 +21,7 @@ Generated: $(date)
 ```
 
 #### Project Settings
-- **Bundle Identifier**: `com.example.magiwork`
+- **Bundle Identifier**: `com.example.magicwork`
 - **Deployment Target**: iOS 13.0
 - **Swift Version**: 5.0
 - **Xcode Version**: 26.2

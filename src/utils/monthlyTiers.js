@@ -3,7 +3,7 @@
  * Tracks practice sessions per month and calculates tier levels
  */
 
-const STORAGE_KEY = 'magiwork_monthly_tiers';
+const STORAGE_KEY = 'magicwork_monthly_tiers';
 
 // Tier definitions
 export const TIERS = {

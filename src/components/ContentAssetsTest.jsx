@@ -3,7 +3,7 @@ import { useContentSet } from '../hooks/useContentSet';
 
 // Use deployed API URL for local development since serverless functions don't run locally
 const API_BASE = import.meta.env.DEV 
-  ? 'https://magiwork.vercel.app'
+  ? 'https://magicwork.vercel.app'
   : '';
 
 export default function ContentAssetsTest() {

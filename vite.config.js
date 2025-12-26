@@ -17,7 +17,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'https://magiwork.vercel.app',
+        target: 'https://magicwork.vercel.app',
         changeOrigin: true,
         secure: true
       }

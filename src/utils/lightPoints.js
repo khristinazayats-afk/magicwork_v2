@@ -1,5 +1,5 @@
 // Light Points system for localStorage
-const STORAGE_KEY = 'magiwork_lightPoints';
+const STORAGE_KEY = 'magicwork_lightPoints';
 const LIGHT_POINTS_PER_PRACTICE = 5;
 const SECONDS_PER_LIGHT_POINT = 10;
 const MAX_DAILY_TUNE_POINTS = 6; // 60 seconds = 6 points max

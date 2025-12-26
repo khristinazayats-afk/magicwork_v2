@@ -87,7 +87,7 @@ export function preloadAssets(assetIds) {
  */
 export const CANVA_ASSETS = {
   // Videos
-  BREATHE_VIDEO: getCanvaAsset('breathe-to-relax-video') || "https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/canva/videos/breathe-to-relax-video.mp4",
+  BREATHE_VIDEO: getCanvaAsset('breathe-to-relax-video') || "https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/canva/videos/breathe-to-relax-video.mp4",
   MOBILE_BG: getCanvaAsset('mobile-video-bg') || null,
   
   // Images

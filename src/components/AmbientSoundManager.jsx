@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const AMBIENT_SOUNDS = [
-  'https://cdn.magiwork.app/ambient/soft-rain.mp3',
-  'https://cdn.magiwork.app/ambient/gentle-waves.mp3',
-  'https://cdn.magiwork.app/ambient/forest-birds.mp3',
-  'https://cdn.magiwork.app/ambient/white-noise.mp3'
+  'https://cdn.magicwork.app/ambient/soft-rain.mp3',
+  'https://cdn.magicwork.app/ambient/gentle-waves.mp3',
+  'https://cdn.magicwork.app/ambient/forest-birds.mp3',
+  'https://cdn.magicwork.app/ambient/white-noise.mp3'
 ];
 
 export default function AmbientSoundManager() {

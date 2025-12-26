@@ -386,9 +386,9 @@ export default function ResultsScreen({
         >
           <motion.button
             onClick={() => {
-              const text = `I'm vibing as ${currentVibe.vibe.name} today on Magiwork ✨ Join me in stillness!`;
+              const text = `I'm vibing as ${currentVibe.vibe.name} today on MagicWork ✨ Join me in stillness!`;
               if (navigator.share) {
-                navigator.share({ title: 'Magiwork Vibe', text, url: window.location.origin });
+                navigator.share({ title: 'MagicWork Vibe', text, url: window.location.origin });
               } else {
                 navigator.clipboard.writeText(text);
                 alert('Vibe copied to clipboard! 📋');

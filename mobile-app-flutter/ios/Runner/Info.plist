@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Magiwork</string>
+	<string>MagicWork</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>magiwork</string>
+	<string>magicwork</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -74,23 +74,23 @@
 		<true/>
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Magiwork needs microphone access for voice-guided meditation and emotional check-in features.</string>
+	<string>MagicWork needs microphone access for voice-guided meditation and emotional check-in features.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Magiwork needs camera access for setting your profile picture and recording mindfulness moments.</string>
+	<string>MagicWork needs camera access for setting your profile picture and recording mindfulness moments.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Magiwork needs photo library access for choosing your profile picture and saving meditation certificates.</string>
+	<string>MagicWork needs photo library access for choosing your profile picture and saving meditation certificates.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Magiwork needs permission to save images to your photo library.</string>
+	<string>MagicWork needs permission to save images to your photo library.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Magiwork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
+	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Magiwork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
+	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Magiwork uses location to suggest practices based on your environment (e.g., morning walks).</string>
+	<string>MagicWork uses location to suggest practices based on your environment (e.g., morning walks).</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Magiwork uses location to suggest practices based on your environment (e.g., morning walks).</string>
+	<string>MagicWork uses location to suggest practices based on your environment (e.g., morning walks).</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Magiwork uses data to personalize your meditation experience and track your progress across devices.</string>
+	<string>MagicWork uses data to personalize your meditation experience and track your progress across devices.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CFBundleURLTypes</key>
@@ -99,10 +99,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.example.magiwork</string>
+			<string>com.example.magicwork</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>magiwork</string>
+				<string>magicwork</string>
 			</array>
 		</dict>
 	</array>

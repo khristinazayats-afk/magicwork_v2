@@ -19,15 +19,15 @@
    ```bash
    # Pixabay
    aws s3 cp ~/Downloads/pixabay/file.mp3 \
-     s3://magiwork-canva-assets/audio/Pixabay/file.mp3
+     s3://magicwork-canva-assets/audio/Pixabay/file.mp3
    
    # Canva video
    aws s3 cp ~/Downloads/canva/file.mp4 \
-     s3://magiwork-canva-assets/video/canva/file.mp4
+     s3://magicwork-canva-assets/video/canva/file.mp4
    
    # Canva audio
    aws s3 cp ~/Downloads/canva/file.wav \
-     s3://magiwork-canva-assets/audio/file.wav
+     s3://magicwork-canva-assets/audio/file.wav
    ```
 
 4. **Update Spreadsheet**
@@ -43,7 +43,7 @@
 6. **Verify**
    ```bash
    # Test CDN
-   curl -I https://cdn.magiwork.app/audio/pixabay/file.mp3
+   curl -I https://cdn.magicwork.app/audio/pixabay/file.mp3
    
    # Test API
    curl "https://your-app.vercel.app/api/content-assets?space=Slow%20Morning"
@@ -68,8 +68,8 @@
 | H | Format | `mp3` | mp3/wav/mp4 |
 | I | File Size (MB) | `2.8` | Optional |
 | J | S3 Key | `audio/Pixabay/file.mp3` or `video/canva/file.mp4` | **Required** |
-| K | S3 Bucket | `magiwork-canva-assets` | Always same |
-| L | CDN URL | `https://cdn.magiwork.app/...` | Auto-generated |
+| K | S3 Bucket | `magicwork-canva-assets` | Always same |
+| L | CDN URL | `https://cdn.magicwork.app/...` | Auto-generated |
 | M | Allocated Space | `Slow Morning` | One of 9 spaces |
 | N | Database ID | `slow-morning-audio-001` | Same as Asset ID |
 | O | Status | `live` | downloaded/uploaded/registered/live |
@@ -83,7 +83,7 @@
 ## 🗂️ S3 Folder Structure
 
 ```
-magiwork-canva-assets/
+magicwork-canva-assets/
 ├── audio/
 │   ├── Pixabay/     ← MP3 files from Pixabay (capitalized)
 │   ├── Gemini/       ← WAV files from Google Gemini (capitalized)
@@ -114,30 +114,30 @@ magiwork-canva-assets/
 ### S3 Upload
 ```bash
 # Pixabay audio
-aws s3 cp local-file.mp3 s3://magiwork-canva-assets/audio/Pixabay/file.mp3
+aws s3 cp local-file.mp3 s3://magicwork-canva-assets/audio/Pixabay/file.mp3
 
 # Canva video
-aws s3 cp local-file.mp4 s3://magiwork-canva-assets/video/canva/file.mp4
+aws s3 cp local-file.mp4 s3://magicwork-canva-assets/video/canva/file.mp4
 
 # Canva audio
-aws s3 cp local-file.wav s3://magiwork-canva-assets/audio/file.wav
+aws s3 cp local-file.wav s3://magicwork-canva-assets/audio/file.wav
 
 # Gemini audio
-aws s3 cp local-file.wav s3://magiwork-canva-assets/audio/Gemini/file.wav
+aws s3 cp local-file.wav s3://magicwork-canva-assets/audio/Gemini/file.wav
 ```
 
 ### S3 List
 ```bash
-aws s3 ls s3://magiwork-canva-assets/audio/Pixabay/
-aws s3 ls s3://magiwork-canva-assets/audio/Gemini/
-aws s3 ls s3://magiwork-canva-assets/video/canva/
-aws s3 ls s3://magiwork-canva-assets/audio/
+aws s3 ls s3://magicwork-canva-assets/audio/Pixabay/
+aws s3 ls s3://magicwork-canva-assets/audio/Gemini/
+aws s3 ls s3://magicwork-canva-assets/video/canva/
+aws s3 ls s3://magicwork-canva-assets/audio/
 ```
 
 ### Test CDN
 ```bash
-curl -I https://cdn.magiwork.app/audio/Pixabay/file.mp3
-curl -I https://cdn.magiwork.app/video/canva/file.mp4
+curl -I https://cdn.magicwork.app/audio/Pixabay/file.mp3
+curl -I https://cdn.magicwork.app/video/canva/file.mp4
 ```
 
 ### Test API
@@ -155,8 +155,8 @@ node scripts/add-s3-assets-to-db.js
 ## 🐛 Quick Troubleshooting
 
 **File not showing in app?**
-1. Check S3: `aws s3 ls s3://magiwork-canva-assets/audio/Pixabay/file.mp3`
-2. Check CDN: `curl -I https://cdn.magiwork.app/audio/Pixabay/file.mp3`
+1. Check S3: `aws s3 ls s3://magicwork-canva-assets/audio/Pixabay/file.mp3`
+2. Check CDN: `curl -I https://cdn.magicwork.app/audio/Pixabay/file.mp3`
 3. Check database: Supabase dashboard → content_assets table
 4. Check status: Must be `live`
 5. Check space: `allocated_space` must match exactly

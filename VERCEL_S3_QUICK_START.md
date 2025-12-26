@@ -9,7 +9,7 @@ Add these 4 environment variables in Vercel Dashboard → Settings → Environme
 | `AWS_ACCESS_KEY_ID` | Your AWS Access Key | Get from AWS IAM |
 | `AWS_SECRET_ACCESS_KEY` | Your AWS Secret Key | Get from AWS IAM |
 | `AWS_REGION` | `eu-north-1` | Your S3 bucket region |
-| `S3_BUCKET` | `magiwork-canva-assets` | Your bucket name |
+| `S3_BUCKET` | `magicwork-canva-assets` | Your bucket name |
 
 ## Steps
 

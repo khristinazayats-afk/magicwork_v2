@@ -5,7 +5,7 @@
 
 set -e
 
-DEPLOY_URL="https://magiwork-25ako2pyo-khristinazayats-afks-projects.vercel.app"
+DEPLOY_URL="https://magicwork-25ako2pyo-khristinazayats-afks-projects.vercel.app"
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'

@@ -67,7 +67,7 @@ The dot pulses gently to indicate the space is actively inhabited, creating a se
 1. **Non-intrusive:** Appears after brief delay, user can dismiss easily
 2. **Clear messaging:** Two-line copy is concise and welcoming
 3. **Visual guidance:** Arrow icon reinforces scroll interaction
-4. **Warm aesthetic:** Matches Magiwork's gentle, human-centered tone
+4. **Warm aesthetic:** Matches MagicWork's gentle, human-centered tone
 5. **Progressive disclosure:** Doesn't overwhelm, just orients
 
 ## 🧪 Testing

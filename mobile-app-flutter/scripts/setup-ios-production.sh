@@ -1,21 +1,21 @@
 #!/bin/bash
 
 # setup-ios-production.sh
-# Usage: ./setup-ios-production.sh "com.yourname.magiwork" "TEAM_ID"
+# Usage: ./setup-ios-production.sh "com.yourname.magicwork" "TEAM_ID"
 
 NEW_BUNDLE_ID=$1
 TEAM_ID=$2
 
 if [ -z "$NEW_BUNDLE_ID" ] || [ -z "$TEAM_ID" ]; then
     echo "Usage: ./setup-ios-production.sh <BUNDLE_ID> <TEAM_ID>"
-    echo "Example: ./setup-ios-production.sh com.magiwork.app ABC123XYZ"
+    echo "Example: ./setup-ios-production.sh com.magicwork.app ABC123XYZ"
     exit 1
 fi
 
 PROJECT_FILE="mobile-app-flutter/ios/Runner.xcodeproj/project.pbxproj"
 
 echo "Updating Bundle ID to: $NEW_BUNDLE_ID"
-sed -i '' "s/PRODUCT_BUNDLE_IDENTIFIER = com.example.magiwork;/PRODUCT_BUNDLE_IDENTIFIER = $NEW_BUNDLE_ID;/g" "$PROJECT_FILE"
+sed -i '' "s/PRODUCT_BUNDLE_IDENTIFIER = com.example.magicwork;/PRODUCT_BUNDLE_IDENTIFIER = $NEW_BUNDLE_ID;/g" "$PROJECT_FILE"
 
 echo "Updating Development Team ID to: $TEAM_ID"
 # Note: This adds or updates the DEVELOPMENT_TEAM key

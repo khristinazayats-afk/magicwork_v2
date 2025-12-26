@@ -4,7 +4,7 @@ import CanvaShareCard from './CanvaShareCard';
 
 /**
  * CanvaIntegrationExamples - Real-world examples of using Canva designs
- * This shows practical implementations for the magiwork app
+ * This shows practical implementations for the magicwork app
  */
 function CanvaIntegrationExamples() {
   const [currentExample, setCurrentExample] = useState('background-image');
@@ -161,7 +161,7 @@ function CanvaIntegrationExamples() {
             Canva Integration Examples
           </h1>
           <p className="text-lg text-gray-600">
-            See how to use your Canva designs in real magiwork screens
+            See how to use your Canva designs in real magicwork screens
           </p>
         </div>
       </div>

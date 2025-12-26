@@ -33,7 +33,7 @@ const pool = new Pool({
 });
 
 // Configuration
-const S3_BUCKET = process.env.S3_BUCKET || 'magiwork-canva-assets';
+const S3_BUCKET = process.env.S3_BUCKET || 'magicwork-canva-assets';
 const AWS_REGION = process.env.AWS_REGION || 'eu-north-1';
 const CDN_BASE_URL = process.env.CDN_BASE_URL || `https://${S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com`;
 

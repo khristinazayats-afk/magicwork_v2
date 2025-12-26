@@ -1,5 +1,5 @@
 
-Project Name: magiwork
+Project Name: magicwork
 Tagline: Anxiety off. Presence on.
 Goal: Deliver shared calm through immersive sound and connection.
 
@@ -14,7 +14,7 @@ They can join a practice, listen for a few minutes, and sense collective presenc
 🌅 Design: spacious, minimal, sunrise-inspired palette
 
 
-# magiwork — Project Context
+# magicwork — Project Context
 
 Tagline: Anxiety off. Presence on.
 Goal: Deliver shared calm through immersive, sound-based micro practices.
@@ -54,7 +54,7 @@ Animations: smooth, subtle easing
 
 Sound: local or S3-hosted .mp3
 
-No SVG imports (use internal magiwork logo)
+No SVG imports (use internal magicwork logo)
 
 Hosting: Vercel
 

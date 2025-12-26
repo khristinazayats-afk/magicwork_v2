@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.magiwork"
+    namespace = "com.example.magicwork"
     compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.magiwork"
+        applicationId = "com.example.magicwork"
         minSdk = 24
         targetSdk = 35
         versionCode = flutter.versionCode

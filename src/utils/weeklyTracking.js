@@ -3,7 +3,7 @@
  * Tracks how many days a user has practiced this week
  */
 
-const STORAGE_KEY = 'magiwork_weekly_tracking';
+const STORAGE_KEY = 'magicwork_weekly_tracking';
 
 /**
  * Get the start of the current week (Monday)

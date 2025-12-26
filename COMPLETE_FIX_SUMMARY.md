@@ -37,7 +37,7 @@ Your AWS user doesn't have permission to change bucket settings. You MUST do thi
 
 ### Step 1: Disable Block Public Access
 
-**Link:** https://console.aws.amazon.com/s3/buckets/magiwork-canva-assets?region=eu-north-1&tab=permissions
+**Link:** https://console.aws.amazon.com/s3/buckets/magicwork-canva-assets?region=eu-north-1&tab=permissions
 
 1. **Permissions** tab → **Block public access (bucket settings)**
 2. Click **Edit**
@@ -59,28 +59,28 @@ Your AWS user doesn't have permission to change bucket settings. You MUST do thi
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/canva/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/canva/*"
     },
     {
       "Sid": "PublicReadGetObjectVideo",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/video/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/video/*"
     },
     {
       "Sid": "PublicReadGetObjectVideos",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/videos/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/videos/*"
     },
     {
       "Sid": "PublicReadGetObjectAudio",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::magiwork-canva-assets/audio/*"
+      "Resource": "arn:aws:s3:::magicwork-canva-assets/audio/*"
     }
   ]
 }
@@ -112,7 +112,7 @@ Your AWS user doesn't have permission to change bucket settings. You MUST do thi
 
 ```bash
 # Test the correct path (with 's')
-curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
+curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
 ```
 
 **Expected:** `HTTP/1.1 200 OK`
@@ -129,7 +129,7 @@ curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/c
 
 3. **Test:**
    ```bash
-   curl -I https://magiwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
+   curl -I https://magicwork-canva-assets.s3.eu-north-1.amazonaws.com/videos/canva/clouds.mp4
    ```
 
 ## ✅ What's Already Working

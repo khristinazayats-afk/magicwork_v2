@@ -402,7 +402,7 @@ function GardenVisual({ state }) {
   const viewBox = "0 0 200 200";
   
   return (
-    <div className="relative w-full aspect-square max-w-md mx-auto bg-gradient-to-br from-magiwork-cream via-magiwork-beige to-white rounded-3xl overflow-hidden" style={{ boxShadow: '0 8px 32px rgba(30, 45, 46, 0.08)' }}>
+    <div className="relative w-full aspect-square max-w-md mx-auto bg-gradient-to-br from-magicwork-cream via-magicwork-beige to-white rounded-3xl overflow-hidden" style={{ boxShadow: '0 8px 32px rgba(30, 45, 46, 0.08)' }}>
       {/* Soft soil texture base */}
       <div className="absolute inset-0 opacity-40" style={{
         background: `radial-gradient(ellipse at bottom, ${colors[0]}50 0%, transparent 60%),
@@ -682,13 +682,13 @@ function GardenVisual({ state }) {
 // Creature/Plant chip component
 function ElementChip({ element }) {
   return (
-    <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-xl px-4 py-3 border border-magiwork-green/20">
+    <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-xl px-4 py-3 border border-magicwork-green/20">
       <span className="text-2xl">{element.icon}</span>
       <div className="flex-1">
-        <div className="font-hanken text-sm font-semibold text-magiwork-dark-green">
+        <div className="font-hanken text-sm font-semibold text-magicwork-dark-green">
           {element.name}
         </div>
-        <div className="font-hanken text-xs text-magiwork-dark-green/60">
+        <div className="font-hanken text-xs text-magicwork-dark-green/60">
           {element.meaning}
         </div>
       </div>
@@ -703,7 +703,7 @@ export default function GardenStatesDemo() {
   const allElements = [...selectedState.creatures, ...selectedState.plants];
 
   return (
-    <div className="min-h-screen bg-magiwork-beige overflow-y-auto">
+    <div className="min-h-screen bg-magicwork-beige overflow-y-auto">
       {/* Header */}
       <div 
         className="sticky top-0 z-40 bg-gradient-to-b from-[rgba(252,248,242,0.98)] to-transparent backdrop-blur-md pb-4 pt-4" 
@@ -712,10 +712,10 @@ export default function GardenStatesDemo() {
         <div className="max-w-2xl mx-auto px-4 md:px-5">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-hanken text-2xl md:text-3xl font-semibold text-magiwork-dark-green">
+              <h1 className="font-hanken text-2xl md:text-3xl font-semibold text-magicwork-dark-green">
                 Your Magical Garden States
               </h1>
-              <p className="font-hanken text-sm text-magiwork-dark-green/60 mt-1">
+              <p className="font-hanken text-sm text-magicwork-dark-green/60 mt-1">
                 Each state reflects how cared for your inner garden feels this month.
               </p>
             </div>
@@ -738,8 +738,8 @@ export default function GardenStatesDemo() {
                 onClick={() => setSelectedStateId(state.id)}
                 className={`px-4 py-2 rounded-full font-hanken text-sm transition-all ${
                   selectedStateId === state.id
-                    ? 'bg-magiwork-dark-green text-white'
-                    : 'bg-white/70 text-magiwork-dark-green border border-magiwork-dark-green/20 hover:bg-white/90'
+                    ? 'bg-magicwork-dark-green text-white'
+                    : 'bg-white/70 text-magicwork-dark-green border border-magicwork-dark-green/20 hover:bg-white/90'
                 }`}
               >
                 {state.name}
@@ -759,26 +759,26 @@ export default function GardenStatesDemo() {
         {/* State Info Block */}
         <div className="bg-white/50 backdrop-blur-lg rounded-2xl p-6 md:p-8 space-y-4" style={{ boxShadow: '0 4px 16px rgba(30, 45, 46, 0.1)' }}>
           <div>
-            <h2 className="font-hanken text-xl md:text-2xl font-semibold text-magiwork-dark-green mb-2">
+            <h2 className="font-hanken text-xl md:text-2xl font-semibold text-magicwork-dark-green mb-2">
               {selectedState.name}
             </h2>
-            <p className="font-hanken text-base text-magiwork-dark-green/80 mb-4">
+            <p className="font-hanken text-base text-magicwork-dark-green/80 mb-4">
               {selectedState.meaning}
             </p>
-            <p className="font-hanken text-sm text-magiwork-dark-green/70 leading-relaxed">
+            <p className="font-hanken text-sm text-magicwork-dark-green/70 leading-relaxed">
               {selectedState.description}
             </p>
           </div>
 
-          <div className="pt-4 border-t border-magiwork-dark-green/10">
-            <h3 className="font-hanken text-sm font-semibold text-magiwork-dark-green mb-3">
+          <div className="pt-4 border-t border-magicwork-dark-green/10">
+            <h3 className="font-hanken text-sm font-semibold text-magicwork-dark-green mb-3">
               Nervous System Meaning
             </h3>
             <ul className="space-y-2">
               {selectedState.nervousSystemMeaning.map((item, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <span className="text-magiwork-green mt-1">•</span>
-                  <span className="font-hanken text-sm text-magiwork-dark-green/70">
+                  <span className="text-magicwork-green mt-1">•</span>
+                  <span className="font-hanken text-sm text-magicwork-dark-green/70">
                     {item}
                   </span>
                 </li>
@@ -789,7 +789,7 @@ export default function GardenStatesDemo() {
 
         {/* Creatures & Plants Summary */}
         <div className="space-y-4">
-          <h3 className="font-hanken text-lg font-semibold text-magiwork-dark-green">
+          <h3 className="font-hanken text-lg font-semibold text-magicwork-dark-green">
             Magical Elements
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
