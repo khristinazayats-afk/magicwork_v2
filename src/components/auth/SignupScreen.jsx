@@ -77,65 +77,56 @@ export default function SignupScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fcf8f2] flex flex-col justify-center px-8 py-12">
+    <div className="min-h-screen bg-[#fcf8f2] flex flex-col px-6 py-8 overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md mx-auto"
+        className="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center"
       >
-        <h1 className="font-hanken text-[32px] font-bold text-[#1e2d2e] mb-2 text-center">
+        <h1 className="font-hanken text-[28px] font-bold text-[#1e2d2e] mb-1 text-center">
           Create Account
         </h1>
-        <p className="text-[#1e2d2e]/60 text-center mb-12">
-          Start your journey to stillness.
+        <p className="text-[#1e2d2e]/60 text-center mb-8 text-sm">
+          {isTrial ? 'Join for a 7-minute trial.' : 'Start your journey to stillness.'}
         </p>
 
-        <form onSubmit={handleSignup} className="space-y-6">
+        <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-[#1e2d2e] mb-2 px-1">
-              Display Name
-            </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full h-14 rounded-2xl bg-white border border-[#1e2d2e]/10 px-6 font-hanken text-[#1e2d2e] focus:outline-none focus:border-[#1e2d2e]/30 transition-colors"
-              placeholder="Your Name"
+              className="w-full h-12 rounded-xl bg-white border border-[#1e2d2e]/10 px-5 font-hanken text-sm text-[#1e2d2e] focus:outline-none focus:border-[#1e2d2e]/30 transition-colors"
+              placeholder="Display Name"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#1e2d2e] mb-2 px-1">
-              Email
-            </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-14 rounded-2xl bg-white border border-[#1e2d2e]/10 px-6 font-hanken text-[#1e2d2e] focus:outline-none focus:border-[#1e2d2e]/30 transition-colors"
-              placeholder="name@example.com"
+              className="w-full h-12 rounded-xl bg-white border border-[#1e2d2e]/10 px-5 font-hanken text-sm text-[#1e2d2e] focus:outline-none focus:border-[#1e2d2e]/30 transition-colors"
+              placeholder="Email"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#1e2d2e] mb-2 px-1">
-              Password
-            </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-14 rounded-2xl bg-white border border-[#1e2d2e]/10 px-6 font-hanken text-[#1e2d2e] focus:outline-none focus:border-[#1e2d2e]/30 transition-colors"
-              placeholder="Min. 6 characters"
+              className="w-full h-12 rounded-xl bg-white border border-[#1e2d2e]/10 px-5 font-hanken text-sm text-[#1e2d2e] focus:outline-none focus:border-[#1e2d2e]/30 transition-colors"
+              placeholder="Password (Min. 6 chars)"
               minLength={6}
               required
             />
           </div>
 
           {error && (
-            <div className="p-4 rounded-xl bg-red-50 text-red-600 text-sm font-medium border border-red-100">
+            <div className="p-3 rounded-lg bg-red-50 text-red-600 text-[11px] font-medium border border-red-100">
               {error}
             </div>
           )}
@@ -144,13 +135,13 @@ export default function SignupScreen() {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full h-14 rounded-full bg-[#1e2d2e] text-white font-hanken font-bold text-base shadow-lg shadow-[#1e2d2e]/20 disabled:opacity-50"
+            className="w-full h-12 rounded-full bg-[#1e2d2e] text-white font-hanken font-bold text-sm shadow-md disabled:opacity-50 mt-2"
           >
             {loading ? 'Creating...' : 'Sign Up'}
           </motion.button>
         </form>
 
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center pt-6 border-t border-[#1e2d2e]/5">
           <p className="text-[#1e2d2e]/60 text-sm">
             Already have an account?{' '}
             <Link 
