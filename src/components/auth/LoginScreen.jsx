@@ -49,6 +49,20 @@ export default function LoginScreen() {
     }
   };
 
+  const handleSSO = async (provider) => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/feed`,
+        }
+      });
+      if (error) throw error;
+    } catch (err) {
+      setError(`SSO Error: ${err.message}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#fcf8f2] flex flex-col justify-center px-8 py-12">
       <motion.div
@@ -70,6 +84,38 @@ export default function LoginScreen() {
         <p className="text-[#1e2d2e]/60 text-center mb-12">
           Find your center, together.
         </p>
+
+        {/* SSO Buttons */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => handleSSO('google')}
+            className="flex items-center justify-center gap-2 h-14 rounded-2xl bg-white border border-[#1e2d2e]/10 font-hanken font-semibold text-[#1e2d2e] shadow-sm hover:bg-[#1e2d2e]/5 transition-colors"
+          >
+            <img src="https://www.gstatic.com/firebase/anonymous-logos/google.png" alt="Google" className="w-5 h-5 opacity-80" />
+            <span>Google</span>
+          </motion.button>
+          
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => handleSSO('apple')}
+            className="flex items-center justify-center gap-2 h-14 rounded-2xl bg-white border border-[#1e2d2e]/10 font-hanken font-semibold text-[#1e2d2e] shadow-sm hover:bg-[#1e2d2e]/5 transition-colors"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="opacity-80">
+              <path d="M17.05 20.28c-.98.95-2.05 1.72-3.22 1.72-1.17 0-1.55-.72-2.92-.72-1.37 0-1.8.72-2.92.72-1.12 0-2.22-.82-3.22-1.72C2.72 18.25 1 15.15 1 12.12c0-3.3 2.12-5.05 4.15-5.05 1.08 0 2.1.72 2.75.72.65 0 1.78-.78 2.98-.78 1.25 0 2.38.55 3.1 1.45-2.52 1.48-2.1 4.75.42 5.85-.82 2.02-1.9 4.02-3.35 5.97zM12.03 6.3c-.02-2.15 1.75-3.95 3.85-4.05.15 2.25-1.82 4.22-3.85 4.05z"/>
+            </svg>
+            <span>Apple</span>
+          </motion.button>
+        </div>
+
+        <div className="relative mb-8 text-center">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-[#1e2d2e]/5"></div>
+          </div>
+          <span className="relative px-4 bg-[#fcf8f2] text-[#1e2d2e]/30 text-[10px] font-bold uppercase tracking-widest">
+            Or continue with email
+          </span>
+        </div>
 
         <form onSubmit={handleLogin} className="space-y-6 mb-12">
           <div>
