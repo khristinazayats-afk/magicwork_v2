@@ -35,7 +35,7 @@ import AppLayout from './components/AppLayout';
 import ProfileScreen from './components/ProfileScreen';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(window.location.pathname === '/' || window.location.pathname === '/greeting');
 
   // Check if we're in test mode via URL
   const isTestMode = window.location.search.includes('test=animation');

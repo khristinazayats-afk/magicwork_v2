@@ -56,6 +56,14 @@ export default function LoginScreen() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md mx-auto"
       >
+        <div className="flex justify-center mb-8">
+          <img 
+            src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
+            alt="Magicwork Logo"
+            className="h-16 w-16"
+          />
+        </div>
+
         <h1 className="font-hanken text-[32px] font-bold text-[#1e2d2e] mb-2 text-center">
           Welcome Back
         </h1>
@@ -63,7 +71,7 @@ export default function LoginScreen() {
           Find your center, together.
         </p>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6 mb-12">
           <div>
             <label className="block text-sm font-semibold text-[#1e2d2e] mb-2 px-1">
               Email
@@ -117,16 +125,26 @@ export default function LoginScreen() {
           </motion.button>
         </form>
 
-        <div className="mt-12 text-center">
-          <p className="text-[#1e2d2e]/60 text-sm">
-            Don't have an account?{' '}
-            <Link 
-              to="/signup"
-              className="font-bold text-[#1e2d2e] hover:underline underline-offset-4"
-            >
-              Create Account
-            </Link>
+        <div className="space-y-4 border-t border-[#1e2d2e]/5 pt-8">
+          <p className="text-[#1e2d2e]/40 text-[10px] font-bold uppercase tracking-widest text-center mb-4">
+            Other options
           </p>
+          
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate('/signup')}
+            className="w-full h-14 rounded-full bg-[#1e2d2e]/5 text-[#1e2d2e] font-hanken font-bold text-sm"
+          >
+            Create Account
+          </motion.button>
+
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate('/signup?trial=true')}
+            className="w-full h-14 rounded-full bg-[#94d1c4]/20 text-[#1e2d2e] font-hanken font-bold text-sm border border-[#94d1c4]/30"
+          >
+            Guest login (to be optimized)
+          </motion.button>
         </div>
       </motion.div>
     </div>
