@@ -1,10 +1,10 @@
 # Hugging Face API Setup for Ambient Sound Generation
 
-## ✅ Your Token is Ready
+## 🔒 Add Your Token to Vercel (IMPORTANT - Do This Now!)
 
-Your Hugging Face token: `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`
+**Get your token from**: https://huggingface.co/settings/tokens
 
-## 🔒 Add to Vercel (IMPORTANT - Do This Now!)
+**Important**: Your token should ONLY be stored in Vercel environment variables, NEVER in code files!
 
 **DO NOT commit this token to code. It must only be in Vercel environment variables.**
 
