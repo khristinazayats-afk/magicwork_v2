@@ -32,6 +32,11 @@ export default async function handler(req, res) {
       ? prompt
       : `${prompt}, meditation, mindfulness, peaceful, serene, calming atmosphere`;
 
+    // Enhance prompt for meditation/mindfulness context
+    const enhancedPrompt = prompt.includes('meditation') || prompt.includes('mindful') || prompt.includes('calm')
+      ? prompt
+      : `${prompt}, meditation, mindfulness, peaceful, serene, calming atmosphere`;
+
     const hfApiKey = process.env.HF_API_KEY || process.env.HUGGINGFACE_API_KEY;
     const openaiApiKey = process.env.OPENAI_API_KEY;
     
