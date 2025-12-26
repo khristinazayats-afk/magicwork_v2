@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>MagicWork</string>
+	<string>Magicwork</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -74,23 +74,23 @@
 		<true/>
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>MagicWork needs microphone access for voice-guided meditation and emotional check-in features.</string>
+	<string>Magicwork needs microphone access for voice-guided meditation and emotional check-in features.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>MagicWork needs camera access for setting your profile picture and recording mindfulness moments.</string>
+	<string>Magicwork needs camera access for setting your profile picture and recording mindfulness moments.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>MagicWork needs photo library access for choosing your profile picture and saving meditation certificates.</string>
+	<string>Magicwork needs photo library access for choosing your profile picture and saving meditation certificates.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>MagicWork needs permission to save images to your photo library.</string>
+	<string>Magicwork needs permission to save images to your photo library.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
+	<string>Magicwork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>MagicWork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
+	<string>Magicwork needs bluetooth access to connect to your headphones for high-quality audio meditation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>MagicWork uses location to suggest practices based on your environment (e.g., morning walks).</string>
+	<string>Magicwork uses location to suggest practices based on your environment (e.g., morning walks).</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>MagicWork uses location to suggest practices based on your environment (e.g., morning walks).</string>
+	<string>Magicwork uses location to suggest practices based on your environment (e.g., morning walks).</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>MagicWork uses data to personalize your meditation experience and track your progress across devices.</string>
+	<string>Magicwork uses data to personalize your meditation experience and track your progress across devices.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CFBundleURLTypes</key>

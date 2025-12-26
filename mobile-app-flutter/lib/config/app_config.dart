@@ -21,6 +21,6 @@ class AppConfig {
   // static const String runwayApiKey = ''; // For video generation (alternative to Sora)
   
   // App Info
-  static const String appName = 'MagicWork';
+  static const String appName = 'Magicwork';
   static const String appVersion = '1.0.0';
 }

@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 24),
             const Text(
-              'MagicWork',
+              'Magicwork',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

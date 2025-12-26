@@ -1,6 +1,6 @@
-# MagicWork TestFlight Deployment Guide
+# Magicwork TestFlight Deployment Guide
 
-This guide explains how to prepare and push the MagicWork Flutter app to Apple TestFlight.
+This guide explains how to prepare and push the Magicwork Flutter app to Apple TestFlight.
 
 ## Prerequisites
 1. **Apple Developer Account**: You must have an active subscription ($99/year).
@@ -18,7 +18,7 @@ Run the included helper script to set your official Bundle ID and Team ID:
 ## Step 2: Create App in App Store Connect
 1. Go to [App Store Connect](https://appstoreconnect.apple.com/).
 2. Click **My Apps** > **+** > **New App**.
-3. **Name**: MagicWork
+3. **Name**: Magicwork
 4. **Primary Language**: English (US)
 5. **Bundle ID**: Select the one you set in Step 1.
 6. **SKU**: `magicwork-2025` (or any unique string).

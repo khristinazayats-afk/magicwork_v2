@@ -23,8 +23,8 @@ export default function SplashScreen({ onEnter }) {
           {/* Logo */}
           <div className="flex justify-start md:justify-center">
             <img 
-              src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
-              alt="MagicWork Logo"
+              src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - Magicwork (V001)-12.png" 
+              alt="Magicwork Logo"
               className="h-20 w-20 md:h-20 md:w-20"
             />
           </div>

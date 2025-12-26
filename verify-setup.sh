@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # ========================================
-# MagicWork Pipeline Verification Script
+# Magicwork Pipeline Verification Script
 # ========================================
 
-echo "🔍 Verifying MagicWork Pipeline Setup..."
+echo "🔍 Verifying Magicwork Pipeline Setup..."
 echo ""
 
 # Colors for output

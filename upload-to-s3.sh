@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ========================================
-# MagicWork S3 Upload Script
+# Magicwork S3 Upload Script
 # ========================================
 # Upload Canva exports to S3 and get CDN URL
 #

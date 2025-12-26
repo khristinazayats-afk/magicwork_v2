@@ -1,4 +1,4 @@
--- Content Assets Table for MagicWork CMS
+-- Content Assets Table for Magicwork CMS
 -- This table stores all Canva content metadata and CDN URLs
 
 CREATE TABLE IF NOT EXISTS content_assets (

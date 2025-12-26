@@ -7,7 +7,7 @@
  *   node scripts/add-s3-assets-to-db.js
  * 
  * This script reads S3 file information and adds them to the database
- * so they can be used in the MagicWork app.
+ * so they can be used in the Magicwork app.
  */
 
 import pkg from 'pg';

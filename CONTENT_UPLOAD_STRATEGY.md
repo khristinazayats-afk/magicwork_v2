@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-This guide provides a **manual, cost-effective content pipeline** for managing audio and video assets from multiple sources (Pixabay, Canva, Google Gemini) and making them available in your MagicWork app.
+This guide provides a **manual, cost-effective content pipeline** for managing audio and video assets from multiple sources (Pixabay, Canva, Google Gemini) and making them available in your Magicwork app.
 
 **Strategy**: Manual download → Manual S3 upload → Database registration → App visibility
 
@@ -10,7 +10,7 @@ This guide provides a **manual, cost-effective content pipeline** for managing a
 
 ## 📊 Google Spreadsheet Structure
 
-### Spreadsheet: "MagicWork Content Inventory"
+### Spreadsheet: "Magicwork Content Inventory"
 
 Create a Google Spreadsheet with the following columns:
 
@@ -132,7 +132,7 @@ CDN_BASE="https://cdn.magicwork.app"
 
 ### Step 2: Create Google Spreadsheet
 
-1. **Create new Google Spreadsheet**: "MagicWork Content Inventory"
+1. **Create new Google Spreadsheet**: "Magicwork Content Inventory"
 2. **Add all columns** from the structure above (A through S)
 3. **Freeze first row** (View → Freeze → 1 row)
 4. **Format header row** (bold, background color)

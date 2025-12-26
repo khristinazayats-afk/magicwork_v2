@@ -1,4 +1,4 @@
-# 🏗️ MagicWork Content CMS - System Architecture
+# 🏗️ Magicwork Content CMS - System Architecture
 
 ## 🎯 High-Level Overview
 
@@ -104,7 +104,7 @@
 │                    APPLICATION LAYER                             │
 │                                                                  │
 │  ┌────────────────────────────────────────────────────────────┐│
-│  │  React App (MagicWork)                                     ││
+│  │  React App (Magicwork)                                     ││
 │  │                                                            ││
 │  │  • Fetches assets from API                                ││
 │  │  • Renders content from CDN                               ││

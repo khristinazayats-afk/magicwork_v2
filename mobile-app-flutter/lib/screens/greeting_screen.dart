@@ -22,7 +22,7 @@ class GreetingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               const Text(
-                'Welcome to MagicWork',
+                'Welcome to Magicwork',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
@@ -70,7 +70,7 @@ class GreetingScreen extends StatelessWidget {
                   elevation: 2,
                 ),
                 child: const Text(
-                  'Enjoy free calm on us',
+                  'Guest login (to be optimized)',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),

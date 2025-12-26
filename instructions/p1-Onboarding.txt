@@ -6,7 +6,7 @@
 - 📱Screen 1:  Splash screen / Homescreen
     
     **Screen elements:**
-    - **Logo:** *magicwork* Logo: B&W_Logo Design - MagicWork (V001)-03.png
+    - **Logo:** *magicwork* Logo: B&W_Logo Design - Magicwork (V001)-03.png
     - **Headline:** *Join the magic of calm*
     - **Subheadline:** *Replace anxious scrolling with simple practices that steady your mind*
     - **CTA:** Mint circle (pulsing) with arrow → **“Tap to begin”**

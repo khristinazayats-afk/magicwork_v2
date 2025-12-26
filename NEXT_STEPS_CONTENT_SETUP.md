@@ -2,7 +2,7 @@
 
 ## What You've Completed
 
-✅ Created Google Spreadsheet: [MagicWork Content Inventory](https://docs.google.com/spreadsheets/d/13iAonweyvoDYRCWGQRsd3L9RASSiZEjoUmxfgCBc940/edit?gid=0#gid=0)
+✅ Created Google Spreadsheet: [Magicwork Content Inventory](https://docs.google.com/spreadsheets/d/13iAonweyvoDYRCWGQRsd3L9RASSiZEjoUmxfgCBc940/edit?gid=0#gid=0)
 
 ✅ Set up S3 bucket structure:
 - `magicwork-canva-assets/audio/` - For all audio files (Canva, Pixabay, Gemini)
@@ -45,7 +45,7 @@ POSTGRES_URL_NON_POOLING=postgres://postgres.ejhafhggndirnxmwrtgm:MYXp6u8dlToRXX
 2. Go to **Extensions → Apps Script**
 3. Paste code from `scripts/google-sheets-content-tracker.gs`
 4. Save and authorize
-5. Refresh spreadsheet - you should see "MagicWork Content" menu
+5. Refresh spreadsheet - you should see "Magicwork Content" menu
 
 ### 3. Update Spreadsheet Example Row
 

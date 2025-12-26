@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     // Fetch the MP3 file
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'MagicWork/1.0',
+        'User-Agent': 'Magicwork/1.0',
         'Accept': '*/*',
       },
       signal: AbortSignal.timeout(30000) // 30 second timeout

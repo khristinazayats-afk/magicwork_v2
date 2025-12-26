@@ -15,7 +15,7 @@ export default function GreetingScreen() {
         <div className="text-6xl mb-12">🕯️</div>
         
         <h1 className="font-hanken text-[40px] font-bold text-[#1e2d2e] leading-tight mb-6">
-          Welcome to<br />MagicWork
+          Welcome to<br />Magicwork
         </h1>
         
         <p className="font-hanken text-lg text-[#1e2d2e]/70 mb-16 leading-relaxed">
@@ -36,7 +36,7 @@ export default function GreetingScreen() {
             onClick={() => navigate('/signup?trial=true')}
             className="w-full h-16 rounded-full bg-[#94d1c4] text-[#1e2d2e] font-hanken font-bold text-lg shadow-xl shadow-[#94d1c4]/20"
           >
-            Enjoy free calm on us
+            Guest login (to be optimized)
           </motion.button>
           
           <motion.button

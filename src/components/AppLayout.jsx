@@ -25,7 +25,7 @@ export default function AppLayout({ children }) {
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <h1 className="font-hanken font-bold text-[#1e2d2e] text-lg">MagicWork</h1>
+        <h1 className="font-hanken font-bold text-[#1e2d2e] text-lg">Magicwork</h1>
         <div className="w-10" />
       </div>
 
@@ -35,7 +35,7 @@ export default function AppLayout({ children }) {
       >
         <div className="h-full flex flex-col p-6">
           <div className="mb-12">
-            <h1 className="font-hanken font-bold text-[24px] text-[#1e2d2e]">MagicWork</h1>
+            <h1 className="font-hanken font-bold text-[24px] text-[#1e2d2e]">Magicwork</h1>
           </div>
 
           <nav className="flex-1 space-y-2">

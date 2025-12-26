@@ -26,32 +26,26 @@ function walk(dir, callback) {
 
 const rootDir = path.join(__dirname, '..');
 
-console.log('Branding update: Fixing MagicWork (capital W) -> MagicWork');
+console.log('Branding update: Fixing Magicwork (capital W) -> Magicwork');
 
 walk(rootDir, (filepath) => {
   try {
     let content = fs.readFileSync(filepath, 'utf8');
-    let changed = false;
+    let originalContent = content;
 
-    if (content.includes('MagicWork')) {
-      content = content.replace(/MagicWork/g, 'MagicWork');
-      changed = true;
-    }
-    if (content.includes('MagicWork')) {
-      content = content.replace(/MagicWork/g, 'MagicWork');
-      changed = true;
-    }
-    if (content.includes('magicwork')) {
-      content = content.replace(/magicwork/g, 'magicwork');
-      changed = true;
-    }
+    // Replace "Magicwork" with "Magicwork"
+    content = content.replace(/Magicwork/g, 'Magicwork');
+    // Replace "Magicwork" with "Magicwork"
+    content = content.replace(/Magicwork/g, 'Magicwork');
+    // Replace "magicwork" with "magicwork"
+    content = content.replace(/magicwork/g, 'magicwork');
 
-    if (changed) {
+    if (content !== originalContent) {
       fs.writeFileSync(filepath, content, 'utf8');
       console.log(`Updated: ${filepath}`);
     }
   } catch (e) {
-    // Skip binary or encoded files that fail utf8 read
+    // Skip binary files
   }
 });
 
