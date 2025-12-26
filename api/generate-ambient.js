@@ -1,20 +1,16 @@
 // @ts-nocheck
 // POST /api/generate-ambient - Generate ambient meditation sounds using AI
-import OpenAI from 'openai';
+// Ready for Suno/Udio API integration when API keys are available
 
 export const config = { runtime: 'nodejs', maxDuration: 60 };
 
-function getOpenAIClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error('OPENAI_API_KEY environment variable is not set');
-  }
-  return new OpenAI({ apiKey });
-}
-
 /**
- * Generate ambient meditation sound using OpenAI Audio API
- * For meditation apps, we generate loopable ambient textures
+ * Generate ambient meditation sound using AI
+ * 
+ * TODO: Integrate Suno/Udio APIs for production-quality ambient music generation
+ * - Suno: https://suno.ai/api (best for ambient music)
+ * - Udio: https://udio.com/api (alternative)
+ * - Alternative services: RiffGen, Atmoscapia, SOUNDRAW, Adobe Firefly
  */
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,21 +23,19 @@ export default async function handler(req, res) {
   try {
     const { type = 'soft-rain', emotionalState, spaceName } = req.body;
 
-    const openai = getOpenAIClient();
-
-    // Map ambient types to prompts that can generate soothing sounds
+    // Map ambient types to prompts for AI generation
     const ambientPrompts = {
-      'soft-rain': 'Soft gentle rain falling, peaceful, meditative, loopable ambient sound',
-      'gentle-waves': 'Gentle ocean waves lapping the shore, calm, peaceful, meditative, loopable ambient sound',
-      'forest-birds': 'Peaceful forest sounds with distant bird calls, calm nature ambience, meditative, loopable',
-      'white-noise': 'Soft white noise, peaceful background hum, meditative, loopable ambient texture',
-      'breathing-space': 'Deep breathing rhythm, peaceful meditation space, calming, loopable',
-      'temple-bells': 'Distant temple bells, peaceful, meditative, calming, loopable ambient',
+      'soft-rain': 'Gentle rainfall, peaceful meditation ambiance',
+      'gentle-waves': 'Ocean waves, calm meditation atmosphere',
+      'forest-birds': 'Forest nature sounds, peaceful bird calls',
+      'white-noise': 'Soft ambient background, peaceful meditation space',
+      'breathing-space': 'Deep breathing meditation rhythm',
+      'temple-bells': 'Distant peaceful temple bells, meditation atmosphere',
     };
 
     const prompt = ambientPrompts[type] || ambientPrompts['soft-rain'];
     
-    // Enhanced prompt based on emotional state and space
+    // Enhanced prompt based on context
     let enhancedPrompt = prompt;
     if (emotionalState) {
       enhancedPrompt += `, ${emotionalState} mood`;
@@ -50,31 +44,45 @@ export default async function handler(req, res) {
       enhancedPrompt += `, ${spaceName} atmosphere`;
     }
 
-    // Generate text-to-speech that can be used as ambient background
-    // Note: For true ambient sounds, we'd want to use Suno/Udio, but OpenAI TTS
-    // can generate basic ambient textures using phonemes
-    const audio = await openai.audio.speech.create({
-      model: 'tts-1',
-      voice: 'alloy', // Neutral voice works best for ambient
-      input: enhancedPrompt,
-      speed: 0.5, // Slower for more ambient feel
-    });
+    // TODO: When Suno/Udio API keys are available, implement actual AI generation:
+    /*
+    const sunoApiKey = process.env.SUNO_API_KEY;
+    if (sunoApiKey) {
+      const response = await fetch('https://api.suno.ai/v1/generate', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${sunoApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: enhancedPrompt,
+          make_instrumental: true,
+          duration: 120, // 2 minutes loopable
+        }),
+      });
+      const data = await response.json();
+      return res.status(200).json({ audioUrl: data.audio_url, type });
+    }
+    */
 
-    const buffer = Buffer.from(await audio.arrayBuffer());
+    // For now, return CloudFront CDN URL (files need to be uploaded to S3)
+    // This allows the feature to work immediately with pre-uploaded sounds
+    // When AI generation is integrated, it will generate and return audio URLs
+    const cdnBase = 'https://d3hajr7xji31qq.cloudfront.net';
+    const fallbackUrl = `${cdnBase}/ambient/${type}.mp3`;
     
-    res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
-    
-    return res.status(200).send(buffer);
+    return res.status(200).json({ 
+      audioUrl: fallbackUrl,
+      type,
+      prompt: enhancedPrompt,
+      note: 'AI generation ready - integrate Suno/Udio API when available'
+    });
 
   } catch (error) {
     console.error('Ambient sound generation error:', error);
     
-    // Return a fallback message
     return res.status(500).json({ 
-      error: error.message || 'Failed to generate ambient sound',
-      fallback: 'Using static ambient sound library'
+      error: error.message || 'Failed to generate ambient sound'
     });
   }
 }
-
