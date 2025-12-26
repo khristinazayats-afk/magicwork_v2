@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// Ambient sounds - commented out until CDN is configured
-// These will fail gracefully with error handling
+// Ambient sounds using CloudFront CDN
+const CDN_BASE = 'https://d3hajr7xji31qq.cloudfront.net';
 const AMBIENT_SOUNDS = [
-  // 'https://cdn.magicwork.app/ambient/soft-rain.mp3',
-  // 'https://cdn.magicwork.app/ambient/gentle-waves.mp3',
-  // 'https://cdn.magicwork.app/ambient/forest-birds.mp3',
-  // 'https://cdn.magicwork.app/ambient/white-noise.mp3'
+  `${CDN_BASE}/ambient/soft-rain.mp3`,
+  `${CDN_BASE}/ambient/gentle-waves.mp3`,
+  `${CDN_BASE}/ambient/forest-birds.mp3`,
+  `${CDN_BASE}/ambient/white-noise.mp3`
 ];
 
 export default function AmbientSoundManager() {
