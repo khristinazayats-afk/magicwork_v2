@@ -1,5 +1,5 @@
 ---
-description: Handles user progression tracking, achievements, rewards and gamification mechanics for meditation practices
+description: Documents achievement, streak, vibe and progression mechanics for activity-based progression tracking and rewards
 ---
 
 # === USER INSTRUCTIONS ===
@@ -61,50 +61,55 @@ $END$
 
 # progression-system
 
-Core progression mechanics centered around a 10-level "vibe" system tracking meditation progress:
+Core Progression Components:
 
-## Vibe Progression System
-- 10 distinct emotional/mental states mapped to practice consistency
-- Progression based on:
-  - Weekly practice minutes
-  - Consecutive practice days
+1. Vibe States System
+- 10 distinct levels based on practice frequency and consistency
+- Calculation factors:
+  - Total practice minutes completed 
+  - Days practiced per week
   - Current streak length
-- Each level unlocks new meditation content and capabilities
-- Animal-themed state representations provide metaphorical feedback
+- Each level maps to specific neuroscience-backed benefits
+Importance Score: 90/100
 
-## Achievement Tracking
-- 8 achievement categories monitoring:
-  - Practice session completions
-  - Streak maintenance 
-  - Space exploration diversity
-  - Community participation
-- Milestone-based triggers with scientific benefit descriptions
-- Custom calculations for minutes practiced, days active, space variety
-
-## Light Points (LP) System
-- Daily reward mechanics:
-  - Practice completion bonuses
-  - Listening time accumulation
-  - Community participation rewards
-- Daily earning caps and thresholds
-- Automatic daily reset mechanism
-- Weekly rollover bonuses for consistent engagement
-
-## Monthly Tier System
-- 5-tier progression based on:
-  - Monthly practice frequency
+2. Monthly Tier Progression 
+- 5-tier system tracking practice consistency
+- Tier advancement based on:
+  - Total sessions completed
   - Consecutive practice days
-  - Session quality metrics
-  - Community involvement
-- Tier-specific content access and features
-- Scientific benefit unlocks at each tier
+- Community member count tracking per tier
+Importance Score: 85/100
 
-## Integration Points
-- Unified session tracking feeds all progression systems
-- Interconnected rewards across achievement, LP and tier systems
-- Progressive difficulty scaling 
-- Timezone-aware streak calculations
-- Community count integration for social elements
+3. Light Points Rewards
+- Daily-capped reward system
+- Points awarded for:
+  - Practice completion
+  - Tune listening sessions
+  - Daily practice goals
+- Reset logic and accumulation tracking
+Importance Score: 80/100
+
+4. Achievement System
+- 8 distinct achievement categories
+- Unlock conditions based on:
+  - Practice session counts
+  - Streak maintenance
+  - Space exploration progress
+- Progressive milestone tracking
+Importance Score: 75/100
+
+Supporting Mechanics:
+- Streak calculation with UTC date handling
+- Space-specific progression tracking
+- Tier transition management
+- Achievement progress calculations
+- Daily reward caps and reset cycles
+
+Key Files:
+/src/utils/vibeSystem.js
+/src/utils/monthlyTiers.js
+/src/utils/lightPoints.js
+/src/utils/achievements.js
 
 $END$
 

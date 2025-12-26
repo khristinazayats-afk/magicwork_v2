@@ -75,50 +75,51 @@ $END$
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-## Core Business Architecture
+## Core Business Components
 
 ### Practice Generation System
-- AI-driven meditation content generation adapting to:
-  - 5 distinct emotional states (calm to anxious)
-  - 6 meditation intents/goals
-  - Dynamic pacing (60-120 words/minute) based on anxiety level
-- Personalized script construction with opening, main practice, closure
-- Importance Score: 90
+- AI-powered meditation script generation based on emotional states and intents
+- Adaptive pacing system adjusts meditation density (60-120 words/min) based on anxiety levels
+- Multi-step workflow: emotional assessment → intent selection → practice customization
+- Voice synthesis and audio layer orchestration
+Importance Score: 90/100
 
-### State & Progress Management
-- "Vibe System" tracking nervous system states
-  - 10 progression levels with unique requirements
-  - Animal-themed state representations
-  - Weekly practice metrics integration
-- Achievement system with 8 distinct types
-  - Space exploration tracking
-  - Streak maintenance calculation
-  - Custom milestone triggers
-- Importance Score: 85
+### Vibe & Progress Tracking
+- 10-level vibe state system based on practice patterns and consistency
+- Tracks multi-dimensional metrics: total minutes, weekly frequency, streaks
+- Maps progress to visual growth stages and achievement milestones
+- Real-time progress visualization through garden/tree metaphors
+Importance Score: 85/100
 
-### Engagement Systems
-- Light Points (LP) mechanics
-  - Daily reward calculations
-  - Practice completion bonuses
-  - Automated reset mechanisms
-- Monthly tier progression (5 levels)
-  - Frequency-based advancement
-  - Session quality metrics
-  - Community integration
-- Importance Score: 80
+### Community & Social Features
+- Space-specific reflection prompts
+- Privacy-aware sharing modes (public/anonymous/private)
+- Real-time collective presence indicators
+- Community interaction tracking with daily caps
+Importance Score: 75/100
 
-### Audio Experience Orchestration
-- Context-aware sound management
-- Multi-stream coordination (narration, ambient, bowls)
-- Adaptive volume control based on practice phase
-- Space-specific audio asset allocation
-- Importance Score: 75
+### Gamification Framework
+- Multi-tiered achievement system with 8 unlock categories
+- Light Points reward system with daily activity caps
+- 5-tier monthly progression based on practice frequency
+- Science-backed milestone benefits mapping
+Importance Score: 80/100
+
+### Visual Feedback Systems
+- Particle-based meditation flow animations
+- Organic growth patterns for meditative elements
+- Multi-stage garden progression reflecting practice journey
+- Dynamic aura visualization tied to practice states
+Importance Score: 70/100
 
 ## Integration Architecture
-- Emotional state assessment drives practice generation
-- Achievement progress feeds vibe system calculations
-- Light Points connect to monthly tier advancement
-- Practice completion triggers multi-system updates
+- Emotional state processing drives practice personalization
+- Achievement system connects with progress tracking
+- Social features integrate with privacy controls
+- Visual systems respond to practice metrics
+- Audio orchestration syncs with meditation flows
+
+The system implements a comprehensive meditation platform with AI-driven content generation, gamified progression, and social features, all connected through state-aware visualization systems.
 
 $END$
 

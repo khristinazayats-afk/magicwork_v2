@@ -1,5 +1,5 @@
 ---
-description: Guidelines for analyzing data flows between components in meditation practice and emotional state tracking systems
+description: Analyze data flows between components for meditation practice, emotion tracking, and presence features
 ---
 
 # === USER INSTRUCTIONS ===
@@ -53,47 +53,49 @@ $END$
 
 # data-flow
 
-## Practice Session Data Flow
-- Emotional state assessment (5 levels) flows into practice generation system
-- AI generator adapts meditation content based on:
-  - Current emotional state -> pacing/intensity adjustments
-  - Selected intent (6 types) -> content/technique selection
-  - Practice duration -> script length/segmentation
+## Core Data Flows
 
-## Real-time Presence System
-- Participant count updates propagate through:
-  - Active session tracking
-  - Space occupancy metrics 
-  - Community presence indicators
-- Light Points (LP) accumulation flows:
-  - Practice completion -> LP calculation
-  - Daily caps enforcement
-  - Achievement system updates
+1. Practice Session Flow (85/100)
+- Emotional State -> Intent Selection -> Practice Generation
+- User emotion data flows to AI generator for personalized content
+- Generated content feeds into audio synthesis pipeline
+- Practice metrics flow to analytics and achievement systems
 
-## Emotional State Tracking
-- User emotional data flows through:
-  - Initial state assessment -> practice customization
-  - Post-practice feedback -> state adjustment
-  - Weekly aggregation -> vibe system updates
-- Vibe progression system:
-  - Practice metrics -> state calculations
-  - State changes -> content adaptation
-  - Progress tracking -> milestone triggers
+2. Presence Management (80/100) 
+- Real-time participant data flows between connected clients
+- Anonymous/identified states propagate through sharing system
+- Collective presence metrics update space visualizations
 
-## Key Integration Points
-- Practice Generator <-> Emotional State Tracker
-  - Bidirectional updates for practice adaptation
-  - Real-time state adjustments during sessions
+3. Progress Tracking Flow (75/100)
+- Practice completion events flow to:
+  - Vibe scoring system
+  - Achievement processor  
+  - Light points calculator
+  - Monthly tier evaluator
 
-- Progress Tracking <-> Achievement System
-  - Practice completion data
-  - Milestone triggers
-  - LP accumulation
+4. Emotional State Processing (70/100)
+- Five-level emotional assessments flow to:
+  - Practice personalization system
+  - Space-specific guidance
+  - Community interaction filters
+  - Visual feedback elements
 
-- Community System <-> Practice Spaces
-  - Real-time presence updates
-  - Space-specific metrics
-  - Collective practice coordination
+## Integration Points
+
+1. Practice Generation Pipeline
+- Emotional state + intent -> AI generator
+- Generated content -> Audio synthesis
+- Audio + visuals -> Practice delivery
+
+2. Community Features
+- User presence -> Space visualization
+- Reflection prompts -> Anonymous sharing
+- Privacy settings -> Content visibility
+
+3. Progress Systems
+- Session metrics -> Multiple tracking systems
+- Achievement criteria -> Visual progression
+- Practice patterns -> Vibe calculations
 
 $END$
 

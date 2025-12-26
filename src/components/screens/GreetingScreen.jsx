@@ -30,6 +30,14 @@ export default function GreetingScreen() {
           >
             Get Started
           </motion.button>
+
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate('/signup?trial=true')}
+            className="w-full h-16 rounded-full bg-[#94d1c4] text-[#1e2d2e] font-hanken font-bold text-lg shadow-xl shadow-[#94d1c4]/20"
+          >
+            Enjoy free calm on us
+          </motion.button>
           
           <motion.button
             whileTap={{ scale: 0.98 }}

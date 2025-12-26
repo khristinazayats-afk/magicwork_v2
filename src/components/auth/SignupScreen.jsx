@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 export default function SignupScreen() {
   const [email, setEmail] = useState('');
@@ -11,6 +11,9 @@ export default function SignupScreen() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const isTrial = queryParams.get('trial') === 'true';
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -24,6 +27,8 @@ export default function SignupScreen() {
         options: {
           data: {
             name: name,
+            is_trial: isTrial,
+            trial_limit_seconds: 420, // 7 minutes
           },
           emailRedirectTo: `${window.location.origin}/login`,
         },

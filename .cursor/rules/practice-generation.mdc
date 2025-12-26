@@ -1,5 +1,5 @@
 ---
-description: Defines AI-driven meditation practice generation system with emotional processing and personalization
+description: Technical specification for AI-driven meditation practice generation system including emotional processing and personalization
 ---
 
 # === USER INSTRUCTIONS ===
@@ -66,44 +66,38 @@ $END$
 
 # practice-generation
 
-Core Practice Generation Components:
+Core Components:
 
-1. Emotional State Processing
-- 5-level emotional state assessment (calm to very anxious)
-- Maps user state to practice customization parameters
-- Adjusts content pacing based on anxiety levels:
-  * Anxious: 120 words/minute
-  * Calm: 60 words/minute
-Importance Score: 85
+1. AI Practice Generator (85/100)
+- Emotional state-based meditation script generation
+- Dynamic pacing adjustment (120 wpm for anxious, 60 wpm for calm)
+- Eight distinct meditation intents with custom parameters
+- Structured format: opening (2min), main practice, closing (2min)
 
-2. Intent-Based Customization
-- 6 distinct meditation goals with specialized parameters
-- Maps intents to specific guidance styles
-- Contextual mapping between emotional states and practice intents
-- Structures content with opening, main practice, and closing sections
-Importance Score: 90
+2. Emotional State Processing (80/100)
+- Five-level emotional assessment system
+- Emotional state mapping to meditation parameters
+- Real-time adaptation of practice intensity
+- State-specific guidance selection
 
-3. Content Orchestration
-- Multi-layered audio management with narration and ambient sounds
-- Space-based content organization for meditation practices
-- Fallback content management for specific spaces
-- Dynamic volume adjustment during practice phases
-Importance Score: 75
+3. Content Orchestration (75/100)
+- Multi-layer audio management (voice, music, ambient)
+- Dynamic volume balancing
+- Context-aware ambient sound control
+- Screen-based sound transitions
 
-4. Personalization Algorithm
-- AI-driven script generation based on emotional state
-- Intent-specific guidance adaptation
-- Custom prompt engineering for meditation context
-- Adaptive content pacing based on user state
-Importance Score: 90
+4. Personalization Pipeline (70/100)
+- Intent selection → Emotional assessment → Script generation → Audio synthesis
+- Space-specific practice customization
+- Duration-based content adaptation
+- User state persistence
 
-Key Integration Points:
-- Emotional state influences content pacing and structure
-- Intent selection drives practice format and guidance style
-- Space context affects content selection and delivery
-- User state determines audio orchestration parameters
-
-The system uniquely combines emotional assessment, intent mapping, and AI content generation to create personalized meditation experiences.
+Practice Generation Flow:
+1. User completes emotional check-in
+2. System processes emotional state data
+3. AI generates customized meditation script
+4. Audio layers orchestrated based on practice type
+5. Real-time adaptation based on practice duration
 
 $END$
 

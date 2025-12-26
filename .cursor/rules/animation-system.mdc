@@ -1,5 +1,5 @@
 ---
-description: Specialized animation logic for meditation-focused particle systems, breathing patterns and physiological visualizations
+description: Documentation for specialized particle animation system including trajectories, breathing patterns and visual meditation feedback
 ---
 
 # === USER INSTRUCTIONS ===
@@ -43,29 +43,47 @@ $END$
 
 # animation-system
 
-Key Animation Components:
+## Particle Animation Components
 
-1. Boomerang Trajectory System
-Path: `src/components/animations/BoomerangAnimation.jsx`
-- Custom particle-based animation implementing meditative curved trajectories
-- Animation timing synchronized with breathing patterns
-- Particle dispersion patterns tuned for relaxation effects
-Importance Score: 85
+### Boomerang Animation System (src/components/animations/BoomerangAnimation.jsx)
+Implements curved trajectory calculations with parametric equations for meditation flow visualization
+- Custom particle emission based on practice state 
+- Curved path generation with controlled dispersion
+- Color distribution mapping to practice intensity
+Importance Score: 70/100
 
-2. Nervous System Visualization 
-Path: `src/components/animations/QuietGround.jsx`
-- Multi-layered organic movement patterns representing physiological states
-- Synchronized breathing visualization components
-- Visual metaphors for soil, seeds, sprouts and mycelium growth
-Importance Score: 70
+### Quiet Ground Visualization (src/components/animations/QuietGround.jsx)
+Meditation-specific nature-inspired animation patterns
+- Organic growth patterns reflecting practice depth
+- Visual feedback synchronized with breathing rhythm
+- Element transformations based on practice states
+Importance Score: 65/100
 
-Core Domain Features:
-- Meditation-optimized animation timing
-- Bio-inspired movement patterns
-- Breathing synchronization
-- Nervous system state visualization
+## Core Animation Patterns
 
-The animation system focuses exclusively on creating visual representations that support meditative states and physiological regulation. Each component uses specialized timing and movement patterns designed to facilitate relaxation and mindfulness practices.
+1. Physiological Sigh Visualization
+- Two-phase breathing pattern animation
+- Extended inhale followed by double-exhale sequence
+- Visual pace adjustment based on anxiety levels
+
+2. Practice State Transitions
+- Smooth morphing between meditation phases
+- Particle density changes reflecting depth
+- Color schemes mapped to practice types
+
+3. Breathing Synchronization
+- Real-time breath cycle visualization
+- Adaptive pacing based on practice type
+- Visual metronome for guided breathing
+
+## Integration Points
+
+- Particle systems respond to practice completion events
+- Animation state management tied to meditation flow
+- Visual feedback synchronized with audio narration
+- Transition effects coordinated with practice milestones
+
+The animation system focuses on therapeutic visualization patterns specifically designed for meditation guidance and breathing regulation.
 
 $END$
 
