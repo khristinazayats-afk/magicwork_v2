@@ -1,105 +1,102 @@
 // @ts-nocheck
-// POST /api/generate-image - Generate images using OpenAI DALL-E
-import OpenAI from 'openai';
+// POST /api/generate-image - Generate images using Hugging Face Inference API
+// Supports multiple models: Stable Diffusion, FLUX, etc.
 
 export const config = { runtime: 'nodejs' };
 
-// Initialize OpenAI client
-function getOpenAIClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error('OPENAI_API_KEY environment variable is not set');
-  }
-  return new OpenAI({ apiKey });
-}
-
-// Generate image based on prompt
+/**
+ * Generate images using Hugging Face Inference API
+ * 
+ * Available models:
+ * - "stabilityai/stable-diffusion-xl-base-1.0" - High quality (current)
+ * - "runwayml/stable-diffusion-v1-5" - Fast, good quality
+ * - "black-forest-labs/FLUX.1-dev" - Latest FLUX model (premium)
+ * 
+ * Documentation: https://huggingface.co/docs/api-inference/index
+ */
 export default async function handler(req, res) {
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     const { prompt } = req.body;
 
-    // Validate inputs
     if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
       return res.status(400).json({ error: 'prompt is required and must be a non-empty string' });
     }
 
-    // Check for API key
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY environment variable is not set');
+    const hfApiKey = process.env.HF_API_KEY || process.env.HUGGINGFACE_API_KEY;
+    if (!hfApiKey) {
       return res.status(500).json({ 
-        error: 'OpenAI API key not configured',
-        message: 'Please set OPENAI_API_KEY in Vercel environment variables'
+        error: 'HF_API_KEY not configured',
+        message: 'Please set HF_API_KEY in Vercel environment variables'
       });
     }
 
-    const openai = getOpenAIClient();
-
-    // Enhance prompt for meditation/mindfulness context if not already specific
+    // Enhance prompt for meditation/mindfulness context
     const enhancedPrompt = prompt.includes('meditation') || prompt.includes('mindful') || prompt.includes('calm')
       ? prompt
       : `${prompt}, meditation, mindfulness, peaceful, serene, calming atmosphere`;
 
-    // Generate image using DALL-E 3
-    const response = await openai.images.generate({
-      model: 'dall-e-3',
-      prompt: enhancedPrompt,
-      n: 1, // Generate 1 image
-      size: '1024x1024', // Standard size, can be '1024x1792' or '1792x1024' for different ratios
-      quality: 'standard', // 'standard' or 'hd'
-      style: 'natural', // 'vivid' or 'natural'
-    });
+    // Use Stable Diffusion XL for high-quality images
+    const modelId = 'stabilityai/stable-diffusion-xl-base-1.0';
+    
+    const hfResponse = await fetch(
+      `https://api-inference.huggingface.co/models/${modelId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${hfApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inputs: enhancedPrompt,
+          parameters: {
+            num_inference_steps: 30,
+            guidance_scale: 7.5,
+            width: 1024,
+            height: 1024,
+          },
+        }),
+      }
+    );
 
-    const imageUrl = response.data[0]?.url;
-    const revisedPrompt = response.data[0]?.revised_prompt;
-
-    if (!imageUrl) {
-      return res.status(500).json({ error: 'Failed to generate image' });
+    if (!hfResponse.ok) {
+      // Handle model loading (first request can take time)
+      if (hfResponse.status === 503) {
+        const errorData = await hfResponse.json().catch(() => ({}));
+        return res.status(503).json({ 
+          error: 'Model is loading, please try again in a few seconds',
+          estimated_time: errorData.estimated_time || 20
+        });
+      }
+      
+      const errorText = await hfResponse.text();
+      console.error('Hugging Face API error:', hfResponse.status, errorText);
+      throw new Error(`Hugging Face API error: ${hfResponse.status}`);
     }
 
+    // Hugging Face returns image as binary (PNG format)
+    const imageBuffer = await hfResponse.arrayBuffer();
+    const base64Image = Buffer.from(imageBuffer).toString('base64');
+    const imageDataUrl = `data:image/png;base64,${base64Image}`;
+    
     return res.status(200).json({
-      imageUrl,
+      imageUrl: imageDataUrl,
       prompt: enhancedPrompt,
-      revisedPrompt: revisedPrompt || enhancedPrompt
+      provider: 'huggingface',
+      model: modelId
     });
 
   } catch (error) {
     console.error('Error generating image:', error);
-    
-    // Handle OpenAI API errors
-    if (error instanceof OpenAI.APIError) {
-      return res.status(error.status || 500).json({
-        error: 'OpenAI API error',
-        message: error.message,
-        type: error.type
-      });
-    }
-
     return res.status(500).json({
       error: 'Failed to generate image',
       message: error.message
     });
   }
 }
-
-
-
-
-
-
-
-
-
