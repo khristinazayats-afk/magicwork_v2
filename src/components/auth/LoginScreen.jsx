@@ -188,9 +188,13 @@ export default function LoginScreen() {
           </div>
 
           {error && (
-            <div className="p-3 rounded-lg bg-red-50 text-red-600 text-[11px] font-medium border border-red-100">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 rounded-xl bg-red-50 text-red-700 text-sm font-medium border-2 border-red-200"
+            >
               {error}
-            </div>
+            </motion.div>
           )}
 
           <motion.button
