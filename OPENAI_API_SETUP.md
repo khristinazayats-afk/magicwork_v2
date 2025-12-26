@@ -110,7 +110,7 @@ When OpenAI releases video generation, this endpoint will be updated.
 ### Test Practice Generation
 
 ```bash
-curl -X POST https://magicwork.vercel.app/api/generate-practice \
+curl -X POST https://magicwork-six.vercel.app/api/generate-practice \
   -H "Content-Type: application/json" \
   -d '{
     "emotionalState": "anxious",
@@ -121,7 +121,7 @@ curl -X POST https://magicwork.vercel.app/api/generate-practice \
 ### Test Image Generation
 
 ```bash
-curl -X POST https://magicwork.vercel.app/api/generate-image \
+curl -X POST https://magicwork-six.vercel.app/api/generate-image \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "peaceful meditation garden"

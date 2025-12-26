@@ -61,10 +61,10 @@ After deploying, test the API endpoints:
 
 ```bash
 # Test content set endpoint
-curl "https://magicwork.vercel.app/api/content-assets?set=true&space=Drift%20into%20Sleep"
+curl "https://magicwork-six.vercel.app/api/content-assets?set=true&space=Drift%20into%20Sleep"
 
 # Test all assets for a space
-curl "https://magicwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
+curl "https://magicwork-six.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
 ```
 
 ### Expected Results
