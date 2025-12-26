@@ -57,6 +57,23 @@ class GreetingScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: () => context.push('/signup?trial=true'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF94d1c4),
+                  foregroundColor: const Color(0xFF1e2d2e),
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 2,
+                ),
+                child: const Text(
+                  'Enjoy free calm on us',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () => context.push('/login'),

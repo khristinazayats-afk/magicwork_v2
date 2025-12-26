@@ -68,6 +68,22 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   const [floatingHearts, setFloatingHearts] = useState([]);
   const [joinedAt, setJoinedAt] = useState(null);
   const [milestone, setMilestone] = useState(null);
+  const [isTrialUser, setIsTrialUser] = useState(false);
+  const [trialLimit, setTrialLimit] = useState(420);
+  const [totalPreExistingTime, setTotalPreExistingTime] = useState(0);
+
+  // Check trial status on mount
+  useEffect(() => {
+    async function checkTrial() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.user_metadata?.is_trial) {
+        setIsTrialUser(true);
+        setTrialLimit(user.user_metadata?.trial_limit_seconds || 420);
+        setTotalPreExistingTime(getTotalPracticeTime());
+      }
+    }
+    checkTrial();
+  }, []);
   
   // Practice flow states
   const [showTabs, setShowTabs] = useState(false); // New tabbed interface
@@ -387,6 +403,23 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
       }}
       data-index={currentIndex - 1}
     >
+      {/* Trial Progress Bar */}
+      {isTrialUser && joined && !showTabs && (
+        <div className="absolute top-0 left-0 w-full h-1 z-[70] bg-[#1e2d2e]/5">
+          <motion.div 
+            className="h-full bg-[#94d1c4]"
+            initial={{ width: 0 }}
+            animate={{ 
+              width: `${Math.min(100, ((totalPreExistingTime + secondsElapsed) / trialLimit) * 100)}%` 
+            }}
+            transition={{ duration: 1, ease: "linear" }}
+          />
+          <div className="absolute top-2 right-4 text-[10px] font-hanken font-bold text-[#1e2d2e]/30 uppercase tracking-widest">
+            Free Calm: {Math.max(0, Math.floor((trialLimit - (totalPreExistingTime + secondsElapsed)) / 60))}m left
+          </div>
+        </div>
+      )}
+
       {/* Video Background - if available */}
       {videoUrl && !assetsLoading && !showTabs && (
         <video
@@ -409,6 +442,22 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
           }}
         />
       )}
+
+      {/* Breathing Pulse Overlay */}
+      {joined && !showTabs && !showSummary && (
+        <motion.div 
+          className="absolute inset-0 z-0 pointer-events-none"
+          animate={{ 
+            backgroundColor: isPlaying ? ["rgba(255,255,255,0)", "rgba(255,255,255,0.05)", "rgba(255,255,255,0)"] : "rgba(255,255,255,0)" 
+          }}
+          transition={{ 
+            duration: 8, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+        />
+      )}
+
       {/* New Tabbed Interface - shown when user joins */}
       <AnimatePresence mode="wait">
         {showTabs && joined && (

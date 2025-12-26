@@ -99,7 +99,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
   
-  Future<bool> signUpWithEmail(String email, String password, String? name) async {
+  Future<bool> signUpWithEmail(String email, String password, String? name, {Map<String, dynamic>? metadata}) async {
     try {
       _isLoading = true;
       _error = null;
@@ -116,11 +116,16 @@ class AuthProvider extends ChangeNotifier {
       print('🔵 Attempting signup with email: ${email.trim()}');
       print('🔵 Supabase URL: ${AppConfig.supabaseUrl}');
       
+      // Combine name with provided metadata
+      final Map<String, dynamic> combinedData = {};
+      if (name != null && name.isNotEmpty) combinedData['name'] = name;
+      if (metadata != null) combinedData.addAll(metadata);
+      
       final response = await _supabase.auth.signUp(
         email: email.trim(),
         password: password,
-        data: name != null && name.isNotEmpty ? {'name': name} : null,
-        emailRedirectTo: null, // Let Supabase handle redirect
+        data: combinedData.isNotEmpty ? combinedData : null,
+        emailRedirectTo: '${AppConfig.deepLinkScheme}://${AppConfig.authCallbackPath}',
       );
       
       print('🔵 Signup response received');

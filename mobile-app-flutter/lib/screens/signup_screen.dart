@@ -33,6 +33,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
     final authProvider = context.read<AuthProvider>();
     
+    // Check for trial flag in URL parameters
+    final router = GoRouter.of(context);
+    final isTrial = router.routeInformationProvider.value.uri.queryParameters['trial'] == 'true';
+    
     // Show loading indicator
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -47,6 +51,10 @@ class _SignupScreenState extends State<SignupScreen> {
       _emailController.text.trim(),
       _passwordController.text,
       _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : null,
+      metadata: {
+        'is_trial': isTrial,
+        'trial_limit_seconds': 420,
+      },
     );
 
     if (mounted) {

@@ -64,24 +64,52 @@ export default function AuthGuard({ children }) {
 
   if (trialExpired) {
     return (
-      <div className="min-h-screen bg-[#fcf8f2] flex flex-col items-center justify-center px-8 text-center">
-        <div className="text-6xl mb-8">✨</div>
-        <h1 className="font-hanken text-3xl font-bold text-[#1e2d2e] mb-4">Your free calm is complete</h1>
-        <p className="font-hanken text-[#1e2d2e]/70 mb-12 max-w-sm">
-          You've reached your 7-minute trial limit. We hope these moments helped you find your center.
-        </p>
-        <button
-          onClick={() => navigate('/signup')}
-          className="w-full max-w-xs h-16 rounded-full bg-[#1e2d2e] text-white font-hanken font-bold text-lg"
+      <div className="min-h-screen bg-[#fcf8f2] flex flex-col items-center justify-center px-8 text-center relative overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#94d1c4]/20 rounded-full blur-[80px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#e52431]/10 rounded-full blur-[80px]" />
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="z-10"
         >
-          Join Magiwork for full access
-        </button>
-        <button
-          onClick={() => supabase.auth.signOut()}
-          className="mt-4 text-sm text-[#1e2d2e]/60 font-medium"
-        >
-          Log Out
-        </button>
+          <div className="text-7xl mb-10">✨</div>
+          <h1 className="font-hanken text-[36px] md:text-[48px] font-bold text-[#1e2d2e] mb-6 leading-tight">
+            Your free calm<br />is complete
+          </h1>
+          <p className="font-hanken text-lg md:text-xl text-[#1e2d2e]/70 mb-14 max-w-md mx-auto leading-relaxed">
+            You've reached your 7-minute trial limit. We hope these small moments of stillness helped you find your center today.
+          </p>
+          
+          <div className="space-y-4 w-full max-w-sm mx-auto">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate('/signup')}
+              className="w-full h-16 rounded-full bg-[#1e2d2e] text-white font-hanken font-bold text-lg shadow-xl shadow-[#1e2d2e]/20"
+            >
+              Unlock full access
+            </motion.button>
+            
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="w-full h-14 text-[#1e2d2e]/40 font-hanken font-bold text-sm hover:text-[#1e2d2e]/60 transition-colors"
+            >
+              Log out and return later
+            </button>
+          </div>
+        </motion.div>
+        
+        {/* Branding badge */}
+        <div className="absolute bottom-12 flex flex-col items-center">
+          <img 
+            src="/assets/logos/magiwork-bw/PNG/B&W_Logo Design - MagiWork (V001)-12.png" 
+            alt="Magiwork"
+            className="h-8 w-8 opacity-20 mb-2"
+          />
+          <span className="text-[10px] font-hanken font-bold text-[#1e2d2e]/20 uppercase tracking-[0.2em]">Magiwork</span>
+        </div>
       </div>
     );
   }
