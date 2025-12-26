@@ -35,16 +35,54 @@ export default function LoginScreen() {
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
+      // Validate input
+      if (!email.trim()) {
+        throw new Error('Please enter your email address.');
+      }
+      if (!password) {
+        throw new Error('Please enter your password.');
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
         password,
       });
 
-      if (error) throw error;
-      navigate('/feed');
+      if (error) {
+        console.error('Supabase login error:', error);
+        // Provide user-friendly error messages
+        let errorMessage = error.message;
+        if (error.message.includes('Invalid login credentials') || 
+            error.message.includes('Invalid credentials')) {
+          errorMessage = 'Invalid email or password. Please try again.';
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Please verify your email address before logging in.';
+        } else if (error.message.includes('User not found')) {
+          errorMessage = 'No account found with this email. Please sign up first.';
+        } else if (error.message.includes('rate limit')) {
+          errorMessage = 'Too many login attempts. Please wait a moment and try again.';
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Verify session was created
+      if (!data?.session) {
+        // Try to get session one more time
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !sessionData?.session) {
+          throw new Error('Login failed. Please try again.');
+        }
+      }
+
+      // Small delay to ensure session is fully established
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      // Navigate to feed
+      navigate('/feed', { replace: true });
+      
     } catch (err) {
-      setError(err.message);
-    } finally {
+      console.error('Login error:', err);
+      setError(err.message || 'An error occurred during login. Please try again.');
       setLoading(false);
     }
   };
