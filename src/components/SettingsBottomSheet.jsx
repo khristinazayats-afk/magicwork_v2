@@ -19,7 +19,7 @@ export default function SettingsBottomSheet({ isOpen, onClose }) {
     { id: 'profile', label: 'My Profile', icon: '👤' },
     { id: 'notifications', label: 'Notifications', icon: '🔔' },
     { id: 'privacy', label: 'Privacy & Safety', icon: '🔒' },
-    { id: 'about', label: 'About Magicwork', icon: '🕯️' },
+    { id: 'about', label: 'About Magicwork', icon: '✨' },
     { id: 'logout', label: 'Logout', icon: '🚪', danger: true }
   ];
   

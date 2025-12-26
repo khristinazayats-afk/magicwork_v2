@@ -104,7 +104,7 @@ export default function AuthGuard({ children }) {
         {/* Branding badge */}
         <div className="absolute bottom-12 flex flex-col items-center">
           <img 
-            src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - Magicwork (V001)-12.png" 
+            src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
             alt="Magicwork"
             className="h-8 w-8 opacity-20 mb-2"
           />
