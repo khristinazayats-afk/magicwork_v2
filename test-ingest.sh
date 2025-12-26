@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "🧪 Testing Audio Ingest Endpoint"
-DEPLOY_URL="https://magicwork.vercel.app"
+DEPLOY_URL="https://magicwork-six.vercel.app"
 echo "Deploy URL: $DEPLOY_URL"
 
 echo ""

@@ -44,7 +44,7 @@ After setting the environment variable:
 After redeploying, test the API:
 
 ```bash
-curl "https://magicwork.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
+curl "https://magicwork-six.vercel.app/api/content-assets?space=Drift%20into%20Sleep"
 ```
 
 **Expected Result** (with database working):

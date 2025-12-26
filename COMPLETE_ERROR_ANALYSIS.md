@@ -198,7 +198,7 @@ This only allows CloudFront, but the app is using direct S3 URLs.
 
 4. **Verify**:
    ```bash
-   curl "https://magicwork.vercel.app/api/content-assets?space=Slow%20Morning"
+   curl "https://magicwork-six.vercel.app/api/content-assets?space=Slow%20Morning"
    ```
    Should return 200 OK with JSON data
 
