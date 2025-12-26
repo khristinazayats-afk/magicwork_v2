@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 import SwipeHint from './SwipeHint';
 import FloatingHeart from './FloatingHeart';
 import ArtistCredit from './ArtistCredit';
@@ -11,7 +12,7 @@ import { gradientStyle } from '../styles/gradients';
 import { useLocalAudio } from '../hooks/useLocalAudio';
 import { useTuneTracking } from '../hooks/useTuneTracking';
 import { usePostEvent } from '../hooks/usePostEvent';
-import { saveSession } from '../utils/sessionTracking';
+import { saveSession, getTotalPracticeTime } from '../utils/sessionTracking';
 import { recordWeeklyPractice } from '../utils/weeklyTracking';
 import { useContentSet } from '../hooks/useContentSet';
 
@@ -114,6 +115,21 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   useEffect(() => {
     let t;
     if (joined && isPlaying) {
+      // Check trial limit every second
+      const checkTrialLimit = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.user_metadata?.is_trial) {
+          const totalSeconds = getTotalPracticeTime() + secondsElapsed;
+          const limitSeconds = user.user_metadata?.trial_limit_seconds || 420;
+          if (totalSeconds >= limitSeconds) {
+            handleFinish();
+            // AuthGuard will handle the redirection after handleFinish resets 'joined'
+          }
+        }
+      };
+      
+      checkTrialLimit();
+
       if (practiceDuration !== null && timeRemaining !== null) {
         // Countdown timer
         t = setInterval(() => {
