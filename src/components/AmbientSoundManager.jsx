@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+// Ambient sounds - commented out until CDN is configured
+// These will fail gracefully with error handling
 const AMBIENT_SOUNDS = [
-  'https://cdn.magicwork.app/ambient/soft-rain.mp3',
-  'https://cdn.magicwork.app/ambient/gentle-waves.mp3',
-  'https://cdn.magicwork.app/ambient/forest-birds.mp3',
-  'https://cdn.magicwork.app/ambient/white-noise.mp3'
+  // 'https://cdn.magicwork.app/ambient/soft-rain.mp3',
+  // 'https://cdn.magicwork.app/ambient/gentle-waves.mp3',
+  // 'https://cdn.magicwork.app/ambient/forest-birds.mp3',
+  // 'https://cdn.magicwork.app/ambient/white-noise.mp3'
 ];
 
 export default function AmbientSoundManager() {
@@ -29,7 +31,7 @@ export default function AmbientSoundManager() {
     const ambientRoutes = ['/feed', '/greeting', '/what-to-expect'];
     const shouldPlay = ambientRoutes.includes(location.pathname);
 
-    if (shouldPlay) {
+    if (shouldPlay && AMBIENT_SOUNDS.length > 0) {
       // Pick a random sound if not already playing
       if (audio.paused) {
         const randomIndex = Math.floor(Math.random() * AMBIENT_SOUNDS.length);
