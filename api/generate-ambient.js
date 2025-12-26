@@ -1,16 +1,14 @@
 // @ts-nocheck
-// POST /api/generate-ambient - Generate ambient meditation sounds using AI
-// Ready for Suno/Udio API integration when API keys are available
+// POST /api/generate-ambient - Generate ambient meditation sounds using Fal.ai API
+// Fal.ai provides a Sound Effect Generation API that creates professional ambient sounds
 
 export const config = { runtime: 'nodejs', maxDuration: 60 };
 
 /**
- * Generate ambient meditation sound using AI
+ * Generate ambient meditation sound using Fal.ai Sound Effect Generation API
  * 
- * TODO: Integrate Suno/Udio APIs for production-quality ambient music generation
- * - Suno: https://suno.ai/api (best for ambient music)
- * - Udio: https://udio.com/api (alternative)
- * - Alternative services: RiffGen, Atmoscapia, SOUNDRAW, Adobe Firefly
+ * API Documentation: https://fal.ai/models/beatoven/sound-effect-generation/api
+ * Requires: FAL_API_KEY environment variable in Vercel
  */
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -23,66 +21,97 @@ export default async function handler(req, res) {
   try {
     const { type = 'soft-rain', emotionalState, spaceName } = req.body;
 
-    // Map ambient types to prompts for AI generation
+    const falApiKey = process.env.FAL_API_KEY;
+    if (!falApiKey) {
+      // Fallback to CDN if API key not configured
+      console.warn('FAL_API_KEY not set, using CDN fallback');
+      const cdnBase = 'https://d3hajr7xji31qq.cloudfront.net';
+      return res.status(200).json({ 
+        audioUrl: `${cdnBase}/ambient/${type}.mp3`,
+        type,
+        note: 'FAL_API_KEY not configured - using CDN fallback'
+      });
+    }
+
+    // Map ambient types to prompts for Fal.ai
     const ambientPrompts = {
-      'soft-rain': 'Gentle rainfall, peaceful meditation ambiance',
-      'gentle-waves': 'Ocean waves, calm meditation atmosphere',
-      'forest-birds': 'Forest nature sounds, peaceful bird calls',
-      'white-noise': 'Soft ambient background, peaceful meditation space',
-      'breathing-space': 'Deep breathing meditation rhythm',
-      'temple-bells': 'Distant peaceful temple bells, meditation atmosphere',
+      'soft-rain': 'gentle rain falling softly, peaceful meditation ambiance, calm weather sounds',
+      'gentle-waves': 'ocean waves gently lapping the shore, calm seaside meditation atmosphere, peaceful water sounds',
+      'forest-birds': 'peaceful forest with distant bird calls, nature meditation ambiance, calm woodland sounds',
+      'white-noise': 'soft ambient background white noise, peaceful meditation space, calming static',
+      'breathing-space': 'deep breathing meditation rhythm, peaceful breathing sounds, calm meditation space',
+      'temple-bells': 'distant peaceful temple bells, meditation atmosphere, calm spiritual sounds',
     };
 
-    const prompt = ambientPrompts[type] || ambientPrompts['soft-rain'];
+    let prompt = ambientPrompts[type] || ambientPrompts['soft-rain'];
     
-    // Enhanced prompt based on context
-    let enhancedPrompt = prompt;
+    // Enhance prompt based on context
     if (emotionalState) {
-      enhancedPrompt += `, ${emotionalState} mood`;
+      prompt += `, ${emotionalState} mood`;
     }
     if (spaceName) {
-      enhancedPrompt += `, ${spaceName} atmosphere`;
+      prompt += `, ${spaceName} atmosphere`;
     }
 
-    // TODO: When Suno/Udio API keys are available, implement actual AI generation:
-    /*
-    const sunoApiKey = process.env.SUNO_API_KEY;
-    if (sunoApiKey) {
-      const response = await fetch('https://api.suno.ai/v1/generate', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${sunoApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt: enhancedPrompt,
-          make_instrumental: true,
-          duration: 120, // 2 minutes loopable
-        }),
-      });
-      const data = await response.json();
-      return res.status(200).json({ audioUrl: data.audio_url, type });
-    }
-    */
+    // Call Fal.ai Sound Effect Generation API
+    // Model: beatoven/sound-effect-generation
+    const falResponse = await fetch('https://fal.run/fal-ai/beatoven/sound-effect-generation', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Key ${falApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        duration: 10, // 10 seconds (can be looped)
+        format: 'mp3',
+      }),
+    });
 
-    // For now, return CloudFront CDN URL (files need to be uploaded to S3)
-    // This allows the feature to work immediately with pre-uploaded sounds
-    // When AI generation is integrated, it will generate and return audio URLs
-    const cdnBase = 'https://d3hajr7xji31qq.cloudfront.net';
-    const fallbackUrl = `${cdnBase}/ambient/${type}.mp3`;
+    if (!falResponse.ok) {
+      const errorText = await falResponse.text();
+      console.error('Fal.ai API error:', falResponse.status, errorText);
+      throw new Error(`Fal.ai API error: ${falResponse.status}`);
+    }
+
+    const falData = await falResponse.json();
     
+    // Fal.ai returns the audio file URL or base64 data
+    // The response format may vary, so we handle both cases
+    let audioUrl = null;
+    
+    if (falData.audio_url) {
+      audioUrl = falData.audio_url;
+    } else if (falData.audio) {
+      audioUrl = falData.audio;
+    } else if (falData.output && falData.output.audio_url) {
+      audioUrl = falData.output.audio_url;
+    } else if (falData.output && falData.output.audio) {
+      audioUrl = falData.output.audio;
+    }
+
+    if (!audioUrl) {
+      console.error('Fal.ai response format unexpected:', falData);
+      throw new Error('Unexpected response format from Fal.ai');
+    }
+
     return res.status(200).json({ 
-      audioUrl: fallbackUrl,
+      audioUrl,
       type,
-      prompt: enhancedPrompt,
-      note: 'AI generation ready - integrate Suno/Udio API when available'
+      prompt,
+      provider: 'fal.ai'
     });
 
   } catch (error) {
     console.error('Ambient sound generation error:', error);
     
-    return res.status(500).json({ 
-      error: error.message || 'Failed to generate ambient sound'
+    // Fallback to CDN if generation fails
+    const cdnBase = 'https://d3hajr7xji31qq.cloudfront.net';
+    return res.status(200).json({ 
+      audioUrl: `${cdnBase}/ambient/${req.body?.type || 'soft-rain'}.mp3`,
+      type: req.body?.type || 'soft-rain',
+      error: error.message,
+      fallback: true
     });
   }
 }
