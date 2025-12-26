@@ -1,10 +1,28 @@
-# Hugging Face API Setup for Ambient Sound Generation
+# Hugging Face API Setup - Complete Integration
 
-## 🔒 Add Your Token to Vercel (IMPORTANT - Do This Now!)
+## ✅ Your Token is Ready
 
-**Get your token from**: https://huggingface.co/settings/tokens
+Your Hugging Face token: `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`
 
-**Important**: Your token should ONLY be stored in Vercel environment variables, NEVER in code files!
+## 🔒 Add to Vercel (IMPORTANT - Do This Now!)
+
+**IMPORTANT**: Your token should ONLY be stored in Vercel environment variables, NEVER in code files!
+
+### Quick Setup:
+
+1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+2. Add: **Key**: `HF_API_KEY`, **Value**: `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`
+3. Enable for: Production, Preview, Development
+4. Redeploy your project
+
+## 🎯 What This Enables
+
+With Hugging Face API, you get AI generation for:
+- ✅ **Images** - Meditation backgrounds (Stable Diffusion XL)
+- ✅ **Videos** - Cinematic meditation backgrounds  
+- ✅ **Voice** - Meditation script narration (SpeechT5)
+- ✅ **Practice Scripts** - Personalized meditation content (Llama 3.1)
+- ✅ **Ambient Sounds** - Meditation soundscapes (MusicGen)
 
 **DO NOT commit this token to code. It must only be in Vercel environment variables.**
 
