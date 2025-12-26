@@ -1,14 +1,21 @@
 // @ts-nocheck
-// POST /api/generate-ambient - Generate ambient meditation sounds using Fal.ai API
-// Fal.ai provides a Sound Effect Generation API that creates professional ambient sounds
+// POST /api/generate-ambient - Generate ambient meditation sounds using Hugging Face Inference API
+// Hugging Face provides access to multiple audio generation models through their unified Inference API
 
 export const config = { runtime: 'nodejs', maxDuration: 60 };
 
 /**
- * Generate ambient meditation sound using Fal.ai Sound Effect Generation API
+ * Generate ambient meditation sound using Hugging Face Inference API
  * 
- * API Documentation: https://fal.ai/models/beatoven/sound-effect-generation/api
- * Requires: FAL_API_KEY environment variable in Vercel
+ * Models available:
+ * - "facebook/musicgen-small" - Music generation
+ * - "facebook/audiocraft" - Audio generation
+ * - "facebook/musicgen-medium" - Higher quality music
+ * - "facebook/text2music" - Text-to-music
+ * 
+ * API Documentation: https://huggingface.co/docs/api-inference/index
+ * Requires: HF_API_KEY (Hugging Face API token) environment variable in Vercel
+ * Get your token: https://huggingface.co/settings/tokens
  */
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -21,26 +28,26 @@ export default async function handler(req, res) {
   try {
     const { type = 'soft-rain', emotionalState, spaceName } = req.body;
 
-    const falApiKey = process.env.FAL_API_KEY;
-    if (!falApiKey) {
+    const hfApiKey = process.env.HF_API_KEY || process.env.HUGGINGFACE_API_KEY;
+    if (!hfApiKey) {
       // Fallback to CDN if API key not configured
-      console.warn('FAL_API_KEY not set, using CDN fallback');
+      console.warn('HF_API_KEY not set, using CDN fallback');
       const cdnBase = 'https://d3hajr7xji31qq.cloudfront.net';
       return res.status(200).json({ 
         audioUrl: `${cdnBase}/ambient/${type}.mp3`,
         type,
-        note: 'FAL_API_KEY not configured - using CDN fallback'
+        note: 'HF_API_KEY not configured - using CDN fallback. Get your token: https://huggingface.co/settings/tokens'
       });
     }
 
-    // Map ambient types to prompts for Fal.ai
+    // Map ambient types to prompts for Hugging Face models
     const ambientPrompts = {
-      'soft-rain': 'gentle rain falling softly, peaceful meditation ambiance, calm weather sounds',
-      'gentle-waves': 'ocean waves gently lapping the shore, calm seaside meditation atmosphere, peaceful water sounds',
-      'forest-birds': 'peaceful forest with distant bird calls, nature meditation ambiance, calm woodland sounds',
-      'white-noise': 'soft ambient background white noise, peaceful meditation space, calming static',
-      'breathing-space': 'deep breathing meditation rhythm, peaceful breathing sounds, calm meditation space',
-      'temple-bells': 'distant peaceful temple bells, meditation atmosphere, calm spiritual sounds',
+      'soft-rain': 'gentle rain falling softly, peaceful meditation ambiance, calm weather sounds, ambient nature',
+      'gentle-waves': 'ocean waves gently lapping the shore, calm seaside meditation atmosphere, peaceful water sounds, ambient ocean',
+      'forest-birds': 'peaceful forest with distant bird calls, nature meditation ambiance, calm woodland sounds, ambient nature',
+      'white-noise': 'soft ambient background white noise, peaceful meditation space, calming static, ambient soundscape',
+      'breathing-space': 'deep breathing meditation rhythm, peaceful breathing sounds, calm meditation space, ambient breathing',
+      'temple-bells': 'distant peaceful temple bells, meditation atmosphere, calm spiritual sounds, ambient meditation',
     };
 
     let prompt = ambientPrompts[type] || ambientPrompts['soft-rain'];
@@ -53,53 +60,64 @@ export default async function handler(req, res) {
       prompt += `, ${spaceName} atmosphere`;
     }
 
-    // Call Fal.ai Sound Effect Generation API
-    // Model: beatoven/sound-effect-generation
-    const falResponse = await fetch('https://fal.run/fal-ai/beatoven/sound-effect-generation', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Key ${falApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        prompt: prompt,
-        duration: 10, // 10 seconds (can be looped)
-        format: 'mp3',
-      }),
-    });
-
-    if (!falResponse.ok) {
-      const errorText = await falResponse.text();
-      console.error('Fal.ai API error:', falResponse.status, errorText);
-      throw new Error(`Fal.ai API error: ${falResponse.status}`);
-    }
-
-    const falData = await falResponse.json();
+    // Use Facebook's MusicGen model via Hugging Face Inference API
+    // This model generates music/audio from text descriptions
+    const modelId = 'facebook/musicgen-small'; // Lightweight model for faster generation
     
-    // Fal.ai returns the audio file URL or base64 data
-    // The response format may vary, so we handle both cases
-    let audioUrl = null;
+    const hfResponse = await fetch(
+      `https://api-inference.huggingface.co/models/${modelId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${hfApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inputs: prompt,
+          parameters: {
+            duration: 10, // 10 seconds (can be looped)
+            top_k: 250,
+            top_p: 0.0,
+            temperature: 1.0,
+            classifier_free_guidance: 3.0,
+          },
+        }),
+      }
+    );
+
+    if (!hfResponse.ok) {
+      // Handle model loading (first request can take time)
+      if (hfResponse.status === 503) {
+        const errorData = await hfResponse.json().catch(() => ({}));
+        return res.status(503).json({ 
+          error: 'Model is loading, please try again in a few seconds',
+          estimated_time: errorData.estimated_time || 20,
+          retry_after: errorData.estimated_time || 20
+        });
+      }
+      
+      const errorText = await hfResponse.text();
+      console.error('Hugging Face API error:', hfResponse.status, errorText);
+      throw new Error(`Hugging Face API error: ${hfResponse.status}`);
+    }
+
+    // Hugging Face returns audio as binary (WAV format)
+    const audioBuffer = await hfResponse.arrayBuffer();
     
-    if (falData.audio_url) {
-      audioUrl = falData.audio_url;
-    } else if (falData.audio) {
-      audioUrl = falData.audio;
-    } else if (falData.output && falData.output.audio_url) {
-      audioUrl = falData.output.audio_url;
-    } else if (falData.output && falData.output.audio) {
-      audioUrl = falData.output.audio;
-    }
-
-    if (!audioUrl) {
-      console.error('Fal.ai response format unexpected:', falData);
-      throw new Error('Unexpected response format from Fal.ai');
-    }
-
+    // Convert to base64 for client-side playback
+    // Or return as blob URL (we'll return base64 data URL)
+    const base64Audio = Buffer.from(audioBuffer).toString('base64');
+    const audioDataUrl = `data:audio/wav;base64,${base64Audio}`;
+    
+    // For production, you might want to upload to S3 and return CDN URL
+    // For now, we'll return the data URL (works but not ideal for large files)
     return res.status(200).json({ 
-      audioUrl,
+      audioUrl: audioDataUrl,
       type,
       prompt,
-      provider: 'fal.ai'
+      provider: 'huggingface',
+      model: modelId,
+      format: 'wav'
     });
 
   } catch (error) {

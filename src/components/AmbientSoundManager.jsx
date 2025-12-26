@@ -36,7 +36,16 @@ export default function AmbientSoundManager() {
       }
 
       const data = await response.json();
-      const audioUrl = data.audioUrl;
+      let audioUrl = data.audioUrl;
+      
+      // Handle Hugging Face data URLs (base64 audio)
+      // If it's a data URL, create a blob URL for better performance
+      if (audioUrl && audioUrl.startsWith('data:audio/')) {
+        // Convert data URL to blob URL
+        const response = await fetch(audioUrl);
+        const blob = await response.blob();
+        audioUrl = URL.createObjectURL(blob);
+      }
       
       // Cache the generated sound URL
       setGeneratedSounds(prev => ({ ...prev, [type]: audioUrl }));

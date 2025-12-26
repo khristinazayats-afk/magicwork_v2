@@ -33,7 +33,7 @@ These variables are only needed for specific features:
 | `POSTGRES_URL_NON_POOLING` | Non-pooling database connection | Database scripts | Local development scripts |
 | `CANVA_API_KEY` | Canva API key for content export | `scripts/export-canva-to-s3.js` | Canva integration |
 | `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront distribution ID | CloudFront invalidation | CDN cache invalidation |
-| `FAL_API_KEY` | Fal.ai API key for ambient sound generation | `api/generate-ambient.js` | AI-generated ambient sounds |
+| `HF_API_KEY` or `HUGGINGFACE_API_KEY` | Hugging Face API token for audio generation | `api/generate-ambient.js` | AI-generated ambient sounds (get token: https://huggingface.co/settings/tokens) |
 | `GOOGLE_SHEET_ID` | Google Sheets ID for CMS sync | `scripts/sync-content-cms.js` | Google Sheets CMS |
 | `GOOGLE_SHEET_NAME` | Google Sheets tab name | `scripts/sync-content-cms.js` | Google Sheets CMS |
 | `GOOGLE_SHEET_PUBLIC` | Whether sheet is public | `scripts/sync-content-cms.js` | Google Sheets CMS |
