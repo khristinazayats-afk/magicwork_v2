@@ -35,7 +35,7 @@ import AppLayout from './components/AppLayout';
 import ProfileScreen from './components/ProfileScreen';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(window.location.pathname === '/' || window.location.pathname === '/greeting');
+  const [showSplash, setShowSplash] = useState(window.location.pathname === '/');
 
   // Check if we're in test mode via URL
   const isTestMode = window.location.search.includes('test=animation');
@@ -85,10 +85,10 @@ function App() {
     <Router>
       <AmbientSoundManager />
       <Routes>
-        <Route path="/" element={<Navigate to="/greeting" replace />} />
-        <Route path="/greeting" element={<GreetingScreen />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/greeting" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginScreen />} />
-        <Route path="/signup" element={<SignupScreen />} />
+        <Route path="/signup" element={<Navigate to="/login" replace />} />
         <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
         
         {/* Protected Routes */}
