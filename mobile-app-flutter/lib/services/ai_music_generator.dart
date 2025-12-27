@@ -1,51 +1,37 @@
 import 'package:dio/dio.dart';
+import '../config/app_config.dart';
 
 class AIMusicGenerator {
   final Dio _dio = Dio();
 
   AIMusicGenerator() {
+    _dio.options.baseUrl = AppConfig.apiBaseUrl;
     _dio.options.headers = {
       'Content-Type': 'application/json',
     };
   }
 
-  /// Generate ambient/meditation music using Suno API
-  /// Note: This assumes a Suno API key is provided in AppConfig
+  /// Generate ambient/meditation music using web API (Hugging Face primary, CDN fallback)
   Future<String?> generateAmbientMusic({
-    required String prompt,
-    required String emotionalState,
-    int duration = 120,
+    String type = 'soft-rain',
+    String? emotionalState,
+    String? spaceName,
   }) async {
     try {
-      // For now, if no Suno key is present, we'll return a high-quality meditation stream URL
-      // as a fallback to ensure the user always has music.
-      const sunoApiKey = String.fromEnvironment('SUNO_API_KEY', defaultValue: '');
-      
-      if (sunoApiKey.isEmpty) {
-        print('Suno API key not found, using high-quality ambient fallback');
-        // Fallback to a high-quality ambient meditation soundscape
-        return 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808f30302.mp3'; // Deep Meditation Ambient
-      }
-
-      final enhancedPrompt = 'Ambient meditation music, $emotionalState mood, $prompt, peaceful, no vocals, high quality';
-      
+      // Call web API endpoint which uses Hugging Face (primary) or CDN (fallback)
       final response = await _dio.post(
-        'https://api.suno.ai/v1/generate', // Example Suno endpoint
+        '/generate-ambient',
         data: {
-          'prompt': enhancedPrompt,
-          'make_instrumental': true,
-          'duration': duration,
+          'type': type,
+          'emotionalState': emotionalState,
+          'spaceName': spaceName,
         },
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $sunoApiKey',
-          },
-        ),
       );
 
-      return response.data['audio_url'] as String?;
+      final audioUrl = response.data['audioUrl'] as String?;
+      return audioUrl;
     } catch (e) {
-      print('Error generating music: $e');
+      print('Error generating ambient music: $e');
       // Fallback URL
       return 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808f30302.mp3';
     }

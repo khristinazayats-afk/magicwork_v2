@@ -7,20 +7,15 @@ class AIVoiceGenerator {
   final Dio _dio = Dio();
 
   AIVoiceGenerator() {
-    _dio.options.baseUrl = AppConfig.openaiBaseUrl;
-    _dio.options.headers = {
-      'Authorization': 'Bearer ${AppConfig.openaiApiKey}',
-    };
+    _dio.options.baseUrl = AppConfig.apiBaseUrl;
   }
 
-  /// Generate speech from text using OpenAI TTS
+  /// Generate speech from text using web API (Hugging Face primary, OpenAI fallback)
   /// 
-  /// Available voices: alloy, echo, fable, onyx, nova, shimmer
-  /// Available formats: mp3, opus, aac, flac
-  /// Speed: 0.25 to 4.0 (default 1.0)
+  /// Available voices: default (maps to appropriate voice based on provider)
   Future<Uint8List?> generateSpeech({
     required String text,
-    String voice = 'nova', // Default to 'nova' (warm, clear voice, good for meditation)
+    String voice = 'default',
     String format = 'mp3',
     double speed = 1.0, // Normal speed
   }) async {
@@ -31,32 +26,12 @@ class AIVoiceGenerator {
         return null;
       }
 
-      if (speed < 0.25 || speed > 4.0) {
-        print('Warning: Speed should be between 0.25 and 4.0, using 1.0');
-        speed = 1.0;
-      }
-
-      final validVoices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
-      if (!validVoices.contains(voice.toLowerCase())) {
-        print('Warning: Invalid voice, using nova');
-        voice = 'nova';
-      }
-
-      final validFormats = ['mp3', 'opus', 'aac', 'flac'];
-      if (!validFormats.contains(format.toLowerCase())) {
-        print('Warning: Invalid format, using mp3');
-        format = 'mp3';
-      }
-
-      // Call OpenAI TTS API
+      // Call web API endpoint which uses Hugging Face (primary) or OpenAI (fallback)
       final response = await _dio.post(
-        '/audio/speech',
+        '/generate-voice',
         data: {
-          'model': 'tts-1', // Use 'tts-1-hd' for higher quality (6x more expensive)
-          'input': text,
-          'voice': voice.toLowerCase(),
-          'response_format': format.toLowerCase(),
-          'speed': speed,
+          'text': text,
+          'voice': voice,
         },
         options: Options(
           responseType: ResponseType.bytes, // Get binary audio data
