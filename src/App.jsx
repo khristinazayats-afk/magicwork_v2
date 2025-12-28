@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
-import FeedWrapper from './components/FeedWrapper';
+import Feed from './components/Feed';
 import AnimationTest from './components/AnimationTest';
 import ShareoutsTestSimple from './components/ShareoutsTestSimple';
 import BoomerangLab from './components/animations/BoomerangLab';
