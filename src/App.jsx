@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
-import Feed from './components/Feed';
+const Feed = lazy(() => import('./components/Feed'));
 import AnimationTest from './components/AnimationTest';
 import ShareoutsTestSimple from './components/ShareoutsTestSimple';
 import BoomerangLab from './components/animations/BoomerangLab';
@@ -112,7 +112,22 @@ function AppContent() {
         {/* Protected Routes */}
         <Route path="/profile-setup" element={<AuthGuard><ProfileSetupScreen /></AuthGuard>} />
         <Route path="/what-to-expect" element={<AuthGuard><WhatToExpectScreen /></AuthGuard>} />
-        <Route path="/feed" element={<AuthGuard><AppLayout><Feed onBack={() => {}} /></AppLayout></AuthGuard>} />
+        <Route 
+          path="/feed" 
+          element={
+            <AuthGuard>
+              <AppLayout>
+                <Suspense fallback={
+                  <div className="min-h-screen bg-[#fcf8f2] flex items-center justify-center">
+                    <div className="w-12 h-12 border-4 border-[#1e2d2e]/10 border-t-[#1e2d2e] rounded-full animate-spin" />
+                  </div>
+                }>
+                  <Feed onBack={() => {}} />
+                </Suspense>
+              </AppLayout>
+            </AuthGuard>
+          } 
+        />
         <Route path="/profile" element={<AuthGuard><AppLayout><ProfileScreen onBack={() => window.history.back()} /></AppLayout></AuthGuard>} />
         
         {/* Fallback */}
