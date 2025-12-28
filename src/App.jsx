@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
 import Feed from './components/Feed';
@@ -36,10 +36,18 @@ import ProfileScreen from './components/ProfileScreen';
 
 function AppContent() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showSplash, setShowSplash] = useState(() => {
-    const path = window.location.pathname;
-    return path === '/' || path === '/greeting';
+    // Only show splash on root path
+    return location.pathname === '/';
   });
+
+  // Redirect /greeting to /login immediately
+  useEffect(() => {
+    if (location.pathname === '/greeting') {
+      navigate('/login', { replace: true });
+    }
+  }, [location.pathname, navigate]);
 
   // Check if we're in test mode via URL
   const isTestMode = window.location.search.includes('test=animation');
