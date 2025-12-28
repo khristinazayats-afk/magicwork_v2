@@ -33,6 +33,7 @@ import AuthGuard from './components/auth/AuthGuard';
 import AmbientSoundManager from './components/AmbientSoundManager';
 import AppLayout from './components/AppLayout';
 import ProfileScreen from './components/ProfileScreen';
+import ProtectedFeedRoute from './components/ProtectedFeedRoute';
 
 function AppContent() {
   const navigate = useNavigate();
@@ -112,16 +113,7 @@ function AppContent() {
         {/* Protected Routes */}
         <Route path="/profile-setup" element={<AuthGuard><ProfileSetupScreen /></AuthGuard>} />
         <Route path="/what-to-expect" element={<AuthGuard><WhatToExpectScreen /></AuthGuard>} />
-        <Route 
-          path="/feed" 
-          element={
-            <AuthGuard>
-              <AppLayout>
-                <FeedWrapper onBack={() => {}} />
-              </AppLayout>
-            </AuthGuard>
-          } 
-        />
+        <Route path="/feed" element={<ProtectedFeedRoute />} />
         <Route path="/profile" element={<AuthGuard><AppLayout><ProfileScreen onBack={() => window.history.back()} /></AppLayout></AuthGuard>} />
         
         {/* Fallback */}
