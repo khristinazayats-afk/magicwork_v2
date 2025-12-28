@@ -55,7 +55,8 @@ export default function AuthGuard({ children }) {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  if (loading) {
+  // Don't render children during loading or if no session
+  if (loading || !session) {
     return (
       <div className="min-h-screen bg-[#fcf8f2] flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-[#1e2d2e]/10 border-t-[#1e2d2e] rounded-full animate-spin" />
@@ -115,7 +116,7 @@ export default function AuthGuard({ children }) {
     );
   }
 
-  return session ? children : null;
+  return children;
 }
 
 

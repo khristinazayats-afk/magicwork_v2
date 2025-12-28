@@ -11,15 +11,25 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'framer-motion': ['framer-motion'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'react-vendor';
+            }
+            if (id.includes('framer-motion')) {
+              return 'framer-motion';
+            }
+            return 'vendor';
+          }
         },
       },
     },
-    // Ensure proper Safari compatibility
-    target: 'es2015',
+    // Ensure proper Safari compatibility - use modern target but compatible syntax
+    target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
     minify: 'esbuild',
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
   },
   server: {
     port: 4000,
