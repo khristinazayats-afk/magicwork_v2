@@ -11,6 +11,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        format: 'es',
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
@@ -24,11 +25,12 @@ export default defineConfig({
         },
       },
     },
-    // Ensure proper Safari compatibility - use modern target but compatible syntax
-    target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
+    // Use ES2017 target for better Safari compatibility
+    target: 'es2017',
     minify: 'esbuild',
     commonjsOptions: {
       include: [/node_modules/],
+      transformMixedEsModules: true,
     },
   },
   server: {

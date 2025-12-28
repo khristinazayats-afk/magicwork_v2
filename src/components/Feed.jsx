@@ -7,8 +7,11 @@ import PracticeCard from './PracticeCard';
 import ProgressStats from './ProgressStats';
 import stationsData from '../data/stations.json';
 
+// Extract stations data at module level to avoid Safari initialization issues
+const INITIAL_STATIONS = stationsData?.stations || [];
+
 export default function Feed({ onBack }) {
-  const [spaces] = useState(stationsData.stations || []);
+  const [spaces] = useState(INITIAL_STATIONS);
   const [greeting, setGreeting] = useState('Good afternoon');
   const [recommendedSpace, setRecommendedSpace] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
