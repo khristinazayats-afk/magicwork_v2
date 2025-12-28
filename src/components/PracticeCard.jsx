@@ -72,6 +72,8 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   const [trialLimit, setTrialLimit] = useState(420);
   const [totalPreExistingTime, setTotalPreExistingTime] = useState(0);
   const [aiJourneyVideos, setAiJourneyVideos] = useState({ start: null, end: null });
+  const [practiceDuration, setPracticeDuration] = useState(null); // Timer duration in seconds - moved before journeyProgress
+  const [timeRemaining, setTimeRemaining] = useState(null); // Countdown timer - moved before journeyProgress
 
   // Calculate journey progress (0 to 1)
   const journeyProgress = useMemo(() => {
