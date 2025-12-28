@@ -1,10 +1,11 @@
 {
-  "name": "Magicwork",
+  "name": "Magicwork — Anxiety off. Presence on.",
   "short_name": "Magicwork",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "background_color": "#fcf8f2",
+  "theme_color": "#fcf8f2",
   "icons": [
     {
       "src": "/icons/icon-192.png",

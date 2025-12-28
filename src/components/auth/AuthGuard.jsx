@@ -30,7 +30,7 @@ export default function AuthGuard({ children }) {
       
       setLoading(false);
       if (!session) {
-        navigate('/greeting');
+        navigate('/login', { replace: true });
       }
     }
 
@@ -48,7 +48,7 @@ export default function AuthGuard({ children }) {
           }
         }
       } else {
-        navigate('/greeting');
+        navigate('/login', { replace: true });
       }
     });
 
