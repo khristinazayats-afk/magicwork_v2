@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
 import Feed from './components/Feed';
@@ -34,8 +34,12 @@ import AmbientSoundManager from './components/AmbientSoundManager';
 import AppLayout from './components/AppLayout';
 import ProfileScreen from './components/ProfileScreen';
 
-function App() {
-  const [showSplash, setShowSplash] = useState(window.location.pathname === '/');
+function AppContent() {
+  const navigate = useNavigate();
+  const [showSplash, setShowSplash] = useState(() => {
+    const path = window.location.pathname;
+    return path === '/' || path === '/greeting';
+  });
 
   // Check if we're in test mode via URL
   const isTestMode = window.location.search.includes('test=animation');
@@ -77,12 +81,18 @@ function App() {
   if (isContentAssetsTest) return <ContentAssetsTest />;
   if (isAllContentAssetsTest) return <AllContentAssetsTest />;
 
+  // Handle splash screen dismissal
+  const handleSplashEnter = () => {
+    setShowSplash(false);
+    navigate('/login', { replace: true });
+  };
+
   if (showSplash) {
-    return <SplashScreen onEnter={() => setShowSplash(false)} />;
+    return <SplashScreen onEnter={handleSplashEnter} />;
   }
 
   return (
-    <Router>
+    <>
       <AmbientSoundManager />
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -100,6 +110,14 @@ function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/feed" replace />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
