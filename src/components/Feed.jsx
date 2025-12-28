@@ -2,10 +2,12 @@ import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import SettingsBottomSheet from './SettingsBottomSheet';
 import HomeScreenSummary from './HomeScreenSummary';
-const ProfileScreen = lazy(() => import('./ProfileScreen'));
 import PracticeCard from './PracticeCard';
 import ProgressStats from './ProgressStats';
 import stationsData from '../data/stations.json';
+
+// Lazy load ProfileScreen to avoid circular dependencies
+const ProfileScreen = lazy(() => import('./ProfileScreen'));
 
 export default function Feed({ onBack }) {
   const [spaces] = useState(stationsData.stations || []);

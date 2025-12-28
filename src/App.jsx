@@ -1,8 +1,8 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
-const Feed = lazy(() => import('./components/Feed'));
+import Feed from './components/Feed';
 import AnimationTest from './components/AnimationTest';
 import ShareoutsTestSimple from './components/ShareoutsTestSimple';
 import BoomerangLab from './components/animations/BoomerangLab';
@@ -117,13 +117,7 @@ function AppContent() {
           element={
             <AuthGuard>
               <AppLayout>
-                <Suspense fallback={
-                  <div className="min-h-screen bg-[#fcf8f2] flex items-center justify-center">
-                    <div className="w-12 h-12 border-4 border-[#1e2d2e]/10 border-t-[#1e2d2e] rounded-full animate-spin" />
-                  </div>
-                }>
-                  <Feed onBack={() => {}} />
-                </Suspense>
+                <Feed onBack={() => {}} />
               </AppLayout>
             </AuthGuard>
           } 

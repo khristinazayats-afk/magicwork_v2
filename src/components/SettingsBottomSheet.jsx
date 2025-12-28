@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, lazy, Suspense } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
+
+// Lazy load ProfileScreen to avoid circular dependencies
 const ProfileScreen = lazy(() => import('./ProfileScreen'));
 
 export default function SettingsBottomSheet({ isOpen, onClose }) {
