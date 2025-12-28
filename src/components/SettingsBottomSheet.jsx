@@ -1,10 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, lazy, Suspense } from 'react';
+import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
-
-// Lazy load ProfileScreen to avoid circular dependencies
-const ProfileScreen = lazy(() => import('./ProfileScreen'));
+import ProfileScreen from './ProfileScreen';
 
 export default function SettingsBottomSheet({ isOpen, onClose }) {
   const [showProfile, setShowProfile] = useState(false);
@@ -26,15 +24,7 @@ export default function SettingsBottomSheet({ isOpen, onClose }) {
   ];
   
   if (showProfile) {
-    return (
-      <Suspense fallback={
-        <div className="fixed inset-0 bg-[#fcf8f2] flex items-center justify-center z-50">
-          <div className="w-12 h-12 border-4 border-[#1e2d2e]/10 border-t-[#1e2d2e] rounded-full animate-spin" />
-        </div>
-      }>
-        <ProfileScreen onBack={() => setShowProfile(false)} />
-      </Suspense>
-    );
+    return <ProfileScreen onBack={() => setShowProfile(false)} />;
   }
 
   return (
