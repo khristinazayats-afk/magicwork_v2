@@ -27,7 +27,7 @@ export default defineConfig({
     },
     // Use ES2017 target for better Safari compatibility
     target: 'es2017',
-    minify: false, // Temporarily disable minification to debug Safari issue
+    minify: 'esbuild',
     commonjsOptions: {
       include: [/node_modules/],
       transformMixedEsModules: true,
