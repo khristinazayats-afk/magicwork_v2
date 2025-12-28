@@ -101,8 +101,6 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   const [showTabs, setShowTabs] = useState(false); // New tabbed interface
   const [showShareouts, setShowShareouts] = useState(false); // P2 (legacy, may be removed)
   const [practiceMode, setPracticeMode] = useState('ambient'); // Always ambient mode now
-  const [practiceDuration, setPracticeDuration] = useState(null); // Timer duration in seconds
-  const [timeRemaining, setTimeRemaining] = useState(null); // Countdown timer
   const [showTimePicker, setShowTimePicker] = useState(false);
   const countdownIntervalRef = useRef(null);
   const videoRef = useRef(null); // Video background ref
