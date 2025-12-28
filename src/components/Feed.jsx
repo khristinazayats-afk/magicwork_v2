@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import SettingsBottomSheet from './SettingsBottomSheet';
 import HomeScreenSummary from './HomeScreenSummary';
-import ProfileScreen from './ProfileScreen';
+const ProfileScreen = lazy(() => import('./ProfileScreen'));
 import PracticeCard from './PracticeCard';
 import ProgressStats from './ProgressStats';
 import stationsData from '../data/stations.json';
@@ -243,7 +243,13 @@ export default function Feed({ onBack }) {
       <SettingsBottomSheet isOpen={showSettings} onClose={() => setShowSettings(false)} />
       
       {showProfile && (
-        <ProfileScreen onBack={() => setShowProfile(false)} />
+        <Suspense fallback={
+          <div className="fixed inset-0 bg-[#fcf8f2] flex items-center justify-center z-50">
+            <div className="w-12 h-12 border-4 border-[#1e2d2e]/10 border-t-[#1e2d2e] rounded-full animate-spin" />
+          </div>
+        }>
+          <ProfileScreen onBack={() => setShowProfile(false)} />
+        </Suspense>
       )}
     </>
   );

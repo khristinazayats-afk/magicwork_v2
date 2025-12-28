@@ -8,6 +8,19 @@ const __dirname = dirname(__filename)
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'framer-motion': ['framer-motion'],
+        },
+      },
+    },
+    // Ensure proper Safari compatibility
+    target: 'es2015',
+    minify: 'esbuild',
+  },
   server: {
     port: 4000,
     host: '0.0.0.0',
