@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import CustomPracticesSidebar from './CustomPracticesSidebar';
 
 export default function AppLayout({ children }) {
   const navigate = useNavigate();
@@ -56,6 +57,17 @@ export default function AppLayout({ children }) {
                 <span className="font-hanken font-semibold">{item.name}</span>
               </button>
             ))}
+
+            {/* Custom Practices Section */}
+            <div className="pt-6 mt-6 border-t border-[#1e2d2e]/5">
+              <CustomPracticesSidebar
+                onStartPractice={(practice) => {
+                  console.log('Starting practice:', practice);
+                  navigate('/practice');
+                  setIsSidebarOpen(false);
+                }}
+              />
+            </div>
           </nav>
 
           <div className="pt-6 border-t border-[#1e2d2e]/5">

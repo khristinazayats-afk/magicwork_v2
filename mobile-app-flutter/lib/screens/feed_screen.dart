@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/analytics_provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/vibe_system.dart';
+import '../models/custom_practice.dart';
+import '../services/custom_practices_service.dart';
 
 const List<Map<String, String>> PRACTICES = [
   {
@@ -66,33 +68,16 @@ class _FeedScreenState extends State<FeedScreen> {
   int _daysActivePracticesThisWeek = 0;
   VibeAnimal _currentVibe = VibeSystem.vibes[0];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  
-  // Custom practices created by user
-  final List<Map<String, String>> _customPractices = [
-    {
-      'name': 'My Evening Wind-Down',
-      'description': 'Personal 10-minute wind-down routine',
-      'duration': '10 min',
-      'color': '#F0E8F5',
-    },
-    {
-      'name': 'Work Stress Relief',
-      'description': 'Quick 5-minute break at work',
-      'duration': '5 min',
-      'color': '#C9E8F5',
-    },
-    {
-      'name': 'Deep Sleep Prep',
-      'description': 'Extended 20-minute sleep meditation',
-      'duration': '20 min',
-      'color': '#D4F5E8',
-    },
-  ];
+  List<CustomPractice> _customPractices = [];
+  List<PracticeFolder> _practiceFolders = [];
+  String? _expandedFolderId;
+  final CustomPracticesService _practicesService = CustomPracticesService();
 
   @override
   void initState() {
     super.initState();
     _loadStats();
+    _loadCustomPractices();
     // Track screen view
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = context.read<AuthProvider>();
@@ -101,6 +86,15 @@ class _FeedScreenState extends State<FeedScreen> {
         'Feed',
         userId: authProvider.user?.id,
       );
+    });
+  }
+
+  Future<void> _loadCustomPractices() async {
+    final practices = await _practicesService.getPractices();
+    final folders = await _practicesService.getFolders();
+    setState(() {
+      _customPractices = practices;
+      _practiceFolders = folders;
     });
   }
 
@@ -146,6 +140,233 @@ class _FeedScreenState extends State<FeedScreen> {
       properties: {'practice': practiceName},
     );
     context.go('/practice');
+  }
+
+  Widget _buildPracticeCard(CustomPractice practice) {
+    final colorHex = practice.color.replaceFirst('#', '');
+    final color = Color(int.parse('FF$colorHex', radix: 16));
+    
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            practice.name,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1e2d2e),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            practice.description,
+            style: TextStyle(
+              fontSize: 11,
+              color: const Color(0xFF1e2d2e).withValues(alpha: 0.7),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                practice.duration,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF1e2d2e),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  _startPractice(practice.name);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Text(
+                    'Start',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1e2d2e),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCreatePracticeDialog() {
+    final nameController = TextEditingController();
+    final descController = TextEditingController();
+    String selectedColor = '#E8D5F2';
+    String selectedDuration = '5 min';
+    String? selectedFolder;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Create Custom Practice'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Practice Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: descController,
+                decoration: const InputDecoration(
+                  labelText: 'Description',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: selectedDuration,
+                decoration: const InputDecoration(
+                  labelText: 'Duration',
+                  border: OutlineInputBorder(),
+                ),
+                items: ['1 min', '5 min', '10 min', '15 min', '20 min', '30 min']
+                    .map((d) => DropdownMenuItem(value: d, child: Text(d)))
+                    .toList(),
+                onChanged: (value) => selectedDuration = value!,
+              ),
+              const SizedBox(height: 16),
+              if (_practiceFolders.isNotEmpty)
+                DropdownButtonFormField<String?>(
+                  value: selectedFolder,
+                  decoration: const InputDecoration(
+                    labelText: 'Folder (Optional)',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    const DropdownMenuItem(value: null, child: Text('No Folder')),
+                    ..._practiceFolders.map((f) => DropdownMenuItem(
+                          value: f.id,
+                          child: Text('${f.icon} ${f.name}'),
+                        )),
+                  ],
+                  onChanged: (value) => selectedFolder = value,
+                ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (nameController.text.isNotEmpty) {
+                await _practicesService.createPractice(
+                  name: nameController.text,
+                  description: descController.text,
+                  duration: selectedDuration,
+                  color: selectedColor,
+                  folderId: selectedFolder,
+                );
+                await _loadCustomPractices();
+                if (context.mounted) Navigator.pop(context);
+              }
+            },
+            child: const Text('Create'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCreateFolderDialog() {
+    final nameController = TextEditingController();
+    String selectedColor = '#E8D5F2';
+    String selectedIcon = '📁';
+
+    final icons = ['📁', '🌙', '☀️', '🌟', '💼', '🏠', '🧘', '🎯', '💚', '🌸'];
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Create Folder'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Folder Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text('Choose Icon:', style: TextStyle(fontSize: 14)),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: icons.map((icon) {
+                return InkWell(
+                  onTap: () => selectedIcon = icon,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(icon, style: const TextStyle(fontSize: 24)),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (nameController.text.isNotEmpty) {
+                await _practicesService.createFolder(
+                  name: nameController.text,
+                  color: selectedColor,
+                  icon: selectedIcon,
+                );
+                await _loadCustomPractices();
+                if (context.mounted) Navigator.pop(context);
+              }
+            },
+            child: const Text('Create'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildStatColumn(String label, String value, String emoji) {
@@ -352,95 +573,126 @@ class _FeedScreenState extends State<FeedScreen> {
               // Custom Practices Section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'My Custom Practices',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1e2d2e),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'My Custom Practices',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF1e2d2e),
+                      ),
                     ),
-                  ),
+                    Row(
+                      children: [
+                        // Add folder button
+                        InkWell(
+                          onTap: () => _showCreateFolderDialog(),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.create_new_folder,
+                              size: 20,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Add practice button
+                        InkWell(
+                          onTap: () => _showCreatePracticeDialog(),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.add_circle_outline,
+                              size: 20,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 12),
               Expanded(
-                child: ListView.builder(
+                child: ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: _customPractices.length,
-                  itemBuilder: (context, index) {
-                    final practice = _customPractices[index];
-                    final colorHex = practice['color']!.replaceFirst('#', '');
-                    final color = Color(int.parse('FF$colorHex', radix: 16));
+                  children: [
+                    // Uncategorized practices
+                    ..._customPractices.where((p) => p.folderId == null).map((practice) {
+                      return _buildPracticeCard(practice);
+                    }),
                     
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    // Folders
+                    ..._practiceFolders.map((folder) {
+                      final isExpanded = _expandedFolderId == folder.id;
+                      final folderPractices = _customPractices.where((p) => p.folderId == folder.id).toList();
+                      
+                      return Column(
                         children: [
-                          Text(
-                            practice['name']!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1e2d2e),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            practice['description']!,
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: const Color(0xFF1e2d2e).withValues(alpha: 0.7),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                practice['duration']!,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF1e2d2e),
-                                ),
+                          // Folder header
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _expandedFolderId = isExpanded ? null : folder.id;
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Color(int.parse('FF${folder.color.replaceFirst('#', '')}', radix: 16)),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              InkWell(
-                                onTap: () {
-                                  _startPractice(practice['name']!);
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.5),
-                                    borderRadius: BorderRadius.circular(6),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    folder.icon,
+                                    style: const TextStyle(fontSize: 20),
                                   ),
-                                  child: const Text(
-                                    'Start',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1e2d2e),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      folder.name,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1e2d2e),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  Text(
+                                    '${folderPractices.length}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Icon(
+                                    isExpanded ? Icons.expand_less : Icons.expand_more,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
+                          
+                          // Folder practices (when expanded)
+                          if (isExpanded)
+                            ...folderPractices.map((practice) {
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: _buildPracticeCard(practice),
+                              );
+                            }),
                         ],
-                      ),
-                    );
-                  },
+                      );
+                    }),
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
