@@ -34,28 +34,14 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFFCF8F2),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logos/magicwork-bw.png',
-              width: 120,
-              height: 120,
-              color: const Color(0xFF1e2d2e),
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.self_improvement, size: 80, color: Color(0xFF172223));
-              },
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Magicwork',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF172223),
-              ),
-            ),
-          ],
+        child: Image.asset(
+          'assets/logos/magicwork-bw.png',
+          width: 200,
+          height: 200,
+          color: const Color(0xFF1e2d2e),
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.self_improvement, size: 120, color: Color(0xFF172223));
+          },
         ),
       ),
     );

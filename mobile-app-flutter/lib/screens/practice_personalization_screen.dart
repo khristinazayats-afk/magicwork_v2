@@ -16,6 +16,30 @@ class _PracticePersonalizationScreenState
   int _selectedDuration = 10; // Default 10 minutes
   bool _isGenerating = false;
   String? _errorMessage;
+  String _selectedLanguage = 'en'; // Default: English
+  String _selectedVoice = 'nova'; // Warm, clear voice
+  String _selectedPace = 'slow'; // slow, moderate, fast
+  bool _includeAmbientSound = true;
+
+  final Map<String, String> _languageOptions = {
+    'en': '🇺🇸 English',
+    'es': '🇪🇸 Español',
+    'fr': '🇫🇷 Français',
+    'de': '🇩🇪 Deutsch',
+    'pt': '🇵🇹 Português',
+    'it': '🇮🇹 Italiano',
+    'ja': '🇯🇵 日本語',
+    'zh': '🇨🇳 中文',
+  };
+
+  final Map<String, String> _voiceOptions = {
+    'nova': 'Nova (Warm & Clear)',
+    'echo': 'Echo (Deep & Calm)',
+    'sage': 'Sage (Soft & Gentle)',
+    'shimmer': 'Shimmer (Bright & Uplifting)',
+  };
+
+  final List<String> _paceOptions = ['Slow', 'Moderate', 'Fast'];
 
   // Get emotional state and intent from route extra
   String? get _emotionalState {
@@ -60,11 +84,14 @@ class _PracticePersonalizationScreenState
     });
 
     try {
-      // Generate practice content using AI
+      // Generate practice content using AI with all customizations
       final practiceContent = await _aiGenerator.generatePracticeContent(
         emotionalState: _emotionalState ?? 'neutral',
         durationMinutes: _selectedDuration,
         intent: _intent,
+        language: _selectedLanguage,
+        voice: _selectedVoice,
+        pace: _selectedPace,
       );
 
       if (practiceContent == null || practiceContent.isEmpty) {
@@ -75,7 +102,7 @@ class _PracticePersonalizationScreenState
         return;
       }
 
-      // Navigate to practice screen with generated content
+      // Navigate to practice screen with generated content and customizations
       if (mounted) {
         context.push(
           '/practice',
@@ -84,6 +111,10 @@ class _PracticePersonalizationScreenState
             'emotionalState': _emotionalState,
             'intent': _intent,
             'durationMinutes': _selectedDuration,
+            'language': _selectedLanguage,
+            'voice': _selectedVoice,
+            'pace': _selectedPace,
+            'ambientSound': _includeAmbientSound,
           },
         );
       }
@@ -113,9 +144,10 @@ class _PracticePersonalizationScreenState
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
               const Text(
                 'Choose your practice duration',
                 style: TextStyle(
@@ -171,6 +203,229 @@ class _PracticePersonalizationScreenState
                     ),
                   );
                 }).toList(),
+              ),
+              const SizedBox(height: 32),
+              // Language selector
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Language 🌍',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1e2d2e),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _languageOptions.entries.map((entry) {
+                        final isSelected = _selectedLanguage == entry.key;
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedLanguage = entry.key;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isSelected ? const Color(0xFF1e2d2e) : Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isSelected ? const Color(0xFF1e2d2e) : Colors.transparent,
+                              ),
+                            ),
+                            child: Text(
+                              entry.value,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: isSelected ? Colors.white : const Color(0xFF1e2d2e),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Voice selector
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Voice 🎤',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1e2d2e),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ...._voiceOptions.entries.map((entry) {
+                      final isSelected = _selectedVoice == entry.key;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedVoice = entry.key;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: isSelected ? const Color(0xFF1e2d2e) : Colors.grey.shade50,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isSelected ? const Color(0xFF1e2d2e) : Colors.grey.shade200,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Radio<String>(
+                                  value: entry.key,
+                                  groupValue: _selectedVoice,
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        _selectedVoice = value;
+                                      });
+                                    }
+                                  },
+                                  fillColor: MaterialStateProperty.all(
+                                    isSelected ? Colors.white : const Color(0xFF1e2d2e),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    entry.value,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: isSelected ? Colors.white : const Color(0xFF1e2d2e),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Pace selector
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Narration Pace ⏱️',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1e2d2e),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _paceOptions.asMap().entries.map((entry) {
+                        final pace = ['slow', 'moderate', 'fast'][entry.key];
+                        final isSelected = _selectedPace == pace;
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedPace = pace;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isSelected ? const Color(0xFF1e2d2e) : Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isSelected ? const Color(0xFF1e2d2e) : Colors.transparent,
+                              ),
+                            ),
+                            child: Text(
+                              entry.value,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: isSelected ? Colors.white : const Color(0xFF1e2d2e),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Ambient sound toggle
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Add Ambient Sound 🎵',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1e2d2e),
+                      ),
+                    ),
+                    Switch(
+                      value: _includeAmbientSound,
+                      onChanged: (value) {
+                        setState(() {
+                          _includeAmbientSound = value;
+                        });
+                      },
+                      activeColor: const Color(0xFF1e2d2e),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 32),
               // Info card
@@ -279,6 +534,7 @@ class _PracticePersonalizationScreenState
                       ),
               ),
             ],
+            ),
           ),
         ),
       ),

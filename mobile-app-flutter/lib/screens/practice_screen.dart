@@ -29,6 +29,12 @@ class _PracticeScreenState extends State<PracticeScreen> {
   bool _isLoadingAudio = false;
   bool _isLoadingMusic = false;
   Timer? _timer;
+  
+  // Customization parameters
+  String _language = 'en';
+  String _voice = 'nova';
+  String _pace = 'slow';
+  bool _includeAmbientSound = true;
 
   @override
   void initState() {
@@ -50,7 +56,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   void _setupAudio() {
     // Set music volume lower than voice
-    _musicPlayer.setVolume(0.3);
+    _musicPlayer.setVolume(_includeAmbientSound ? 0.3 : 0.0);
     _voicePlayer.setVolume(1.0);
     
     // Loop music
@@ -69,13 +75,22 @@ class _PracticeScreenState extends State<PracticeScreen> {
             _emotionalState = extra['emotionalState'] as String?;
             _intent = extra['intent'] as String?;
             _durationMinutes = extra['durationMinutes'] as int? ?? 10;
+            _language = extra['language'] as String? ?? 'en';
+            _voice = extra['voice'] as String? ?? 'nova';
+            _pace = extra['pace'] as String? ?? 'slow';
+            _includeAmbientSound = extra['ambientSound'] as bool? ?? true;
             _remainingSeconds = _durationMinutes * 60;
           });
+        
+        // Re-setup audio with new ambient sound preference
+        _setupAudio();
         
         // Generate audio narration and music
         if (_practiceContent != null && _practiceContent!.isNotEmpty) {
           _generateAudioNarration();
-          _generateBackgroundMusic();
+          if (_includeAmbientSound) {
+            _generateBackgroundMusic();
+          }
         }
       }
     });

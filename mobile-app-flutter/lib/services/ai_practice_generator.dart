@@ -15,6 +15,9 @@ class AIPracticeGenerator {
     required String emotionalState,
     required int durationMinutes,
     String? intent, // User's intent/goal for the practice
+    String language = 'en', // Language code
+    String voice = 'nova', // Voice style
+    String pace = 'slow', // Narration pace
   }) async {
     try {
       // Call web API endpoint which uses Hugging Face (primary) or OpenAI (fallback)
@@ -24,6 +27,9 @@ class AIPracticeGenerator {
           'emotionalState': emotionalState,
           'durationMinutes': durationMinutes,
           'intent': intent,
+          'language': language,
+          'voice': voice,
+          'pace': pace,
         },
       );
 
