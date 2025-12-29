@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/analytics_provider.dart';
 import '../providers/auth_provider.dart';
+import '../utils/vibe_system.dart';
 
 const List<Map<String, String>> PRACTICES = [
   {
@@ -61,6 +62,9 @@ class _FeedScreenState extends State<FeedScreen> {
   int _practicesCompleted = 0;
   int _practiceStreak = 0;
   int _practiceLevel = 1;
+  int _totalMinutesThisWeek = 0;
+  int _daysActivePracticesThisWeek = 0;
+  VibeAnimal _currentVibe = VibeSystem.vibes[0];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   
   // Custom practices created by user
@@ -108,6 +112,16 @@ class _FeedScreenState extends State<FeedScreen> {
       _practiceLevel = (_practicesCompleted ~/ 10) + 1;
       // Get streak from preferences
       _practiceStreak = prefs.getInt('practice_streak') ?? 0;
+      // Get this week's stats
+      _totalMinutesThisWeek = prefs.getInt('minutes_this_week') ?? 45;
+      _daysActivePracticesThisWeek = prefs.getInt('days_active_this_week') ?? 3;
+      
+      // Calculate current vibe
+      _currentVibe = VibeSystem.getCurrentVibe(
+        totalMinutesThisWeek: _totalMinutesThisWeek,
+        daysActivePracticesThisWeek: _daysActivePracticesThisWeek,
+        currentStreak: _practiceStreak,
+      );
     });
   }
 
@@ -265,6 +279,61 @@ class _FeedScreenState extends State<FeedScreen> {
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 20),
+                    // Your Vibe Section
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Your Vibe This Week',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                _currentVibe.emoji,
+                                style: const TextStyle(fontSize: 32),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _currentVibe.name,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1e2d2e),
+                                      ),
+                                    ),
+                                    Text(
+                                      _currentVibe.microcopy,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.grey.shade600,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20),
                     // Practice stats

@@ -282,7 +282,7 @@ class _PracticePersonalizationScreenState
                       ),
                     ),
                     const SizedBox(height: 12),
-                    ...._voiceOptions.entries.map((entry) {
+                    ..._voiceOptions.entries.map((entry) {
                       final isSelected = _selectedVoice == entry.key;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
