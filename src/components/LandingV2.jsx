@@ -10,9 +10,9 @@ export default function LandingV2() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50/30 via-violet-50/20 via-orange-50/20 via-sage-50/40 to-sky-50/30 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-pink-50/30 via-violet-50/20 via-orange-50/20 via-sage-50/40 to-sky-50/30 relative">
       {/* Navigation Header */}
-      <div className="absolute top-0 left-0 right-0 z-50 px-6 md:px-12 py-6">
+      <div className="sticky top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 bg-gradient-to-b from-pink-50/60 to-transparent backdrop-blur-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Left - Contact Button */}
           <button className="px-6 py-2 rounded-full border border-sage-300 text-sage-600 font-medium text-sm hover:bg-sage-50/50 transition-colors">
@@ -43,9 +43,9 @@ export default function LandingV2() {
       </div>
 
       {/* Hero Section - Landscape Background */}
-      <div className="relative min-h-screen flex items-center justify-center">
+      <div className="relative h-screen flex items-center justify-center">
         {/* Landscape Illustration Background */}
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden will-change-transform">
           {/* Sky Gradient - Pastel */}
           <div className="absolute inset-0 bg-gradient-to-b from-sky-50 via-violet-50/30 via-orange-50/20 via-rose-50/20 to-sage-50/40" />
           
@@ -110,8 +110,8 @@ export default function LandingV2() {
       </div>
 
       {/* Lower Content Section */}
-      <div className="relative bg-white min-h-screen flex items-center">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative bg-white py-20">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center will-change-transform">
           {/* Left Side - Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
