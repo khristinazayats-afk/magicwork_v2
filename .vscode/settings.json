@@ -22,5 +22,15 @@
     "[swift]": {
         "editor.defaultFormatter": "sweetpad.sweetpad",
         "editor.formatOnSave": true
-    }
+    },
+    "sweetpad.build.xcodeWorkspacePath": "mobile-app-flutter/ios/Runner.xcworkspace",
+    "github.copilot.chat.alternateGptPrompt.enabled": true,
+    "chat.edits2.enabled": true,
+    "chat.mcp.discovery.enabled": {
+        "claude-desktop": true,
+        "windsurf": true,
+        "cursor-global": true,
+        "cursor-workspace": true
+    },
+    "chat.mcp.gallery.enabled": true
 }

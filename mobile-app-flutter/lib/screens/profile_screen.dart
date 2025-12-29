@@ -18,7 +18,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _totalMinutesThisWeek = 0;
   int _daysActivePracticesThisWeek = 0;
   int _practiceStreak = 0;
-  int _practicesCompleted = 0;
   VibeAnimal _currentVibe = VibeSystem.vibes[0];
   
   @override
@@ -45,7 +44,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _loadStats() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _practicesCompleted = prefs.getInt('practices_completed') ?? 0;
       _practiceStreak = prefs.getInt('practice_streak') ?? 0;
       _totalMinutesThisWeek = prefs.getInt('minutes_this_week') ?? 45;
       _daysActivePracticesThisWeek = prefs.getInt('days_active_this_week') ?? 3;

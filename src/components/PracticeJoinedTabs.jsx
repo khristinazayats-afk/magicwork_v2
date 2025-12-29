@@ -94,8 +94,8 @@ export default function PracticeJoinedTabs({
           right: 0,
           bottom: 0,
           // Use dynamic viewport height for mobile (accounts for browser UI)
-          height: showFullScreenCounter ? '100vh' : 'calc(100dvh - env(safe-area-inset-top, 0px) - 73px)',
-          maxHeight: showFullScreenCounter ? '100vh' : 'calc(100dvh - env(safe-area-inset-top, 0px) - 73px)',
+          height: showFullScreenCounter ? '100dvh' : 'calc(100dvh - env(safe-area-inset-top, 0px) - 73px)',
+          maxHeight: showFullScreenCounter ? '100dvh' : 'calc(100dvh - env(safe-area-inset-top, 0px) - 73px)',
           overflowY: showFullScreenCounter ? 'hidden' : 'auto',
           WebkitOverflowScrolling: showFullScreenCounter ? 'auto' : 'touch',
           overscrollBehavior: 'contain',

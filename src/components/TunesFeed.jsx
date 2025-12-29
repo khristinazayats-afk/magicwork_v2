@@ -642,7 +642,7 @@ export default function TunesFeed({
   return (
     <div 
       ref={scrollContainerRef}
-      className="w-full h-full overflow-y-auto px-4 md:px-5 snap-y snap-mandatory relative"
+      className="w-full h-full overflow-y-auto px-4 md:px-5 snap-y snap-mandatory relative scroll-container"
       style={{ 
         position: 'absolute',
         top: headerHeight,

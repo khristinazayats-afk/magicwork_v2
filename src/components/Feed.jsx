@@ -6,6 +6,7 @@ import ProfileScreen from './ProfileScreen';
 import PracticeCard from './PracticeCard';
 import ProgressStats from './ProgressStats';
 import stationsData from '../data/stations.json';
+import { supabase } from '../lib/supabase';
 
 // Extract stations data at module level to avoid Safari initialization issues
 const INITIAL_STATIONS = stationsData?.stations || [];
@@ -18,6 +19,7 @@ export default function Feed({ onBack }) {
   const [showProfile, setShowProfile] = useState(false);
   const [activeSpaceIndex, setActiveSpaceIndex] = useState(null);
   const [swipeHintReady] = useState(true);
+  const [isAdminDesktop, setIsAdminDesktop] = useState(false);
   
   const scrollContainerRef = useRef(null);
   const isScrollingRef = useRef(false);
@@ -113,7 +115,7 @@ export default function Feed({ onBack }) {
     <>
       <div 
         ref={scrollContainerRef}
-        className={`full-viewport w-full ${activeSpaceIndex === null ? 'overflow-y-scroll md:overflow-y-auto' : 'overflow-hidden'}`}
+        className={`full-viewport w-full scroll-container ${activeSpaceIndex === null ? 'overflow-y-scroll md:overflow-y-auto' : 'overflow-hidden'}`}
         style={{ 
           margin: 0, 
           padding: 0,
@@ -143,9 +145,21 @@ export default function Feed({ onBack }) {
               animate={{ opacity: 1, y: 0 }}
               className="mb-12"
             >
-              <h1 className="font-hanken font-bold text-[32px] md:text-[48px] text-[#1e2d2e] mb-4">
-                {greeting}
-              </h1>
+              <div className="flex items-center justify-between mb-2">
+                <h1 className="font-hanken font-bold text-[32px] md:text-[48px] text-[#1e2d2e]">
+                  {greeting}
+                </h1>
+                {isAdminDesktop && (
+                  <a
+                    href="/admin/analytics"
+                    className="hidden md:inline-flex px-3 py-2 rounded-xl bg-[#1e2d2e]/10 hover:bg-[#1e2d2e]/20 text-[#1e2d2e] text-sm font-medium"
+                    title="Admin Analytics"
+                  >
+                    Admin
+                  </a>
+                )}
+              </div>
+              <div className="mb-4" />
               
               <div className="flex flex-col md:flex-row gap-6 mb-12">
                 <ProgressStats />
@@ -158,10 +172,9 @@ export default function Feed({ onBack }) {
                     Recommended for you
                   </h2>
                   <motion.div
-                    whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
                     onClick={() => handleJoin(spaces.indexOf(recommendedSpace))}
-                    className="bg-[#94d1c4]/20 rounded-[32px] p-8 border-2 border-[#94d1c4]/30 cursor-pointer flex items-center justify-between group overflow-hidden relative"
+                    className="bg-[#94d1c4]/20 rounded-[32px] p-8 border-2 border-[#94d1c4]/30 cursor-pointer flex items-center justify-between group overflow-hidden relative hover:scale-[1.01] transition-transform duration-150 will-change-transform"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="relative z-10">
@@ -189,10 +202,9 @@ export default function Feed({ onBack }) {
               {spaces.map((space, index) => (
                 <motion.div
                   key={`grid-${space.name}-${index}`}
-                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleJoin(index)}
-                  className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end"
+                  className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end hover:scale-[1.02] transition-transform duration-150 will-change-transform"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-[#1e2d2e]/5 group-hover:from-white/20 transition-all" />
                   <div className="relative z-10">
@@ -242,6 +254,25 @@ export default function Feed({ onBack }) {
           })}
         </div>
       </div>
+      
+      {/* Desktop/Grid PracticeCard Overlay - shown when card clicked */}
+      {activeSpaceIndex !== null && (
+        <div className="hidden md:block fixed inset-0 z-50">
+          <PracticeCard
+            station={spaces[activeSpaceIndex]}
+            isActive={true}
+            hasInteracted={true}
+            showFirstTimeHint={false}
+            swipeHintReady={true}
+            onBack={handleLeave}
+            currentIndex={activeSpaceIndex + 1}
+            totalPractices={spaces.length}
+            onJoin={() => handleJoin(activeSpaceIndex)}
+            onLeave={handleLeave}
+            isCurrentlyActive={true}
+          />
+        </div>
+      )}
       
       <SettingsBottomSheet isOpen={showSettings} onClose={() => setShowSettings(false)} />
       

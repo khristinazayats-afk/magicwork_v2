@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/desktop-commander"]
+    },
+    "xcode-build": {
+      "command": "npx",
+      "args": ["-y", "xcodebuildmcp@latest"],
+      "env": {
+        "XCODEBUILDMCP_DEBUG": "true",
+        "XCODEBUILDMCP_DYNAMIC_TOOLS": "true",
+        "INCREMENTAL_BUILDS_ENABLED": "false"
+      }
+    },
+    "swift-sdk": {
+      "command": "node",
+      "args": ["./external/swift-sdk/bin/mcp-server.js"]
+    }
+  }
+}

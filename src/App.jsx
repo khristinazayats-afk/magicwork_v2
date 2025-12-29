@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { TenantProvider } from './context/TenantContext';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
 import Feed from './components/Feed';
@@ -36,6 +37,8 @@ import ProfileScreen from './components/ProfileScreen';
 import ProtectedFeedRoute from './components/ProtectedFeedRoute';
 import FeedV2 from './components/FeedV2';
 import DashboardV2 from './components/DashboardV2';
+import AdminAnalyticsDashboard from './components/AdminAnalyticsDashboard';
+import AdminGuard from './components/auth/AdminGuard';
 import LoginV2 from './components/auth/LoginV2';
 import LandingV2 from './components/LandingV2';
 
@@ -83,7 +86,7 @@ function AppContent() {
   if (isPracticeComplete) return <PracticeCompleteScreen />;
   if (isAuraRingDemo) return <AuraRingDemo />;
   if (isAuraGlowDemo) return <AuraGlowDemo />;
-  if (isHomeScreen) return <div className="bg-[#fcf8f2] min-h-screen"><HomeScreen /></div>;
+  if (isHomeScreen) return <div className="bg-[#fcf8f2] min-h-[100dvh]"><HomeScreen /></div>;
   if (isGardenStatesDemo) return <GardenStatesDemo />;
   if (isTreeGrowthDemo) return <TreeGrowthDemo />;
   if (isLottieTest) return <LottieTest />;
@@ -119,6 +122,7 @@ function AppContent() {
         <Route path="/login-v2" element={<LoginV2 />} />
         <Route path="/feed-v2" element={<AuthGuard><FeedV2 /></AuthGuard>} />
         <Route path="/dashboard-v2" element={<AuthGuard><DashboardV2 /></AuthGuard>} />
+        <Route path="/admin/analytics" element={<AuthGuard><AdminGuard><AdminAnalyticsDashboard /></AdminGuard></AuthGuard>} />
         
         {/* Protected Routes */}
         <Route path="/profile-setup" element={<AuthGuard><ProfileSetupScreen /></AuthGuard>} />
@@ -136,7 +140,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <TenantProvider>
+        <AppContent />
+      </TenantProvider>
     </Router>
   );
 }

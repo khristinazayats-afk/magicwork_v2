@@ -1,12 +1,46 @@
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomPracticesSidebar from './CustomPracticesSidebar';
+import { supabase } from '../lib/supabase';
 
 export default function AppLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAdminDesktop, setIsAdminDesktop] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    async function check() {
+      try {
+        const width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 1024) {
+          if (mounted) setIsAdminDesktop(false);
+          return;
+        }
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          if (mounted) setIsAdminDesktop(false);
+          return;
+        }
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('role, is_admin')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        const isAdmin = Boolean(
+          (profile && (profile.role === 'admin' || profile.is_admin === true)) ||
+          (user.email && user.email.endsWith('@magicwork.app'))
+        );
+        if (mounted) setIsAdminDesktop(isAdmin);
+      } catch {
+        if (mounted) setIsAdminDesktop(false);
+      }
+    }
+    check();
+    return () => { mounted = false; };
+  }, []);
 
   const navItems = [
     { name: 'Practice', path: '/feed', icon: '🧘' },
@@ -36,7 +70,18 @@ export default function AppLayout({ children }) {
       >
         <div className="h-full flex flex-col p-6">
           <div className="mb-12">
-            <h1 className="font-hanken font-bold text-[24px] text-[#1e2d2e]">Magicwork</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="font-hanken font-bold text-[24px] text-[#1e2d2e]">Magicwork</h1>
+              {isAdminDesktop && (
+                <a
+                  href="/admin/analytics"
+                  className="hidden md:inline-flex px-3 py-2 rounded-xl bg-[#1e2d2e]/10 hover:bg-[#1e2d2e]/20 text-[#1e2d2e] text-sm font-medium"
+                  title="Admin Analytics"
+                >
+                  Admin
+                </a>
+              )}
+            </div>
           </div>
 
           <nav className="flex-1 space-y-2">
@@ -90,7 +135,7 @@ export default function AppLayout({ children }) {
       </motion.aside>
 
       {/* Main Content */}
-      <main className="flex-1 relative overflow-y-auto">
+      <main className="flex-1 relative overflow-y-auto scroll-smooth">
         {children}
       </main>
 

@@ -31,9 +31,6 @@ class _PracticeScreenState extends State<PracticeScreen> {
   Timer? _timer;
   
   // Customization parameters
-  String _language = 'en';
-  String _voice = 'nova';
-  String _pace = 'slow';
   bool _includeAmbientSound = true;
 
   @override
@@ -75,9 +72,6 @@ class _PracticeScreenState extends State<PracticeScreen> {
             _emotionalState = extra['emotionalState'] as String?;
             _intent = extra['intent'] as String?;
             _durationMinutes = extra['durationMinutes'] as int? ?? 10;
-            _language = extra['language'] as String? ?? 'en';
-            _voice = extra['voice'] as String? ?? 'nova';
-            _pace = extra['pace'] as String? ?? 'slow';
             _includeAmbientSound = extra['ambientSound'] as bool? ?? true;
             _remainingSeconds = _durationMinutes * 60;
           });

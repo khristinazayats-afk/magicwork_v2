@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { availablePractices } from '../../constants/availablePractices';
 import { useContentSet } from '../../hooks/useContentSet';
+import { trackPracticeStarted, trackPracticeCompleted } from '../../services/analytics';
 
 export default function PracticesTab({
   station,
@@ -32,6 +32,8 @@ export default function PracticesTab({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isGeneratingVoice, setIsGeneratingVoice] = useState(false);
   const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  const [previewImageUrl, setPreviewImageUrl] = useState(null);
+  const [activeBackgroundUrl, setActiveBackgroundUrl] = useState(null);
   const [error, setError] = useState(null);
 
   const narrationAudioRef = useRef(new Audio());
@@ -44,12 +46,7 @@ export default function PracticesTab({
   const libraryVideoUrl = contentSet?.visual?.cdn_url || null;
   
   // Use generated video if available, otherwise fallback to library
-  const activeVideoUrl = generatedVideoUrl || libraryVideoUrl;
-
-  // Get practices for this station
-  const stationPractices = availablePractices.filter(p => 
-    p.spaces && p.spaces.includes(station?.name)
-  ) || [];
+  const activeVideoUrl = libraryVideoUrl;
 
   const emotionalStates = [
     { value: 'calm', label: 'Calm', icon: '😌', color: '#4CAF50' },
@@ -75,6 +72,12 @@ export default function PracticesTab({
     setFlowFlowStep('generating');
 
     try {
+      await trackPracticeStarted({
+        spaceName: station?.name,
+        intent: selectedIntent,
+        emotionalState,
+        durationSeconds: practiceDuration || 0,
+      });
       // 1. Generate meditation script
       const response = await fetch('/api/generate-practice', {
         method: 'POST',
@@ -90,6 +93,20 @@ export default function PracticesTab({
 
       const data = await response.json();
       setGeneratedScript(data.content);
+      // Generate preview image (guided meditation thumbnail)
+      try {
+        const previewRes = await fetch('/api/generate-preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emotionalState, intent: selectedIntent, spaceName: station?.name }),
+        });
+        if (previewRes.ok) {
+          const previewData = await previewRes.json();
+          setPreviewImageUrl(previewData.imageUrl || null);
+        }
+      } catch (e) {
+        console.log('Preview image generation skipped:', e);
+      }
       
       // 2. Generate cinematic AI Journey (Start & End stages)
       setIsGeneratingVideo(true);
@@ -116,6 +133,8 @@ export default function PracticesTab({
           
           console.log('[AI] Generated visual journey videos:', newVideos);
           setJourneyVideos(newVideos);
+          // Set initial background to start stage or library fallback
+          setActiveBackgroundUrl(newVideos.start || libraryVideoUrl || null);
           
           if (onVideoGenerated) {
             // Send the journey object to the parent
@@ -182,6 +201,18 @@ export default function PracticesTab({
     }
   };
 
+  // Switch background to "end" stage halfway through the session if available
+  useEffect(() => {
+    if (flowStep === 'practice' && practiceDuration && journeyVideos?.end) {
+      const halfway = Math.floor(practiceDuration / 2);
+      if (typeof timeRemaining === 'number' && timeRemaining <= halfway) {
+        if (activeBackgroundUrl !== journeyVideos.end) {
+          setActiveBackgroundUrl(journeyVideos.end);
+        }
+      }
+    }
+  }, [flowStep, practiceDuration, timeRemaining, journeyVideos, activeBackgroundUrl]);
+
   // Handle practice completion
   const handleCompletePractice = () => {
     if (countdownIntervalRef.current) {
@@ -208,6 +239,12 @@ export default function PracticesTab({
         emotionalState
       });
     }
+    trackPracticeCompleted({
+      spaceName: station?.name,
+      intent: selectedIntent,
+      emotionalState,
+      durationSeconds: practiceDuration || 0,
+    });
     setActivePracticeId(null);
     setPracticeDuration(null);
     setTimeRemaining(null);
@@ -266,24 +303,7 @@ export default function PracticesTab({
               </div>
             </motion.div>
 
-            {stationPractices.map((practice) => (
-              <motion.div
-                key={practice.id}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  setActivePracticeId(practice.id);
-                  setFlowFlowStep('emotional_checkin');
-                }}
-                className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 border border-[#1e2d2e]/10 cursor-pointer"
-              >
-                <h3 className="font-hanken text-lg font-semibold text-[#1e2d2e] mb-2">
-                  {practice.title}
-                </h3>
-                <p className="text-[#1e2d2e]/70 font-hanken text-sm">
-                  {practice.description}
-                </p>
-              </motion.div>
-            ))}
+            {/* Live-only: Static practice lists removed */}
           </div>
         </div>
       </div>
@@ -421,13 +441,20 @@ export default function PracticesTab({
 
   // 5. Active Practice View
   if (flowStep === 'practice') {
-    const practice = stationPractices.find(p => p.id === activePracticeId) || {
+    const practice = {
       title: 'Personalized AI Practice',
       description: generatedScript
     };
 
     return (
       <div className="w-full h-full relative flex flex-col">
+        {/* Cinematic background image */}
+        {activeBackgroundUrl && (
+          <div className="absolute inset-0 -z-10">
+            <img src={activeBackgroundUrl} alt="Meditation background" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-white/20 backdrop-blur-sm" />
+          </div>
+        )}
         {/* Practice Content */}
         <div className="flex-1 flex flex-col p-6 overflow-y-auto">
           <div className="flex justify-between items-center mb-8 bg-white/40 backdrop-blur-md p-4 rounded-2xl sticky top-0 z-10">
@@ -458,6 +485,11 @@ export default function PracticesTab({
               animate={{ opacity: 1, y: 0 }}
               className="bg-white/80 backdrop-blur-lg rounded-[40px] p-8 md:p-12 mb-8 border border-white/40 shadow-2xl relative overflow-hidden"
             >
+              {previewImageUrl && (
+                <div className="mb-6 rounded-2xl overflow-hidden">
+                  <img src={previewImageUrl} alt="Guided meditation preview" className="w-full h-auto"/>
+                </div>
+              )}
               <div className="absolute top-0 right-0 p-8 text-4xl opacity-10 select-none">✨</div>
               <p className="text-[#1e2d2e] font-hanken text-lg md:text-xl leading-relaxed whitespace-pre-wrap relative z-10">
                 {generatedScript || practice.description}
