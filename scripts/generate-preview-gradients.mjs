@@ -60,11 +60,11 @@ const practices = {
   }
 };
 
-async function createGradientImage(filename, colors, emoji) {
+async function createGradientImage(filename, colors) {
   const width = 800;
   const height = 1000;
 
-  // Create SVG with gradient and emoji
+  // Create SVG with gradient and subtle decorative shapes (no fonts)
   const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -75,9 +75,9 @@ async function createGradientImage(filename, colors, emoji) {
       </linearGradient>
     </defs>
     <rect width="${width}" height="${height}" fill="url(#grad)"/>
-    <text x="50%" y="50%" font-size="200" text-anchor="middle" dominant-baseline="middle" opacity="0.3">
-      ${emoji}
-    </text>
+    <circle cx="${width * 0.2}" cy="${height * 0.25}" r="120" fill="${colors[0]}" opacity="0.12"/>
+    <circle cx="${width * 0.8}" cy="${height * 0.75}" r="180" fill="${colors[3]}" opacity="0.10"/>
+    <rect x="${width * 0.1}" y="${height * 0.7}" width="${width * 0.3}" height="40" fill="${colors[1]}" opacity="0.08"/>
   </svg>`;
 
   const outputPath = path.join(path.dirname(__dirname), 'public', 'assets', 'practice-previews', `${filename}.jpg`);
@@ -109,7 +109,7 @@ async function generateAllImages() {
   let failed = 0;
 
   for (const [filename, config] of Object.entries(practices)) {
-    const success = await createGradientImage(filename, config.gradient, config.emoji);
+    const success = await createGradientImage(filename, config.gradient);
     if (success) {
       successful++;
     } else {
