@@ -41,14 +41,12 @@ import AdminAnalyticsDashboard from './components/AdminAnalyticsDashboard';
 import AdminGuard from './components/auth/AdminGuard';
 import LoginV2 from './components/auth/LoginV2';
 import LandingV2 from './components/LandingV2';
+import LandingPage from './components/LandingPage';
 
 function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [showSplash, setShowSplash] = useState(() => {
-    // Only show splash on root path
-    return location.pathname === '/';
-  });
+  const [showSplash, setShowSplash] = useState(false); // Disabled splash to show landing page directly
 
   // Redirect /greeting to /login immediately
   useEffect(() => {
@@ -111,14 +109,15 @@ function AppContent() {
     <>
       <AmbientSoundManager />
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/landing-v2" element={<LandingV2 />} />
         <Route path="/greeting" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/signup" element={<Navigate to="/login" replace />} />
         <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
         
         {/* V2 Routes - New Design */}
-        <Route path="/landing-v2" element={<LandingV2 />} />
         <Route path="/login-v2" element={<LoginV2 />} />
         <Route path="/feed-v2" element={<AuthGuard><FeedV2 /></AuthGuard>} />
         <Route path="/dashboard-v2" element={<AuthGuard><DashboardV2 /></AuthGuard>} />
