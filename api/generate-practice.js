@@ -77,11 +77,11 @@ ${intentGuidance ? `- ${intentGuidance}\n` : ''}- Include natural pauses and mom
 
 Return only the meditation script content, without any additional formatting or explanation.`;
 
-    // Use Llama 3.1 8B Instruct for fast, high-quality generation
-    const modelId = 'meta-llama/Meta-Llama-3.1-8B-Instruct';
+    // Use Llama 3.1-8B via Inference Providers (cheapest routing)
+    const modelId = 'meta-llama/Llama-3.1-8B-Instruct:cheapest';
     
     const hfResponse = await fetch(
-      `https://api-inference.huggingface.co/models/${modelId}`,
+      'https://router.huggingface.co/v1/chat/completions',
       {
         method: 'POST',
         headers: {
@@ -89,53 +89,43 @@ Return only the meditation script content, without any additional formatting or 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          inputs: `<|begin_of_text|><|start_header_id|>system<|end_header_id|>
-
-You are an expert meditation teacher who creates personalized, accessible, and supportive guided meditation scripts. Your scripts are warm, clear, and help people find calm and presence.<|eot_id|><|start_header_id|>user<|end_header_id|>
-
-${prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>`,
-          parameters: {
-            max_new_tokens: Math.floor(totalWords * 1.5),
-            temperature: 0.7,
-            top_p: 0.9,
-            return_full_text: false,
-          },
+          model: modelId,
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert meditation teacher who creates personalized, accessible, and supportive guided meditation scripts. Your scripts are warm, clear, and help people find calm and presence.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          max_tokens: Math.floor(totalWords * 1.5),
+          temperature: 0.7,
+          top_p: 0.9
         }),
       }
     );
 
     if (!hfResponse.ok) {
-      if (hfResponse.status === 503) {
-        const errorData = await hfResponse.json().catch(() => ({}));
-        return res.status(503).json({ 
-          error: 'Model is loading, please try again in a few seconds',
-          estimated_time: errorData.estimated_time || 30
-        });
-      }
-      
       const errorText = await hfResponse.text();
-      console.error('Hugging Face LLM error:', hfResponse.status, errorText);
-      throw new Error(`Hugging Face API error: ${hfResponse.status}`);
+      console.error('HF Inference Providers error:', hfResponse.status, errorText);
+      throw new Error(`HF Inference Providers error: ${hfResponse.status}`);
     }
 
     const hfData = await hfResponse.json();
     
-    // Extract generated text from response
-    // Format varies by model, handle common formats
+    // Extract content from OpenAI-compatible response format
     let generatedContent = '';
-    if (Array.isArray(hfData) && hfData[0]?.generated_text) {
-      generatedContent = hfData[0].generated_text;
-    } else if (hfData.generated_text) {
-      generatedContent = hfData.generated_text;
-    } else if (typeof hfData === 'string') {
-      generatedContent = hfData;
+    if (hfData.choices && hfData.choices[0]?.message?.content) {
+      generatedContent = hfData.choices[0].message.content;
     } else {
-      console.error('Unexpected Hugging Face response format:', hfData);
-      throw new Error('Unexpected response format from Hugging Face');
+      console.error('Unexpected Inference Providers response format:', hfData);
+      throw new Error('Unexpected response format from Inference Providers');
     }
 
-    // Clean up any model-specific formatting
-    generatedContent = generatedContent.trim().replace(/<\|.*?\|>/g, '').trim();
+    // Clean up any remaining formatting
+    generatedContent = generatedContent.trim();
 
     if (!generatedContent) {
       return res.status(500).json({ error: 'Failed to generate content' });

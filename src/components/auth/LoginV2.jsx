@@ -140,6 +140,9 @@ export default function LoginV2() {
               src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
               alt="Magicwork"
               className="w-12 h-12"
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
             />
           </div>
           <h1 className="text-3xl font-serif font-bold text-sage-800 mb-2">

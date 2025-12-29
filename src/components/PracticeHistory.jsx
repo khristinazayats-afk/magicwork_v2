@@ -92,7 +92,7 @@ export default function PracticeHistory({ onBack }) {
       </div>
       
       {/* Content */}
-      <div className="h-screen overflow-y-auto pt-24 pb-8 px-6">
+      <div className="h-screen overflow-y-auto scroll-smooth pt-24 pb-8 px-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           <motion.div

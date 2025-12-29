@@ -34,7 +34,7 @@ export default function StepsScreen({ onContinue, onBack }) {
             <ol className="grid grid-rows-3 gap-7 md:gap-10 md:max-w-2xl w-full md:w-auto">
               <li className="grid grid-cols-[2.5rem_1fr] md:grid-cols-[3rem_1fr] items-center gap-4 md:gap-5">
                 <div className="w-8 md:w-10 flex justify-center">
-                  <img src="/assets/icons/leaf.svg" alt="Leaf icon" className="w-7 h-7 md:w-10 md:h-10" />
+                  <img src="/assets/icons/leaf.svg" alt="Leaf icon" className="w-7 h-7 md:w-10 md:h-10" loading="lazy" decoding="async" fetchpriority="low" />
                 </div>
                 <div className="flex-1">
                   <p className="font-hanken font-semibold text-[#172223] text-base md:text-xl leading-snug uppercase">9 Calm Spaces</p>
@@ -43,7 +43,7 @@ export default function StepsScreen({ onContinue, onBack }) {
               </li>
               <li className="grid grid-cols-[2.5rem_1fr] md:grid-cols-[3rem_1fr] items-center gap-4 md:gap-5">
                 <div className="w-8 md:w-10 flex justify-center">
-                  <img src="/assets/icons/heart.svg" alt="Heart icon" className="w-7 h-7 md:w-10 md:h-10" />
+                  <img src="/assets/icons/heart.svg" alt="Heart icon" className="w-7 h-7 md:w-10 md:h-10" loading="lazy" decoding="async" fetchpriority="low" />
                 </div>
                 <div className="flex-1">
                   <p className="font-hanken font-semibold text-[#172223] text-base md:text-xl leading-snug uppercase">Practice Presence</p>
@@ -52,7 +52,7 @@ export default function StepsScreen({ onContinue, onBack }) {
               </li>
               <li className="grid grid-cols-[2.5rem_1fr] md:grid-cols-[3rem_1fr] items-center gap-4 md:gap-5">
                 <div className="w-8 md:w-10 flex justify-center">
-                  <img src="/assets/icons/yogi.svg" alt="Yogi icon" className="w-7 h-7 md:w-10 md:h-10" />
+                  <img src="/assets/icons/yogi.svg" alt="Yogi icon" className="w-7 h-7 md:w-10 md:h-10" loading="lazy" decoding="async" fetchpriority="low" />
                 </div>
                 <div className="flex-1">
                   <p className="font-hanken font-semibold text-[#172223] text-base md:text-xl leading-snug uppercase">Nervous System, Strong</p>

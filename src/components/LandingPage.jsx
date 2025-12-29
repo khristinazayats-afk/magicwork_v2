@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import AmbientSoundManager from './AmbientSoundManager';
+import LandingAudioPlayer from './LandingAudioPlayer';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#fcf8f2] font-hanken">
       {/* Ambient Sound Manager */}
-      {isSoundPlaying && <AmbientSoundManager ambientSound={ambientSound} />}
+      <LandingAudioPlayer ambientSound={ambientSound} isPlaying={isSoundPlaying} />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#1e2d2e]/10">
@@ -187,7 +187,7 @@ export default function LandingPage() {
                   className="px-8 py-4 bg-[#1e2d2e] text-white rounded-full font-bold text-lg 
                     hover:bg-[#2a3f40] transition-all shadow-xl hover:shadow-2xl hover:scale-105"
                 >
-                  LEARN MORE
+                  Get Started
                 </button>
                 <button
                   onClick={() => setAmbientSound(ambientSound === 'forest-birds' ? 'ocean-waves' : 'forest-birds')}

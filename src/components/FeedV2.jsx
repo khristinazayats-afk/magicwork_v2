@@ -103,7 +103,7 @@ export default function FeedV2() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-pink-50/20 via-violet-50/20 via-orange-50/15 via-sage-50/40 to-sky-50/30 relative scroll-container">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50/20 via-violet-50/20 via-orange-50/15 via-sage-50/40 to-sky-50/30 relative scroll-container content-auto">
         {/* Mobile Hamburger Menu */}
         {activeSpaceIndex === null && (
           <motion.button
@@ -130,6 +130,9 @@ export default function FeedV2() {
                       src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
                       alt="Magicwork"
                       className="w-8 h-8"
+                      loading="lazy"
+                      decoding="async"
+                      fetchpriority="low"
                     />
                   </div>
                   <h1 className="text-xl font-serif font-semibold text-sage-800">Magicwork</h1>
@@ -229,7 +232,7 @@ export default function FeedV2() {
             {/* Practices Grid */}
             <div>
               <h3 className="text-xl font-serif font-semibold text-sage-800 mb-4">All Practices</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 content-auto">
                 {spaces.map((space, index) => (
                   <motion.div
                     key={space.name}
@@ -238,7 +241,7 @@ export default function FeedV2() {
                     transition={{ delay: 0.1 * index }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleJoin(index)}
-                    className="group bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer border border-sage-100/50 hover:scale-[1.02] will-change-transform"
+                    className="group bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer border border-sage-100/50 hover:scale-[1.02] will-change-transform content-auto"
                   >
                     <div className="w-full h-48 rounded-xl bg-gradient-to-br from-sky-100 via-violet-100 via-orange-100 to-pink-100 mb-4 flex items-center justify-center overflow-hidden">
                       <div className="text-6xl opacity-40">

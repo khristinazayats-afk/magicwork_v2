@@ -109,6 +109,9 @@ export default function AuthGuard({ children }) {
             src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
             alt="Magicwork"
             className="h-8 w-8 opacity-20 mb-2"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
           />
           <span className="text-[10px] font-hanken font-bold text-[#1e2d2e]/20 uppercase tracking-[0.2em]">Magicwork</span>
         </div>

@@ -5,6 +5,7 @@ import HomeScreenSummary from './HomeScreenSummary';
 import ProfileScreen from './ProfileScreen';
 import PracticeCard from './PracticeCard';
 import ProgressStats from './ProgressStats';
+import QuickPracticeSuggestions from './QuickPracticeSuggestions';
 import stationsData from '../data/stations.json';
 import { supabase } from '../lib/supabase';
 
@@ -72,28 +73,35 @@ export default function Feed({ onBack }) {
     const container = scrollContainerRef.current;
     if (!container || spaces.length === 0) return;
     
+    // Throttle scroll work to animation frames to reduce main-thread contention
+    const scheduledRef = { current: false };
     const handleScroll = () => {
-      if (isScrollingRef.current) return;
+      if (scheduledRef.current) return;
+      scheduledRef.current = true;
+      requestAnimationFrame(() => {
+        scheduledRef.current = false;
+        if (isScrollingRef.current) return;
 
-      const scrollTop = container.scrollTop;
-      const scrollHeight = container.scrollHeight;
-      const clientHeight = container.clientHeight;
-      const cardHeight = scrollHeight / (spaces.length * 3);
+        const scrollTop = container.scrollTop;
+        const scrollHeight = container.scrollHeight;
+        const clientHeight = container.clientHeight;
+        const cardHeight = scrollHeight / (spaces.length * 3);
 
-      // Near top edge - loop to bottom set
-      if (scrollTop < cardHeight * 2) {
-        isScrollingRef.current = true;
-        const offset = scrollTop + (cardHeight * spaces.length);
-        container.scrollTo({ top: offset, behavior: 'instant' });
-        requestAnimationFrame(() => { isScrollingRef.current = false; });
-      }
-      // Near bottom edge - loop to top set
-      else if (scrollTop > scrollHeight - clientHeight - cardHeight * 2) {
-        isScrollingRef.current = true;
-        const offset = scrollTop - (cardHeight * spaces.length);
-        container.scrollTo({ top: offset, behavior: 'instant' });
-        requestAnimationFrame(() => { isScrollingRef.current = false; });
-      }
+        // Near top edge - loop to bottom set
+        if (scrollTop < cardHeight * 2) {
+          isScrollingRef.current = true;
+          const offset = scrollTop + (cardHeight * spaces.length);
+          container.scrollTo({ top: offset, behavior: 'instant' });
+          requestAnimationFrame(() => { isScrollingRef.current = false; });
+        }
+        // Near bottom edge - loop to top set
+        else if (scrollTop > scrollHeight - clientHeight - cardHeight * 2) {
+          isScrollingRef.current = true;
+          const offset = scrollTop - (cardHeight * spaces.length);
+          container.scrollTo({ top: offset, behavior: 'instant' });
+          requestAnimationFrame(() => { isScrollingRef.current = false; });
+        }
+      });
     };
 
     container.addEventListener('scroll', handleScroll, { passive: true });
@@ -115,10 +123,12 @@ export default function Feed({ onBack }) {
     <>
       <div 
         ref={scrollContainerRef}
-        className={`full-viewport w-full scroll-container ${activeSpaceIndex === null ? 'overflow-y-scroll md:overflow-y-auto' : 'overflow-hidden'}`}
+        className={`w-full ${activeSpaceIndex === null ? 'overflow-y-auto' : 'overflow-hidden'}`}
         style={{ 
           margin: 0, 
           padding: 0,
+          minHeight: '100vh',
+          height: activeSpaceIndex === null ? 'auto' : '100vh',
           backgroundColor: '#fcf8f2'
         }}
       >
@@ -198,13 +208,25 @@ export default function Feed({ onBack }) {
               )}
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Quick Practice Suggestions */}
+            <QuickPracticeSuggestions 
+              onSelectSuggestion={(suggestion) => {
+                // Find the matching space or use the first one as fallback
+                const spaceIndex = spaces.findIndex(s => 
+                  s.name.toLowerCase().includes(suggestion.intent?.toLowerCase()) ||
+                  suggestion.title?.toLowerCase().includes(s.name.toLowerCase())
+                ) || 0;
+                handleJoin(spaceIndex);
+              }}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 content-auto">
               {spaces.map((space, index) => (
                 <motion.div
                   key={`grid-${space.name}-${index}`}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleJoin(index)}
-                  className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end hover:scale-[1.02] transition-transform duration-150 will-change-transform"
+                  className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end hover:scale-[1.02] transition-transform duration-150 will-change-transform content-auto"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-[#1e2d2e]/5 group-hover:from-white/20 transition-all" />
                   <div className="relative z-10">
@@ -232,7 +254,7 @@ export default function Feed({ onBack }) {
             return (
               <div 
                 key={`${space.name}-${index}`} 
-                className="snap-start snap-always w-full flex-shrink-0 full-viewport" 
+                className="snap-start snap-always w-full flex-shrink-0 min-h-screen" 
                 style={{ margin: 0, padding: 0 }}
               >
                 <PracticeCard

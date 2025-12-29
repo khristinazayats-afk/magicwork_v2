@@ -7,6 +7,7 @@ import '../providers/auth_provider.dart';
 import '../utils/vibe_system.dart';
 import '../models/custom_practice.dart';
 import '../services/custom_practices_service.dart';
+import '../widgets/quick_practice_suggestions.dart';
 
 const List<Map<String, String>> PRACTICES = [
   {
@@ -621,6 +622,18 @@ class _FeedScreenState extends State<FeedScreen> {
                 child: ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   children: [
+                    // Quick Practice Suggestions
+                    QuickPracticeSuggestions(
+                      onStartPractice: (suggestion) {
+                        // Navigate to practice flow with suggestion
+                        context.push('/practice', extra: {
+                          'intent': suggestion['intent'] ?? 'reduce_stress',
+                          'duration': suggestion['duration'] ?? 5,
+                          'emotionalState': suggestion['emotionalState'] ?? 'calm',
+                        });
+                      },
+                    ),
+                    
                     // Uncategorized practices
                     ..._customPractices.where((p) => p.folderId == null).map((practice) {
                       return _buildPracticeCard(practice);
@@ -818,6 +831,9 @@ class _FeedScreenState extends State<FeedScreen> {
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
+              addAutomaticKeepAlives: false,
+              addRepaintBoundaries: true,
+              cacheExtent: 800,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
@@ -830,7 +846,8 @@ class _FeedScreenState extends State<FeedScreen> {
                 final colorHex = practice['color']!.replaceFirst('#', '');
                 final color = Color(int.parse('FF$colorHex', radix: 16));
 
-                return GestureDetector(
+                return RepaintBoundary(
+                  child: GestureDetector(
                   onTap: () => _startPractice(practice['name']!),
                   child: Container(
                     decoration: BoxDecoration(
@@ -924,6 +941,7 @@ class _FeedScreenState extends State<FeedScreen> {
                           ],
                         ),
                       ],
+                    ),
                     ),
                   ),
                 );

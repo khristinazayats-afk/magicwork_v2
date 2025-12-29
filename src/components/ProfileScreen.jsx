@@ -6,6 +6,7 @@ import { getWeeklyStats, getCurrentWeekKey } from '../utils/weeklyTracking';
 import { calculateCurrentVibe, getVibeById, getAllVibes, getWeeklyMinutes } from '../utils/vibeSystem';
 import { getCurrentStreak } from '../utils/sessionTracking';
 import { gradientStyle } from '../styles/gradients';
+import SubscriptionManager from './SubscriptionManager';
 
 // Helper to get week start date from week key
 function getWeekStartFromKey(weekKey) {
@@ -247,7 +248,7 @@ export default function ProfileScreen({ onBack }) {
       </div>
       
       {/* Content */}
-      <div className="h-screen overflow-y-auto pt-24 pb-8 px-6 max-w-2xl mx-auto">
+      <div className="h-screen overflow-y-auto scroll-smooth pt-24 pb-8 px-6 max-w-2xl mx-auto">
         {/* User Profile Header */}
         {userProfile && (
           <motion.div
@@ -271,6 +272,9 @@ export default function ProfileScreen({ onBack }) {
             )}
           </motion.div>
         )}
+
+        {/* Subscription Manager */}
+        <SubscriptionManager />
 
         {/* Current Week Summary */}
         <motion.div

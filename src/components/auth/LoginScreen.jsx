@@ -185,6 +185,9 @@ export default function LoginScreen() {
             src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
             alt="Magicwork Logo"
             className="h-12 w-12"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
           />
         </div>
 

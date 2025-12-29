@@ -1,0 +1,6 @@
+Warning: Building for device with codesigning disabled. You will have to manually codesign before deploying to device.
+Building com.example.magicwork for device (ios-release)...
+Running pod install...                                           2,254ms
+Running Xcode build...                                          
+Xcode build done.                                           34.8s
+✓ Built build/ios/iphoneos/Runner.app (27.6MB)

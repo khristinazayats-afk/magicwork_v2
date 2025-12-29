@@ -60,10 +60,11 @@ export default async function handler(req, res) {
   }
 }
 
-// Hugging Face generation (primary)
+// Hugging Face generation (primary) - TODO: Switch to FLUX.1-dev via Inference Providers
 async function generateWithHuggingFace(hfApiKey, prompt, res) {
   const modelId = 'stabilityai/stable-diffusion-xl-base-1.0';
   
+  // NOTE: Using old endpoint temporarily - will migrate to Inference Providers
   const hfResponse = await fetch(
     `https://api-inference.huggingface.co/models/${modelId}`,
     {

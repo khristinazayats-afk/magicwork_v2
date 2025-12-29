@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import AppLayout from './AppLayout';
-import Feed from './Feed';
+import FeedNew from './FeedNew';
 
 export default function ProtectedFeedRoute() {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ export default function ProtectedFeedRoute() {
 
   return (
     <AppLayout>
-      <Feed onBack={() => {}} />
+      <FeedNew onBack={() => {}} />
     </AppLayout>
   );
 }

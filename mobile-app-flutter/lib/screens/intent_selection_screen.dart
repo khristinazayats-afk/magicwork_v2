@@ -103,6 +103,9 @@ class _IntentSelectionScreenState extends State<IntentSelectionScreen> {
               const SizedBox(height: 32),
               Expanded(
                 child: GridView.builder(
+                  addAutomaticKeepAlives: false,
+                  addRepaintBoundaries: true,
+                  cacheExtent: 800,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 12,

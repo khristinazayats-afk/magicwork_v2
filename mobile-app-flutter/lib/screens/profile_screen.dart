@@ -6,6 +6,7 @@ import '../providers/user_profile_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/analytics_provider.dart';
 import '../utils/vibe_system.dart';
+import '../widgets/subscription_manager.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -149,6 +150,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
+                  
+                  // Subscription Manager
+                  const SubscriptionManager(),
+                  const SizedBox(height: 20),
                   
                   // Your Vibe Animal Section
                   Container(

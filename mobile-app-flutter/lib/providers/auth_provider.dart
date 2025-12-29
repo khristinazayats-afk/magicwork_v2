@@ -280,50 +280,16 @@ class AuthProvider extends ChangeNotifier {
       _error = null;
       notifyListeners();
 
-      const webClientId = '917742868821-9p7u9q7vd8f8f8f8f8f8f8f8f8f8f8f8.apps.googleusercontent.com';
-      
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: webClientId,
-        serverClientId: webClientId,
+      // Use Supabase's built-in OAuth flow for Google to avoid plugin API changes.
+      await _supabase.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: '${AppConfig.deepLinkScheme}://${AppConfig.authCallbackPath}',
       );
 
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      if (googleUser == null) {
-        _isLoading = false;
-        _error = 'Google Sign-In cancelled';
-        notifyListeners();
-        return false;
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final String? accessToken = googleAuth.accessToken;
-      final String? idToken = googleAuth.idToken;
-
-      if (accessToken == null || idToken == null) {
-        _isLoading = false;
-        _error = 'Failed to get Google authentication tokens';
-        notifyListeners();
-        return false;
-      }
-
-      final response = await _supabase.auth.signInWithIdToken(
-        provider: OAuthProvider.google,
-        idToken: idToken,
-        accessToken: accessToken,
-      );
-
-      if (response.user != null) {
-        _user = AppUser.fromSupabaseUser(response.user!);
-        _isLoading = false;
-        _error = null;
-        notifyListeners();
-        return true;
-      }
-
-      _error = 'Google Sign-In failed';
+      // The onAuthStateChange listener will set _user when the redirect completes.
       _isLoading = false;
       notifyListeners();
-      return false;
+      return true;
     } catch (e) {
       _error = 'Google Sign-In error: ${e.toString()}';
       _isLoading = false;

@@ -48,18 +48,10 @@ post_install do |installer|
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
       end
       
-      # Set deployment target to 26.2 for all configurations
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '26.2'
-      
-      # Swift version - use 5.9 for plugins (compatible), 6.0 for main app
-      if target.name == 'Runner'
-        config.build_settings['SWIFT_VERSION'] = '6.0'
-        config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'targeted'
-      else
-        # All plugin targets use Swift 5.9 for compatibility
-        config.build_settings['SWIFT_VERSION'] = '5.9'
-        config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'none'
-      end
+      # Swift compiler configuration: unify across app and pods to reduce Swift 6 concurrency warnings
+      # Use Swift 5.10 (Xcode 26.x default toolchain) and minimal strict concurrency checks
+      config.build_settings['SWIFT_VERSION'] = '5.10'
+      config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'minimal'
       
       # Performance optimizations
       config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-O'

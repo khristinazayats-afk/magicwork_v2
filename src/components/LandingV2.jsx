@@ -26,6 +26,9 @@ export default function LandingV2() {
                 src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
                 alt="Magicwork Logo"
                 className="w-full h-full object-contain"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
               />
             </div>
             <h1 className="text-lg font-serif font-semibold text-slate-900 tracking-tight">

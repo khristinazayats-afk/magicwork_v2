@@ -306,7 +306,7 @@ export default function Shareouts({ spaceName, gradientStyle, onContinue, onClos
           {/* Scrollable comments */}
           <div
             ref={commentsRef}
-            className="flex-1 overflow-y-auto px-6 pt-4 pb-[calc(160px+env(safe-area-inset-bottom,0px))]"
+            className="flex-1 overflow-y-auto scroll-smooth px-6 pt-4 pb-[calc(160px+env(safe-area-inset-bottom,0px))]"
           >
             <div className="space-y-3">
               <AnimatePresence>

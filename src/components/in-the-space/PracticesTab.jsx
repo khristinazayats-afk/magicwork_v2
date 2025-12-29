@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContentSet } from '../../hooks/useContentSet';
-import { trackPracticeStarted, trackPracticeCompleted } from '../../services/analytics';
+import { trackPracticeStarted, trackPracticeCompleted, trackQuickPracticeStarted } from '../../services/analytics';
+import QuickPracticeSuggestions from '../QuickPracticeSuggestions';
 
 export default function PracticesTab({
   station,
@@ -273,11 +274,36 @@ export default function PracticesTab({
   // 1. Practice Selection (List)
   if (flowStep === 'list') {
     return (
-      <div className="w-full h-full overflow-y-auto pb-32">
+      <div className="w-full h-full overflow-y-auto scroll-smooth pb-32">
         <div className="px-6 py-4">
           <h2 className="font-hanken text-xl font-semibold text-[#1e2d2e] mb-4">
             Practices
           </h2>
+
+          {/* Quick Practice Suggestions - AI Recommendations */}
+          <QuickPracticeSuggestions 
+            currentSpaceName={station?.name}
+            onSelectPractice={(quickPractice) => {
+              // Auto-fill flow with quick practice details
+              setActivePracticeId('quick_practice');
+              setEmotionalState(quickPractice.emotionalState);
+              setSelectedIntent(quickPractice.intent);
+              setPracticeDuration(quickPractice.duration * 60); // Convert minutes to seconds
+              
+              // Track quick practice
+              trackQuickPracticeStarted({
+                title: quickPractice.title,
+                duration: quickPractice.duration,
+                spaceName: station?.name,
+                intent: quickPractice.intent,
+                emotionalState: quickPractice.emotionalState,
+                ambientSound: quickPractice.ambientSound
+              });
+              
+              // Skip to generation step
+              handleStartPractice();
+            }}
+          />
 
           <div className="space-y-4">
             {/* AI Custom Practice Card */}
@@ -350,7 +376,7 @@ export default function PracticesTab({
   // 3. Intent Selection & Duration
   if (flowStep === 'intent') {
     return (
-      <div className="w-full h-full p-6 flex flex-col items-center overflow-y-auto pb-32">
+      <div className="w-full h-full p-6 flex flex-col items-center overflow-y-auto scroll-smooth pb-32">
         <button 
           onClick={() => setFlowFlowStep('emotional_checkin')}
           className="self-start text-[#1e2d2e]/60 mb-8"
@@ -451,12 +477,12 @@ export default function PracticesTab({
         {/* Cinematic background image */}
         {activeBackgroundUrl && (
           <div className="absolute inset-0 -z-10">
-            <img src={activeBackgroundUrl} alt="Meditation background" className="w-full h-full object-cover" />
+            <img src={activeBackgroundUrl} alt="Meditation background" className="w-full h-full object-cover" loading="lazy" decoding="async" fetchpriority="low" />
             <div className="absolute inset-0 bg-white/20 backdrop-blur-sm" />
           </div>
         )}
         {/* Practice Content */}
-        <div className="flex-1 flex flex-col p-6 overflow-y-auto">
+        <div className="flex-1 flex flex-col p-6 overflow-y-auto scroll-smooth">
           <div className="flex justify-between items-center mb-8 bg-white/40 backdrop-blur-md p-4 rounded-2xl sticky top-0 z-10">
             <div>
               <h2 className="font-hanken text-xl font-bold text-[#1e2d2e]">
@@ -487,7 +513,7 @@ export default function PracticesTab({
             >
               {previewImageUrl && (
                 <div className="mb-6 rounded-2xl overflow-hidden">
-                  <img src={previewImageUrl} alt="Guided meditation preview" className="w-full h-auto"/>
+                  <img src={previewImageUrl} alt="Guided meditation preview" className="w-full h-auto" loading="lazy" decoding="async" fetchpriority="low" />
                 </div>
               )}
               <div className="absolute top-0 right-0 p-8 text-4xl opacity-10 select-none">✨</div>

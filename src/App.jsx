@@ -4,6 +4,7 @@ import { TenantProvider } from './context/TenantContext';
 import SplashScreen from './components/SplashScreen';
 import StepsScreen from './components/StepsScreen';
 import Feed from './components/Feed';
+import FeedNew from './components/FeedNew';
 import AnimationTest from './components/AnimationTest';
 import ShareoutsTestSimple from './components/ShareoutsTestSimple';
 import BoomerangLab from './components/animations/BoomerangLab';
@@ -36,6 +37,11 @@ import AppLayout from './components/AppLayout';
 import ProfileScreen from './components/ProfileScreen';
 import ProtectedFeedRoute from './components/ProtectedFeedRoute';
 import FeedV2 from './components/FeedV2';
+
+// Component wrapper to use new Feed
+function FeedWrapper() {
+  return <FeedNew />;
+}
 import DashboardV2 from './components/DashboardV2';
 import AdminAnalyticsDashboard from './components/AdminAnalyticsDashboard';
 import AdminGuard from './components/auth/AdminGuard';

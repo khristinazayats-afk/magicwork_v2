@@ -26,7 +26,20 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { type = 'soft-rain', emotionalState, spaceName } = req.body;
+    const { 
+      type = 'soft-rain', 
+      emotionalState, 
+      spaceName,
+      userPreferences = null // Pass user's favorite ambient sounds
+    } = req.body;
+    
+    // Personalize ambient sound selection based on user preferences
+    let selectedType = type;
+    if (userPreferences && userPreferences.favoriteAmbient && !type) {
+      // Use user's most played ambient sound if no specific type requested
+      selectedType = userPreferences.favoriteAmbient;
+      console.log(`[Ambient Personalization] Using user favorite: ${selectedType}`);
+    }
 
     const hfApiKey = process.env.HF_API_KEY || process.env.HUGGINGFACE_API_KEY;
     if (!hfApiKey) {
@@ -34,8 +47,9 @@ export default async function handler(req, res) {
       console.warn('HF_API_KEY not set, using CDN fallback');
       const cdnBase = 'https://d3hajr7xji31qq.cloudfront.net';
       return res.status(200).json({ 
-        audioUrl: `${cdnBase}/ambient/${type}.mp3`,
-        type,
+        audioUrl: `${cdnBase}/ambient/${selectedType}.mp3`,
+        type: selectedType,
+        personalized: !!userPreferences?.favoriteAmbient,
         note: 'HF_API_KEY not configured - using CDN fallback. Get your token: https://huggingface.co/settings/tokens'
       });
     }
@@ -50,7 +64,7 @@ export default async function handler(req, res) {
       'temple-bells': 'distant peaceful temple bells, meditation atmosphere, calm spiritual sounds, ambient meditation',
     };
 
-    let prompt = ambientPrompts[type] || ambientPrompts['soft-rain'];
+    let prompt = ambientPrompts[selectedType] || ambientPrompts['soft-rain'];
     
     // Enhance prompt based on context
     if (emotionalState) {

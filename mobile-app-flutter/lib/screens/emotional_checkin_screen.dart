@@ -77,21 +77,25 @@ class _EmotionalCheckInScreenState extends State<EmotionalCheckInScreen> {
               const SizedBox(height: 32),
               Expanded(
                 child: ListView.builder(
+                  addAutomaticKeepAlives: false,
+                  addRepaintBoundaries: true,
+                  cacheExtent: 600,
                   itemCount: _emotionalStates.length,
                   itemBuilder: (context, index) {
                     final state = _emotionalStates[index];
                     final isSelected = _selectedEmotionalState == state['value'];
                     
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: InkWell(
+                    return RepaintBoundary(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: InkWell(
                         onTap: () {
                           setState(() {
                             _selectedEmotionalState = state['value'] as String;
                           });
                         },
                         borderRadius: BorderRadius.circular(16),
-                        child: Container(
+                          child: Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: isSelected
@@ -160,6 +164,7 @@ class _EmotionalCheckInScreenState extends State<EmotionalCheckInScreen> {
                           ),
                         ),
                       ),
+                    ),
                     );
                   },
                 ),

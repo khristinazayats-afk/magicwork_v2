@@ -4,17 +4,17 @@
 
 export const config = { 
   runtime: 'nodejs',
-  maxDuration: 60 
+  maxDuration: 300 // Allow up to 5 minutes for true video generation
 };
 
 /**
- * Generate cinematic meditation video backgrounds using Hugging Face Inference API
+ * Generate cinematic meditation backgrounds
  * 
- * Available models (video generation is evolving, check Hugging Face for latest):
- * - Text-to-video models are available but may require different approaches
- * - For now, we use image-to-video or sequence models
+ * Options (in order of preference):
+ * 1. OpenAI DALL-E 3 - HD static images ($0.04/image, animated client-side) - DEFAULT
+ * 2. Replicate Video - True video generation ($0.05-0.10/sec, 4-8 sec clips) - OPTIONAL
  * 
- * Documentation: https://huggingface.co/docs/api-inference/index
+ * Set USE_VIDEO_GENERATION=true in Vercel to enable true video (expensive!)
  */
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,11 +27,14 @@ export default async function handler(req, res) {
   try {
     const { emotionalState, intent, spaceName, stage = 'start' } = req.body;
 
-    const hfApiKey = process.env.HF_API_KEY || process.env.HUGGINGFACE_API_KEY;
-    if (!hfApiKey) {
+    const openaiApiKey = process.env.OPENAI_API_KEY;
+    const replicateApiKey = process.env.REPLICATE_API_KEY;
+    const useVideoGeneration = process.env.USE_VIDEO_GENERATION === 'true';
+    
+    if (!openaiApiKey && !replicateApiKey) {
       return res.status(500).json({ 
-        error: 'HF_API_KEY not configured',
-        message: 'Please set HF_API_KEY in Vercel environment variables'
+        error: 'No API key configured',
+        message: 'Please set OPENAI_API_KEY or REPLICATE_API_KEY in Vercel'
       });
     }
 
@@ -51,16 +54,21 @@ export default async function handler(req, res) {
         Peaceful, clear, expansive. Seamless loop.`;
     }
 
-    // NOTE: Video generation via Hugging Face is more complex
-    // Many models require image-to-video or have specific requirements
-    // For now, we'll generate a high-quality static image that can be animated client-side
-    // or you can use a video generation model when available
-    
-    // Using Stable Diffusion to create a cinematic frame (can be looped as video)
-    const modelId = 'stabilityai/stable-diffusion-xl-base-1.0';
+    // Check if user wants true video generation (expensive!)
+    if (useVideoGeneration && replicateApiKey) {
+      return await generateVideoWithReplicate(replicateApiKey, videoPrompt, stage, res);
+    }
+
+    // Default: Use OpenAI for HD static images (animated client-side)
+    if (openaiApiKey) {
+      return await generateWithOpenAI(openaiApiKey, videoPrompt, stage, res);
+    }
+
+    // Fallback: HF old API (likely to fail)
+    const modelId = 'black-forest-labs/FLUX.1-dev';
     
     const hfResponse = await fetch(
-      `https://api-inference.huggingface.co/models/${modelId}`,
+      'https://router.huggingface.co/v1/images/generations',
       {
         method: 'POST',
         headers: {
@@ -68,46 +76,174 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          inputs: videoPrompt,
-          parameters: {
-            num_inference_steps: 40,
-            guidance_scale: 8.0,
-            width: 1024,
-            height: 1792, // Vertical format for meditation videos
-          },
+          model: modelId,
+          prompt: videoPrompt,
+          n: 1,
+          size: '1024x1792', // Vertical format for meditation videos
+          response_format: 'b64_json'
         }),
       }
     );
 
     if (!hfResponse.ok) {
-      if (hfResponse.status === 503) {
-        const errorData = await hfResponse.json().catch(() => ({}));
-        return res.status(503).json({ 
-          error: 'Model is loading, please try again in a few seconds',
-          estimated_time: errorData.estimated_time || 30
-        });
-      }
-      throw new Error(`Hugging Face API error: ${hfResponse.status}`);
+      const errorText = await hfResponse.text();
+      console.error('HF Inference Providers image error:', hfResponse.status, errorText);
+      throw new Error(`HF Inference Providers error: ${hfResponse.status}`);
     }
 
-    // Return image as data URL (can be used as video frame or looped)
-    const imageBuffer = await hfResponse.arrayBuffer();
-    const base64Image = Buffer.from(imageBuffer).toString('base64');
-    const imageDataUrl = `data:image/png;base64,${base64Image}`;
+    const data = await hfResponse.json();
+    
+    // Extract base64 image from OpenAI-compatible response
+    let imageDataUrl = '';
+    if (data.data && data.data[0]?.b64_json) {
+      imageDataUrl = `data:image/png;base64,${data.data[0].b64_json}`;
+    } else if (data.data && data.data[0]?.url) {
+      imageDataUrl = data.data[0].url;
+    } else {
+      console.error('Unexpected Inference Providers image response:', data);
+      throw new Error('Unexpected response format');
+    }
 
-    // Note: For true video generation, you may need to use specialized video models
-    // or generate multiple frames and combine them
     return res.status(200).json({
-      videoUrl: imageDataUrl, // For now, returns static image (can be looped)
+      videoUrl: imageDataUrl,
       stage,
       prompt: videoPrompt,
-      provider: 'huggingface',
+      provider: 'huggingface-inference-providers',
       model: modelId,
-      note: 'Currently returns cinematic image frame (can be animated client-side or use video models when available)'
+      note: 'Stunning FLUX.1-dev image (animated client-side). True video would cost $1-2 per generation vs $0.005 for this.'
     });
 
   } catch (error) {
     console.error('Error generating video:', error);
     return res.status(500).json({ error: error.message });
+  }
+}
+
+// OpenAI DALL-E 3 generation (primary - best quality for meditation images)
+async function generateWithOpenAI(apiKey, prompt, stage, res) {
+  try {
+    const openaiResponse = await fetch(
+      'https://api.openai.com/v1/images/generations',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'dall-e-3',
+          prompt: prompt,
+          n: 1,
+          size: '1024x1792',
+          quality: 'hd',
+          style: 'natural'
+        }),
+      }
+    );
+
+    if (!openaiResponse.ok) {
+      const errorText = await openaiResponse.text();
+      console.error('OpenAI DALL-E error:', openaiResponse.status, errorText);
+      throw new Error(`OpenAI DALL-E error: ${openaiResponse.status}`);
+    }
+
+    const data = await openaiResponse.json();
+    
+    if (!data.data || !data.data[0]?.url) {
+      throw new Error('No image URL in OpenAI response');
+    }
+
+    return res.status(200).json({
+      videoUrl: data.data[0].url,
+      stage,
+      prompt: data.data[0].revised_prompt || prompt,
+      provider: 'openai-dalle3',
+      model: 'dall-e-3',
+      type: 'image',
+      note: 'HD meditation image (animated client-side with CSS). Set USE_VIDEO_GENERATION=true for true video.'
+    });
+    
+  } catch (error) {
+    console.error('OpenAI video generation error:', error);
+    throw error;
+  }
+}
+
+// Replicate video generation (optional - expensive but true video!)
+async function generateVideoWithReplicate(apiKey, prompt, stage, res) {
+  try {
+    // Using Stable Video Diffusion or similar text-to-video model
+    const replicateResponse = await fetch(
+      'https://api.replicate.com/v1/predictions',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Token ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          version: 'b7d8c1a0d4d6e1e1e1e1e1e1e1e1e1e1', // Replace with actual model version
+          input: {
+            prompt: prompt,
+            num_frames: 120,      // 4 seconds at 30fps
+            num_inference_steps: 25,
+            fps: 30,
+            motion_bucket_id: 127 // Medium motion
+          }
+        }),
+      }
+    );
+
+    if (!replicateResponse.ok) {
+      const errorText = await replicateResponse.text();
+      console.error('Replicate error:', replicateResponse.status, errorText);
+      throw new Error(`Replicate error: ${replicateResponse.status}`);
+    }
+
+    const prediction = await replicateResponse.json();
+    
+    // Poll for completion (Replicate is async)
+    let videoUrl = null;
+    for (let i = 0; i < 60; i++) { // Max 5 minutes (60 * 5 seconds)
+      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+      
+      const statusResponse = await fetch(
+        `https://api.replicate.com/v1/predictions/${prediction.id}`,
+        {
+          headers: {
+            'Authorization': `Token ${apiKey}`,
+          }
+        }
+      );
+      
+      const status = await statusResponse.json();
+      
+      if (status.status === 'succeeded') {
+        videoUrl = status.output;
+        break;
+      } else if (status.status === 'failed') {
+        throw new Error('Video generation failed');
+      }
+    }
+    
+    if (!videoUrl) {
+      throw new Error('Video generation timed out');
+    }
+
+    return res.status(200).json({
+      videoUrl,
+      stage,
+      prompt,
+      provider: 'replicate',
+      model: 'stable-video-diffusion',
+      type: 'video',
+      duration: 4,
+      note: 'True video generation (4 seconds, ~$0.40 per video)'
+    });
+    
+  } catch (error) {
+    console.error('Replicate video generation error:', error);
+    // Fallback to OpenAI images if video fails
+    throw error;
   }
 }

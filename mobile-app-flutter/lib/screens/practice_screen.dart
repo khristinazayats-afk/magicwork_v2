@@ -256,7 +256,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
             ),
             // Practice content
             Expanded(
-              child: SingleChildScrollView(
+              child: RepaintBoundary(
+                child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,6 +320,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                       ),
                   ],
                 ),
+              ),
               ),
             ),
             // Bottom controls

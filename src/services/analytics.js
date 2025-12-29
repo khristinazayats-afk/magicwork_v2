@@ -62,6 +62,30 @@ export async function trackPracticeCompleted({ spaceName, intent, emotionalState
   });
 }
 
+export async function trackAmbientSoundPlayed({ soundType, spaceName, emotionalState }) {
+  return trackEvent({
+    name: 'ambient_sound_played',
+    category: 'audio',
+    properties: { ambientSound: soundType, spaceName, emotionalState },
+  });
+}
+
+export async function trackAmbientSoundChanged({ fromSound, toSound, spaceName }) {
+  return trackEvent({
+    name: 'ambient_sound_changed',
+    category: 'audio',
+    properties: { fromSound, toSound, spaceName },
+  });
+}
+
+export async function trackQuickPracticeStarted({ title, duration, spaceName, intent, emotionalState, ambientSound }) {
+  return trackEvent({
+    name: 'quick_practice_started',
+    category: 'recommendations',
+    properties: { title, duration, spaceName, intent, emotionalState, ambientSound },
+  });
+}
+
 export async function trackScreenView({ screen }) {
   return trackEvent({ name: 'screen_view', category: 'navigation', screen });
 }

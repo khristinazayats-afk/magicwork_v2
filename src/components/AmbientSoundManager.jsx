@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { trackAmbientSoundPlayed, trackAmbientSoundChanged } from '../services/analytics';
 
 // Ambient sound types available for AI generation
 const AMBIENT_TYPES = [
@@ -15,6 +16,7 @@ export default function AmbientSoundManager() {
   const audioRef = useRef(new Audio());
   const location = useLocation();
   const [currentSoundIndex, setCurrentSoundIndex] = useState(0);
+  const [currentSoundType, setCurrentSoundType] = useState(null);
   const [generatedSounds, setGeneratedSounds] = useState({});
 
   // Generate ambient sound on demand using AI
@@ -88,6 +90,24 @@ export default function AmbientSoundManager() {
               // Silently handle autoplay errors - they're expected
               console.log('Ambient audio autoplay blocked:', err);
             });
+            
+            // Track ambient sound played
+            if (currentSoundType !== randomType) {
+              if (currentSoundType) {
+                trackAmbientSoundChanged({
+                  fromSound: currentSoundType,
+                  toSound: randomType,
+                  spaceName: 'main'
+                });
+              } else {
+                trackAmbientSoundPlayed({
+                  soundType: randomType,
+                  spaceName: 'main',
+                  emotionalState: null
+                });
+              }
+              setCurrentSoundType(randomType);
+            }
           }
         });
       }
@@ -105,7 +125,7 @@ export default function AmbientSoundManager() {
         }
       });
     };
-  }, [location.pathname, currentSoundIndex, generatedSounds]);
+  }, [location.pathname, currentSoundIndex, generatedSounds, currentSoundType]);
 
   return null;
 }

@@ -148,7 +148,7 @@ export default function ChatTab({ station }) {
       {/* Scrollable content area - Comments only */}
       <div
         ref={commentsContainerRef}
-        className="flex-1 overflow-y-auto pb-6"
+        className="flex-1 overflow-y-auto scroll-smooth pb-6"
       >
         <div className="max-w-2xl mx-auto space-y-3 pt-3">
           <AnimatePresence>

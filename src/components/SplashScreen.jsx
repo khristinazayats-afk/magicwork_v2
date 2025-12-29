@@ -26,6 +26,9 @@ export default function SplashScreen({ onEnter }) {
               src="/assets/logos/magicwork-bw/PNG/B&W_Logo Design - MagicWork (V001)-12.png" 
               alt="Magicwork Logo"
               className="h-20 w-20 md:h-20 md:w-20"
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
             />
           </div>
 

@@ -46,7 +46,7 @@ export default function SettingsBottomSheet({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 left-0 bottom-0 z-50 bg-[#fcf8f2] w-80 max-w-[85vw] overflow-y-auto shadow-2xl flex flex-col"
+            className="fixed top-0 left-0 bottom-0 z-50 bg-[#fcf8f2] w-80 max-w-[85vw] overflow-y-auto scroll-smooth shadow-2xl flex flex-col"
             style={{ paddingTop: 'env(safe-area-inset-top,24px)', paddingBottom: 'env(safe-area-inset-bottom,24px)' }}
             onClick={(e) => e.stopPropagation()}
           >
