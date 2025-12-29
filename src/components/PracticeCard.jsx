@@ -8,6 +8,7 @@ import Shareouts from './Shareouts';
 import ResultsScreen from './ResultsScreen';
 import PracticeJoinedTabs from './PracticeJoinedTabs';
 import MilestoneModal from './MilestoneModal';
+import PracticeOptions from './PracticeOptions';
 import { gradientStyle } from '../styles/gradients';
 import { useLocalAudio } from '../hooks/useLocalAudio';
 import { useTuneTracking } from '../hooks/useTuneTracking';
@@ -61,6 +62,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   const { postEvent } = usePostEvent();
   useTuneTracking(isPlaying, audioRef);
   const [joined, setJoined] = useState(false);
+  const [showPracticeOptions, setShowPracticeOptions] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [heartsSent, setHeartsSent] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
@@ -216,6 +218,12 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
   };
 
   const handleJoin = async () => {
+    // Show practice options instead of immediately joining
+    setShowPracticeOptions(true);
+  };
+
+  const handlePracticeSelect = (practice) => {
+    // Now actually join after selecting a practice
     try {
       if (onJoin) onJoin(); // Notify Feed that this station is now active
       
@@ -227,6 +235,7 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
       setShowSummary(false);
       setJoined(true);
       setHeartsSent(0);
+      setShowPracticeOptions(false);
       
       // Show new tabbed interface
       setShowTabs(true);
@@ -518,6 +527,39 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
         </>
       )}
 
+      {/* Practice Options Modal - shown when user clicks Join */}
+      <AnimatePresence>
+        {showPracticeOptions && !joined && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center"
+          >
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              className="w-full max-w-2xl max-h-[90vh] bg-white rounded-t-3xl md:rounded-3xl p-8 md:p-12 overflow-y-auto"
+            >
+              <h2 className="text-3xl md:text-4xl font-hanken font-bold text-[#1e2d2e] mb-8">
+                {station.name}
+              </h2>
+              <PracticeOptions 
+                spaceName={station.name}
+                onSelectPractice={handlePracticeSelect}
+              />
+              <button
+                onClick={() => setShowPracticeOptions(false)}
+                className="mt-8 w-full px-6 py-3 rounded-full border-2 border-[#1e2d2e]/20 text-[#1e2d2e] font-hanken font-bold hover:border-[#1e2d2e]/40 transition-all"
+              >
+                Go Back
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* New Tabbed Interface - shown when user joins */}
       <AnimatePresence mode="wait">
         {showTabs && joined && (
@@ -677,16 +719,39 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
 
 
                 {!joined && !showSummary && (
-                  <motion.p 
-                    key="description"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="font-hanken text-[#1e2d2e]/80 text-lg md:text-xl leading-relaxed text-center mb-12"
-                  >
-                    {description}
-                  </motion.p>
+                  <>
+                    {/* Preview Image */}
+                    <motion.div
+                      key="preview-image"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.4 }}
+                      className="w-48 h-64 md:w-56 md:h-72 mx-auto mb-8 rounded-2xl overflow-hidden shadow-lg"
+                    >
+                      <img
+                        src={`/assets/practice-previews/${station.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}.jpg`}
+                        alt={station.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Fallback: create gradient if image fails to load
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    </motion.div>
+
+                    {/* Description */}
+                    <motion.p 
+                      key="description"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="font-hanken text-[#1e2d2e]/80 text-lg md:text-xl leading-relaxed text-center mb-12"
+                    >
+                      {description}
+                    </motion.p>
+                  </>
                 )}
 
               </AnimatePresence>

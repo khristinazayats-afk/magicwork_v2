@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import SettingsBottomSheet from './SettingsBottomSheet';
 import HomeScreenSummary from './HomeScreenSummary';
@@ -6,6 +6,7 @@ import ProfileScreen from './ProfileScreen';
 import PracticeCard from './PracticeCard';
 import ProgressStats from './ProgressStats';
 import QuickPracticeSuggestions from './QuickPracticeSuggestions';
+import OnboardingModal from './OnboardingModal';
 import stationsData from '../data/stations.json';
 import { supabase } from '../lib/supabase';
 
@@ -18,6 +19,11 @@ export default function Feed({ onBack }) {
   const [activeSpaceIndex, setActiveSpaceIndex] = useState(null);
   const [isAdminDesktop, setIsAdminDesktop] = useState(false);
   const [userStats, setUserStats] = useState(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
+  const audioRef = useRef(null);
+  const [ambientSound, setAmbientSound] = useState('forest-birds');
+  const [isSoundPlaying, setIsSoundPlaying] = useState(true);
 
   // Verify user account stats on mount
   useEffect(() => {
@@ -28,6 +34,12 @@ export default function Feed({ onBack }) {
         if (userError || !user) {
           console.error('User verification failed:', userError);
           return;
+        }
+
+        // Check if user has completed onboarding
+        const hasOnboarded = localStorage.getItem(`onboarded_${user.id}`);
+        if (!hasOnboarded) {
+          setShowOnboarding(true);
         }
 
         // Fetch user's meditation stats
@@ -112,8 +124,64 @@ export default function Feed({ onBack }) {
     setActiveSpaceIndex(null);
   };
 
+  // Handle onboarding completion
+  const handleOnboardingComplete = async (data) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        localStorage.setItem(`onboarded_${user.id}`, JSON.stringify(data));
+        localStorage.setItem(`user_mood_${user.id}`, data.mood);
+        localStorage.setItem(`user_intentions_${user.id}`, JSON.stringify(data.intentions));
+      }
+    } catch (error) {
+      console.error('Error saving onboarding data:', error);
+    }
+    setShowOnboarding(false);
+    setHasSeenOnboarding(true);
+  };
+
+  // Generate ambient sound
+  useEffect(() => {
+    const generateSound = async () => {
+      try {
+        if (!audioRef.current || !isSoundPlaying) return;
+
+        const response = await fetch('/api/generate-ambient', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: ambientSound }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (audioRef.current) {
+            audioRef.current.src = data.audioUrl;
+            audioRef.current.volume = 0.15;
+            audioRef.current.loop = true;
+            audioRef.current.play().catch(e => {
+              console.log('Autoplay prevented:', e);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error generating ambient sound:', error);
+      }
+    };
+
+    generateSound();
+  }, [ambientSound, isSoundPlaying]);
+
   return (
     <>
+      {/* Ambient Sound */}
+      <audio ref={audioRef} />
+
+      {/* Onboarding Modal */}
+      <OnboardingModal 
+        isOpen={showOnboarding} 
+        onComplete={handleOnboardingComplete}
+      />
+
       <div className="w-full min-h-screen bg-[#fcf8f2] overflow-y-auto">
         {/* Mobile Hamburger Menu */}
         {activeSpaceIndex === null && (

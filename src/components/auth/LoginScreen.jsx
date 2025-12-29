@@ -290,7 +290,7 @@ export default function LoginScreen() {
                 }}
                 className="w-full h-12 rounded-full bg-[#94d1c4]/20 text-[#1e2d2e] font-hanken font-bold text-sm border border-[#94d1c4]/30"
               >
-                Guest login (to be optimized)
+                Guest Login
               </motion.button>
             </>
           ) : (
