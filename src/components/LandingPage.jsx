@@ -6,8 +6,17 @@ import AmbientSoundManager from './AmbientSoundManager';
 export default function LandingPage() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [ambientSound, setAmbientSound] = useState('forest-birds');
-  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+  
+  // Available ambient sounds
+  const ambientSounds = ['forest-birds', 'ocean-waves', 'soft-rain', 'gentle-waves', 'white-noise', 'temple-bells'];
+  
+  // Pick random sound on mount
+  const [ambientSound, setAmbientSound] = useState(() => {
+    return ambientSounds[Math.floor(Math.random() * ambientSounds.length)];
+  });
+  
+  // Auto-play sound on mount
+  const [isSoundPlaying, setIsSoundPlaying] = useState(true);
 
   const handleGetStarted = () => {
     navigate('/login');
@@ -15,6 +24,16 @@ export default function LandingPage() {
 
   const toggleSound = () => {
     setIsSoundPlaying(!isSoundPlaying);
+  };
+  
+  const changeSound = () => {
+    // Pick a different random sound
+    const currentIndex = ambientSounds.indexOf(ambientSound);
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * ambientSounds.length);
+    } while (newIndex === currentIndex && ambientSounds.length > 1);
+    setAmbientSound(ambientSounds[newIndex]);
   };
 
   return (
@@ -113,17 +132,15 @@ export default function LandingPage() {
               className="relative"
             >
               <div className="relative aspect-square lg:aspect-auto lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-                {/* Placeholder for meditation image - using gradient until we can generate */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-pink-50 to-orange-50">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center p-12">
-                      <svg className="w-32 h-32 mx-auto mb-4 text-[#1e2d2e]/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <p className="text-[#1e2d2e]/40 font-medium">Meditation Image</p>
-                    </div>
-                  </div>
-                </div>
+                {/* Meditation hero image */}
+                <img 
+                  src="/assets/meditation-hero.jpg"
+                  alt="Person meditating in peaceful setting"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* Overlay gradient for better contrast with button */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                
                 {/* Sound toggle button */}
                 <button
                   onClick={toggleSound}
