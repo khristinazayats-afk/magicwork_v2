@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../config/app_config.dart';
 import '../models/user_model.dart';
 
@@ -268,6 +270,106 @@ class AuthProvider extends ChangeNotifier {
       _error = e.toString();
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  // Google Sign-In
+  Future<bool> signInWithGoogle() async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
+      const webClientId = '917742868821-9p7u9q7vd8f8f8f8f8f8f8f8f8f8f8f8.apps.googleusercontent.com';
+      
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        clientId: webClientId,
+        serverClientId: webClientId,
+      );
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        _isLoading = false;
+        _error = 'Google Sign-In cancelled';
+        notifyListeners();
+        return false;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final String? accessToken = googleAuth.accessToken;
+      final String? idToken = googleAuth.idToken;
+
+      if (accessToken == null || idToken == null) {
+        _isLoading = false;
+        _error = 'Failed to get Google authentication tokens';
+        notifyListeners();
+        return false;
+      }
+
+      final response = await _supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      if (response.user != null) {
+        _user = AppUser.fromSupabaseUser(response.user!);
+        _isLoading = false;
+        _error = null;
+        notifyListeners();
+        return true;
+      }
+
+      _error = 'Google Sign-In failed';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _error = 'Google Sign-In error: ${e.toString()}';
+      _isLoading = false;
+      notifyListeners();
+      print('Google Sign-In error: $e');
+      return false;
+    }
+  }
+
+  // Apple Sign-In
+  Future<bool> signInWithApple() async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final response = await _supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: credential.identityToken!,
+      );
+
+      if (response.user != null) {
+        _user = AppUser.fromSupabaseUser(response.user!);
+        _isLoading = false;
+        _error = null;
+        notifyListeners();
+        return true;
+      }
+
+      _error = 'Apple Sign-In failed';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _error = 'Apple Sign-In error: ${e.toString()}';
+      _isLoading = false;
+      notifyListeners();
+      print('Apple Sign-In error: $e');
+      return false;
     }
   }
 }

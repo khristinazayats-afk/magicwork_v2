@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '26.2'
+platform :ios, '15.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -43,9 +43,9 @@ post_install do |installer|
       # Define permission handler macros to enable specific permissions
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'PERMISSION_MICROPHONE=1', 'PERMISSION_CAMERA=1', 'PERMISSION_PHOTOS=1', 'PERMISSION_LOCATION=1', 'PERMISSION_NOTIFICATIONS=1', 'PERMISSION_BLUETOOTH=1', 'PERMISSION_APP_TRACKING_TRANSPARENCY=1']
 
-      # Fix deployment target - ensure all pods use iOS 26.2 minimum
-      if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 26.2
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '26.2'
+      # Fix deployment target - ensure all pods use iOS 15.0 minimum
+      if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.0
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
       end
       
       # Set deployment target to 26.2 for all configurations

@@ -17,10 +17,11 @@ class GreetingScreen extends StatelessWidget {
               const Spacer(),
               Image.asset(
                 'assets/logos/magicwork-bw.png',
-                width: 80,
-                height: 80,
+                width: 120,
+                height: 120,
+                color: const Color(0xFF1e2d2e),
                 errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.self_improvement, size: 80, color: Color(0xFF1e2d2e));
+                  return const Icon(Icons.self_improvement, size: 120, color: Color(0xFF1e2d2e));
                 },
               ),
               const SizedBox(height: 32),

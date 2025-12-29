@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +20,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToNext() async {
     await Future.delayed(const Duration(seconds: 2));
     if (mounted) {
-      context.go('/greeting');
+      final authProvider = context.read<AuthProvider>();
+      if (authProvider.isAuthenticated) {
+        context.go('/feed');
+      } else {
+        context.go('/greeting');
+      }
     }
   }
 
@@ -32,8 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset(
               'assets/logos/magicwork-bw.png',
-              width: 80,
-              height: 80,
+              width: 120,
+              height: 120,
+              color: const Color(0xFF1e2d2e),
               errorBuilder: (context, error, stackTrace) {
                 return const Icon(Icons.self_improvement, size: 80, color: Color(0xFF172223));
               },

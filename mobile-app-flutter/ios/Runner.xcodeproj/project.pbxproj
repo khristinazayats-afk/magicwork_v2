@@ -314,7 +314,7 @@
 		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
+			alwaysOutOfDate = 0;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -323,21 +323,25 @@
 			);
 			name = "Thin Binary";
 			outputPaths = (
+				"${DERIVED_FILE_DIR}/thin_binary.marker",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin; /usr/bin/touch \"${DERIVED_FILE_DIR}/thin_binary.marker\"";
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
+			alwaysOutOfDate = 0;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/../pubspec.yaml",
 			);
 			name = "Run Script";
 			outputPaths = (
+				"${PROJECT_DIR}/Flutter/Generated.xcconfig",
+				"${PROJECT_DIR}/Flutter/flutter_export_environment.sh",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
