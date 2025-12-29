@@ -96,3 +96,5 @@ After adding keys and redeploying:
 **Status**: Ready to configure
 **Next Step**: Add `HF_API_KEY` and optionally `OPENAI_API_KEY` to Vercel
 
+
+

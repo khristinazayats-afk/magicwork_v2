@@ -1,5 +1,5 @@
 ---
-description: Analyze data flows between components for meditation practice, emotion tracking, and presence features
+description: Use for analyzing data flow patterns in meditation practice management and emotional state tracking systems
 ---
 
 # === USER INSTRUCTIONS ===
@@ -53,49 +53,48 @@ $END$
 
 # data-flow
 
-## Core Data Flows
+Primary Data Flow Paths:
 
-1. Practice Session Flow (85/100)
-- Emotional State -> Intent Selection -> Practice Generation
-- User emotion data flows to AI generator for personalized content
-- Generated content feeds into audio synthesis pipeline
-- Practice metrics flow to analytics and achievement systems
+1. Practice Session Generation Pipeline (Importance: 90)
+```
+Emotional State Assessment -> Intent Selection -> Practice Configuration -> AI Content Generation -> Audio Orchestration
+```
+- Tracks user emotional state data through multi-step meditation creation
+- Feeds assessment results into personalized content generation
+- Coordinates parallel flows of meditation script and audio content
 
-2. Presence Management (80/100) 
-- Real-time participant data flows between connected clients
-- Anonymous/identified states propagate through sharing system
-- Collective presence metrics update space visualizations
+2. Emotional State Tracking System (Importance: 85)
+```
+User Input -> State Assessment -> Practice Personalization -> Analytics
+```
+- Five-level emotional assessment scale data propagation
+- Contextual state mapping to practice parameters
+- Emotional trend analysis for practice adaptation
 
-3. Progress Tracking Flow (75/100)
-- Practice completion events flow to:
-  - Vibe scoring system
-  - Achievement processor  
-  - Light points calculator
-  - Monthly tier evaluator
+3. Real-time Presence System (Importance: 80)
+```
+Session Timer -> Presence Tracking -> Community Status -> Analytics
+```
+- Continuous presence second calculation
+- Space-specific practice duration tracking
+- Community presence state broadcasting
+- Streak preservation data management
 
-4. Emotional State Processing (70/100)
-- Five-level emotional assessments flow to:
-  - Practice personalization system
-  - Space-specific guidance
-  - Community interaction filters
-  - Visual feedback elements
+4. Progress Tracking Pipeline (Importance: 75)
+```
+Practice Completion -> Achievement System -> Light Points -> Monthly Tiers
+```
+- Multi-dimensional progress data aggregation
+- Cross-component milestone tracking
+- Tiered progression state management
 
-## Integration Points
-
-1. Practice Generation Pipeline
-- Emotional state + intent -> AI generator
-- Generated content -> Audio synthesis
-- Audio + visuals -> Practice delivery
-
-2. Community Features
-- User presence -> Space visualization
-- Reflection prompts -> Anonymous sharing
-- Privacy settings -> Content visibility
-
-3. Progress Systems
-- Session metrics -> Multiple tracking systems
-- Achievement criteria -> Visual progression
-- Practice patterns -> Vibe calculations
+5. Community Interaction Flow (Importance: 70)
+```
+Practice Results -> Privacy Filter -> Space Rules -> Community Feed
+```
+- Privacy-aware data sharing pipeline
+- Space-specific visibility rules
+- Anonymous/public state management
 
 $END$
 

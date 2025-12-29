@@ -38,3 +38,5 @@ echo "✅ Setup complete. Please open Xcode and verify the 'Signing & Capabiliti
 
 
 
+
+

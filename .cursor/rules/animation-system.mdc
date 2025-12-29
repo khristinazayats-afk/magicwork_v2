@@ -1,5 +1,5 @@
 ---
-description: Documentation for specialized particle animation system including trajectories, breathing patterns and visual meditation feedback
+description: Specifications for the meditation app's custom animation system, focusing on breathing guidance and physiological patterns
 ---
 
 # === USER INSTRUCTIONS ===
@@ -43,47 +43,40 @@ $END$
 
 # animation-system
 
-## Particle Animation Components
+The animation system implements specialized meditation-specific visualizations and particle behaviors:
 
-### Boomerang Animation System (src/components/animations/BoomerangAnimation.jsx)
-Implements curved trajectory calculations with parametric equations for meditation flow visualization
-- Custom particle emission based on practice state 
-- Curved path generation with controlled dispersion
-- Color distribution mapping to practice intensity
-Importance Score: 70/100
+## Boomerang Animation Controller
+Path: src/components/animations/BoomerangAnimation.jsx
+Importance Score: 85
 
-### Quiet Ground Visualization (src/components/animations/QuietGround.jsx)
-Meditation-specific nature-inspired animation patterns
-- Organic growth patterns reflecting practice depth
-- Visual feedback synchronized with breathing rhythm
-- Element transformations based on practice states
-Importance Score: 65/100
+Core meditation guidance system:
+- Synchronized particle movement for breathing pattern visualization
+- Parametric curve calculations matching physiological breathing rhythms
+- Dynamic color transitions based on user's emotional state
+- Special handling for physiological sigh patterns (double-inhale)
+- Adaptive speed control based on practice type
 
-## Core Animation Patterns
+## Particle Flow System
+Path: src/utils/animation/particleFlow.js 
+Importance Score: 75
 
-1. Physiological Sigh Visualization
-- Two-phase breathing pattern animation
-- Extended inhale followed by double-exhale sequence
-- Visual pace adjustment based on anxiety levels
+Meditation-specific particle behavior:
+- Guided breathing visualization with acceleration/deceleration curves
+- Practice-state aware particle emission patterns
+- Special formations for different meditation techniques
+- Color palette management tied to emotional states
 
-2. Practice State Transitions
-- Smooth morphing between meditation phases
-- Particle density changes reflecting depth
-- Color schemes mapped to practice types
+## Animation Synchronization
+Path: src/components/animations/AnimationOrchestrator.jsx
+Importance Score: 70
 
-3. Breathing Synchronization
-- Real-time breath cycle visualization
-- Adaptive pacing based on practice type
-- Visual metronome for guided breathing
+Coordinates multiple animation subsystems:
+- Voice narration timing integration
+- Practice phase transitions (opening, main, closing)
+- Ambient sound synchronization
+- Breathing guidance timing management
 
-## Integration Points
-
-- Particle systems respond to practice completion events
-- Animation state management tied to meditation flow
-- Visual feedback synchronized with audio narration
-- Transition effects coordinated with practice milestones
-
-The animation system focuses on therapeutic visualization patterns specifically designed for meditation guidance and breathing regulation.
+The system focuses heavily on scientifically-backed breathing patterns and physiological sigh implementations, with particular attention to smooth transitions and calming visual metaphors.
 
 $END$
 

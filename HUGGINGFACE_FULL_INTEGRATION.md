@@ -106,3 +106,5 @@ Check Hugging Face Model Hub for available models: https://huggingface.co/models
 **Status**: ✅ All generation endpoints now use Hugging Face
 **API Key**: Add `HF_API_KEY` to Vercel environment variables
 
+
+

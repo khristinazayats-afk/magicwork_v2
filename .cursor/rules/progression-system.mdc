@@ -1,5 +1,5 @@
 ---
-description: Documents achievement, streak, vibe and progression mechanics for activity-based progression tracking and rewards
+description: Documenting meditation progression systems including vibes, achievements, streaks and rewards
 ---
 
 # === USER INSTRUCTIONS ===
@@ -61,55 +61,45 @@ $END$
 
 # progression-system
 
-Core Progression Components:
+The meditation progression system consists of multiple interconnected mechanics:
 
-1. Vibe States System
-- 10 distinct levels based on practice frequency and consistency
-- Calculation factors:
-  - Total practice minutes completed 
-  - Days practiced per week
-  - Current streak length
-- Each level maps to specific neuroscience-backed benefits
-Importance Score: 90/100
+## Vibe System (src/utils/vibeSystem.js)
+Importance Score: 95/100
 
-2. Monthly Tier Progression 
-- 5-tier system tracking practice consistency
-- Tier advancement based on:
-  - Total sessions completed
-  - Consecutive practice days
-- Community member count tracking per tier
+10-level nervous system state progression:
+- Tracks practice duration, frequency and streaks
+- Maps user states to emotional/mindfulness milestones
+- Each level includes scientific backing and psychological benefits 
+- Custom milestone triggers for level advancement
+
+## Achievement System (src/utils/achievements.js) 
 Importance Score: 85/100
 
-3. Light Points Rewards
-- Daily-capped reward system
-- Points awarded for:
-  - Practice completion
-  - Tune listening sessions
-  - Daily practice goals
-- Reset logic and accumulation tracking
+Multi-tier achievement tracking:
+- Practice count milestones (1, 10 sessions)
+- Space exploration (9 unique spaces)
+- Streak achievements (7, 30 consecutive days)
+- Duration goals (60, 300, 1000 minutes)
+
+## Light Points (src/utils/lightPoints.js)
 Importance Score: 80/100
 
-4. Achievement System
-- 8 distinct achievement categories
-- Unlock conditions based on:
-  - Practice session counts
-  - Streak maintenance
-  - Space exploration progress
-- Progressive milestone tracking
+Gamification currency:
+- 5 points per practice completion
+- 1 point per 10 seconds of tune listening  
+- Daily point caps
+- Practice-of-day bonus rewards
+
+## Session Tracking (src/utils/sessionTracking.js)
 Importance Score: 75/100
 
-Supporting Mechanics:
-- Streak calculation with UTC date handling
-- Space-specific progression tracking
-- Tier transition management
-- Achievement progress calculations
-- Daily reward caps and reset cycles
+Practice pattern analytics:
+- Consecutive day streak calculations
+- Favorite space determination 
+- Space exploration progress
+- Session grouping and categorization
 
-Key Files:
-/src/utils/vibeSystem.js
-/src/utils/monthlyTiers.js
-/src/utils/lightPoints.js
-/src/utils/achievements.js
+The system focuses on nervous system state progression through consistent practice, with gamification elements encouraging regular engagement. Achievement unlocks and point rewards reinforce key meditation milestones.
 
 $END$
 

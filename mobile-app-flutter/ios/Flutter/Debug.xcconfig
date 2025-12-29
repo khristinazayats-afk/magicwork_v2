@@ -1,6 +1,2 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
-
-// Suppress warnings for dependencies
-GCC_WARN_INCOMPLETE_IMPLEMENTATION = NO
-CLANG_WARN__DUPLICATE_METHOD_MATCH = NO

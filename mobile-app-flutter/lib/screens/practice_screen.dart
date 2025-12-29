@@ -122,9 +122,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
     try {
       final musicUrl = await _musicGenerator.generateAmbientMusic(
-        prompt: _intent ?? 'peaceful meditation',
+        type: 'soft-rain',
         emotionalState: _emotionalState ?? 'neutral',
-        duration: _durationMinutes * 60,
       );
 
       if (musicUrl != null && mounted) {

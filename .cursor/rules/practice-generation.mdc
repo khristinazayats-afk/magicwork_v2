@@ -1,5 +1,5 @@
 ---
-description: Technical specification for AI-driven meditation practice generation system including emotional processing and personalization
+description: Specification for AI-driven meditation practice generation system including emotional processing and personalization
 ---
 
 # === USER INSTRUCTIONS ===
@@ -66,38 +66,40 @@ $END$
 
 # practice-generation
 
-Core Components:
+The practice generation system consists of three core components:
 
-1. AI Practice Generator (85/100)
-- Emotional state-based meditation script generation
-- Dynamic pacing adjustment (120 wpm for anxious, 60 wpm for calm)
-- Eight distinct meditation intents with custom parameters
-- Structured format: opening (2min), main practice, closing (2min)
+1. Emotional State Processing (Importance: 85/100)
+- Multi-step emotional assessment workflow
+- Five-level emotional state classification 
+- Context-aware state mapping to meditation content
+- Integration with personalization pipeline
 
-2. Emotional State Processing (80/100)
-- Five-level emotional assessment system
-- Emotional state mapping to meditation parameters
-- Real-time adaptation of practice intensity
-- State-specific guidance selection
+2. Practice Content Orchestration (Importance: 90/100)
+- AI-driven meditation script generation based on:
+  - User's assessed emotional state
+  - Selected practice duration 
+  - Specific meditation intent/goal
+- Structured three-part format (Opening, Main, Closing)
+- Adaptive pacing system:
+  - 120 WPM for anxious states
+  - 60 WPM for calm states
+- Voice narration and ambient sound coordination
 
-3. Content Orchestration (75/100)
-- Multi-layer audio management (voice, music, ambient)
-- Dynamic volume balancing
-- Context-aware ambient sound control
-- Screen-based sound transitions
+3. Personalization Algorithm (Importance: 85/100)
+- Multi-factor practice customization using:
+  - Duration preferences
+  - Emotional state mapping
+  - User intent classification
+  - Practice history patterns
+- Dynamic content adaptation
+- Space-specific modification rules
 
-4. Personalization Pipeline (70/100)
-- Intent selection → Emotional assessment → Script generation → Audio synthesis
-- Space-specific practice customization
-- Duration-based content adaptation
-- User state persistence
+The system implements a complete pipeline from emotional assessment through personalized content generation and delivery, with specialized handling for different meditation spaces and practice types.
 
-Practice Generation Flow:
-1. User completes emotional check-in
-2. System processes emotional state data
-3. AI generates customized meditation script
-4. Audio layers orchestrated based on practice type
-5. Real-time adaptation based on practice duration
+Key Files:
+- src/components/practice/PracticesTab.jsx
+- src/services/practice-gen/generator.js
+- src/utils/emotions.js
 
 $END$
 

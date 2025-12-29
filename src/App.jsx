@@ -34,6 +34,10 @@ import AmbientSoundManager from './components/AmbientSoundManager';
 import AppLayout from './components/AppLayout';
 import ProfileScreen from './components/ProfileScreen';
 import ProtectedFeedRoute from './components/ProtectedFeedRoute';
+import FeedV2 from './components/FeedV2';
+import DashboardV2 from './components/DashboardV2';
+import LoginV2 from './components/auth/LoginV2';
+import LandingV2 from './components/LandingV2';
 
 function AppContent() {
   const navigate = useNavigate();
@@ -109,6 +113,12 @@ function AppContent() {
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/signup" element={<Navigate to="/login" replace />} />
         <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+        
+        {/* V2 Routes - New Design */}
+        <Route path="/landing-v2" element={<LandingV2 />} />
+        <Route path="/login-v2" element={<LoginV2 />} />
+        <Route path="/feed-v2" element={<AuthGuard><FeedV2 /></AuthGuard>} />
+        <Route path="/dashboard-v2" element={<AuthGuard><DashboardV2 /></AuthGuard>} />
         
         {/* Protected Routes */}
         <Route path="/profile-setup" element={<AuthGuard><ProfileSetupScreen /></AuthGuard>} />
