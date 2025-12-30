@@ -1,0 +1,33 @@
+🎨 Fetching themed images from Unsplash for meditation previews...
+
+⏳ This may take a few minutes as we download 27 HD images...
+
+❌ Error generating sunrise-breath.jpg: Failed to download: 503
+❌ Error generating gratitude-setting.jpg: Failed to download: 503
+❌ Error generating morning-expansion.jpg: Failed to download: 503
+❌ Error generating 3-minute-rescue.jpg: Failed to download: 503
+❌ Error generating tension-release.jpg: Failed to download: 503
+❌ Error generating nervous-system-reset.jpg: Failed to download: 503
+❌ Error generating aware-steps.jpg: Failed to download: 503
+❌ Error generating sensory-immersion.jpg: Failed to download: 503
+❌ Error generating slow-pilgrimage.jpg: Failed to download: 503
+❌ Error generating emotion-to-color.jpg: Failed to download: 503
+❌ Error generating intuitive-sketch.jpg: Failed to download: 503
+❌ Error generating heart-on-paper.jpg: Failed to download: 503
+❌ Error generating energy-release.jpg: Failed to download: 503
+❌ Error generating dynamic-flow.jpg: Failed to download: 503
+❌ Error generating cool-down-journey.jpg: Failed to download: 503
+❌ Error generating quick-root.jpg: Failed to download: 503
+❌ Error generating body-awakening.jpg: Failed to download: 503
+❌ Error generating deep-earth-bond.jpg: Failed to download: 503
+❌ Error generating balanced-breathing.jpg: Failed to download: 503
+❌ Error generating extended-exhale.jpg: Failed to download: 503
+❌ Error generating breath-meditation.jpg: Failed to download: 503
+❌ Error generating mind-sharpening.jpg: Failed to download: 503
+❌ Error generating flow-gateway.jpg: Failed to download: 503
+❌ Error generating peak-focus.jpg: Failed to download: 503
+❌ Error generating sleep-transition.jpg: Failed to download: 503
+❌ Error generating body-softening.jpg: Failed to download: 503
+❌ Error generating dream-passage.jpg: Failed to download: 503
+
+📊 Summary: 0 successful, 27 failed
