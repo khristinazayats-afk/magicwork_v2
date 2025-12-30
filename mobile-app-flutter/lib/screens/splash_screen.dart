@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../providers/auth_provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,10 +24,47 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       final authProvider = context.read<AuthProvider>();
       if (authProvider.isAuthenticated) {
-        context.go('/feed');
+        // Check if user has completed onboarding
+        final hasCompletedOnboarding = await _checkOnboardingStatus();
+        if (hasCompletedOnboarding) {
+          context.go('/feed');
+        } else {
+          context.go('/onboarding');
+        }
       } else {
         context.go('/greeting');
       }
+    }
+  }
+
+  /// Check if user has completed onboarding
+  Future<bool> _checkOnboardingStatus() async {
+    try {
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      if (userId == null) return false;
+      
+      // Check SharedPreferences first (faster)
+      final prefs = await SharedPreferences.getInstance();
+      final onboarded = prefs.getBool('onboarded_$userId');
+      if (onboarded != null) return onboarded;
+      
+      // Fallback to Supabase if not in SharedPreferences
+      final response = await Supabase.instance.client
+          .from('user_profiles')
+          .select('onboarding_completed')
+          .eq('user_id', userId)
+          .maybeSingle();
+      
+      if (response != null && response['onboarding_completed'] == true) {
+        // Cache in SharedPreferences for next time
+        await prefs.setBool('onboarded_$userId', true);
+        return true;
+      }
+      
+      return false;
+    } catch (e) {
+      print('[SplashScreen] Error checking onboarding status: $e');
+      return false; // Show onboarding on error to be safe
     }
   }
 

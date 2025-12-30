@@ -1,0 +1,13 @@
+// Warning Suppression Configuration
+// Suppress linker search path warnings (known Xcode 26.2 issue on macOS 26+)
+// This will be fixed in Xcode 26.3+
+
+// Suppress "ld: warning: search path not found" for cryptexd paths
+LD_WARN_SEARCH_PATHS = NO
+
+// Suppress other non-critical warnings
+GCC_WARN_INHIBIT_ALL_WARNINGS = NO
+SUPPRESS_WARNINGS = YES
+
+// Ensure Swift warnings are handled appropriately
+SWIFT_SUPPRESS_WARNINGS = NO

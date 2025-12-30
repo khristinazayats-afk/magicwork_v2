@@ -25,6 +25,16 @@ export default function Feed({ onBack }) {
   const [ambientSound, setAmbientSound] = useState('forest-birds');
   const [isSoundPlaying, setIsSoundPlaying] = useState(true);
 
+  // Mood to ambient sound mapping
+  const moodToAmbientSound = {
+    'calm': 'gentle-waves',
+    'stressed': 'soft-rain',
+    'energized': 'white-noise',
+    'tired': 'temple-bells',
+    'focused': 'forest-birds',
+    'anxious': 'soft-rain'
+  };
+
   // Verify user account stats on mount
   useEffect(() => {
     async function verifyUserStats() {
@@ -40,6 +50,13 @@ export default function Feed({ onBack }) {
         const hasOnboarded = localStorage.getItem(`onboarded_${user.id}`);
         if (!hasOnboarded) {
           setShowOnboarding(true);
+        }
+
+        // Load user's mood and set appropriate ambient sound
+        const userMood = localStorage.getItem(`user_mood_${user.id}`);
+        if (userMood && moodToAmbientSound[userMood]) {
+          setAmbientSound(moodToAmbientSound[userMood]);
+          console.log(`Setting ambient sound based on mood "${userMood}":`, moodToAmbientSound[userMood]);
         }
 
         // Fetch user's meditation stats
@@ -132,6 +149,12 @@ export default function Feed({ onBack }) {
         localStorage.setItem(`onboarded_${user.id}`, JSON.stringify(data));
         localStorage.setItem(`user_mood_${user.id}`, data.mood);
         localStorage.setItem(`user_intentions_${user.id}`, JSON.stringify(data.intentions));
+        
+        // Update ambient sound based on selected mood
+        if (data.mood && moodToAmbientSound[data.mood]) {
+          setAmbientSound(moodToAmbientSound[data.mood]);
+          console.log(`Mood "${data.mood}" selected, switching ambient sound to:`, moodToAmbientSound[data.mood]);
+        }
       }
     } catch (error) {
       console.error('Error saving onboarding data:', error);

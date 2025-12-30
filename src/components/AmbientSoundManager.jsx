@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { trackAmbientSoundPlayed, trackAmbientSoundChanged } from '../services/analytics';
+import { supabase } from '../lib/supabase';
 
 // Ambient sound types available for AI generation
 const AMBIENT_TYPES = [
@@ -11,6 +12,16 @@ const AMBIENT_TYPES = [
   'breathing-space',
   'temple-bells'
 ];
+
+// Mood to ambient sound mapping
+const MOOD_TO_AMBIENT_SOUND = {
+  'calm': 'gentle-waves',
+  'stressed': 'soft-rain',
+  'energized': 'white-noise',
+  'tired': 'temple-bells',
+  'focused': 'forest-birds',
+  'anxious': 'soft-rain'
+};
 
 // Fallback to local ambient sounds if API generation unavailable
 const LOCAL_AMBIENT_SOUNDS = {
@@ -29,6 +40,48 @@ export default function AmbientSoundManager() {
   const [currentSoundType, setCurrentSoundType] = useState(null);
   const [generatedSounds, setGeneratedSounds] = useState({});
   const [userInteracted, setUserInteracted] = useState(false);
+  const [userMood, setUserMood] = useState(null);
+
+  // Load user's mood from localStorage on mount
+  useEffect(() => {
+    async function loadUserMood() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const savedMood = localStorage.getItem(`user_mood_${user.id}`);
+          if (savedMood) {
+            setUserMood(savedMood);
+            console.log(`[AmbientSoundManager] Loaded user mood: ${savedMood}`);
+          }
+        }
+      } catch (error) {
+        console.error('[AmbientSoundManager] Error loading user mood:', error);
+      }
+    }
+    loadUserMood();
+
+    // Listen for mood changes from onboarding
+    const handleStorageChange = (e) => {
+      if (e.key && e.key.includes('user_mood_')) {
+        const newMood = e.newValue;
+        if (newMood) {
+          setUserMood(newMood);
+          console.log(`[AmbientSoundManager] Mood updated to: ${newMood}`);
+          // Stop current audio to trigger reload with new mood
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = '';
+          }
+        }
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   // Enable audio on first user interaction (required for autoplay)
   useEffect(() => {
@@ -117,12 +170,20 @@ export default function AmbientSoundManager() {
     const shouldPlay = ambientRoutes.includes(location.pathname);
 
     if (shouldPlay && AMBIENT_TYPES.length > 0 && userInteracted) {
-      // Generate and play a random ambient sound if not already playing
+      // Generate and play ambient sound based on user's mood (if available)
       if (audio.paused) {
-        const randomType = AMBIENT_TYPES[currentSoundIndex];
+        // Prioritize mood-based sound, otherwise use current index
+        let selectedType;
+        if (userMood && MOOD_TO_AMBIENT_SOUND[userMood]) {
+          selectedType = MOOD_TO_AMBIENT_SOUND[userMood];
+          console.log(`[AmbientSoundManager] Using mood-based sound: ${selectedType} for mood: ${userMood}`);
+        } else {
+          selectedType = AMBIENT_TYPES[currentSoundIndex];
+          console.log(`[AmbientSoundManager] Using default sound: ${selectedType}`);
+        }
         
         // Generate the sound (or use cached version)
-        generateAmbientSound(randomType).then((soundUrl) => {
+        generateAmbientSound(selectedType).then((soundUrl) => {
           if (soundUrl && audio.paused) {
             audio.src = soundUrl;
             audio.play().catch(err => {
@@ -131,21 +192,21 @@ export default function AmbientSoundManager() {
             });
             
             // Track ambient sound played
-            if (currentSoundType !== randomType) {
+            if (currentSoundType !== selectedType) {
               if (currentSoundType) {
                 trackAmbientSoundChanged({
                   fromSound: currentSoundType,
-                  toSound: randomType,
+                  toSound: selectedType,
                   spaceName: 'main'
                 });
               } else {
                 trackAmbientSoundPlayed({
-                  soundType: randomType,
+                  soundType: selectedType,
                   spaceName: 'main',
-                  emotionalState: null
+                  emotionalState: userMood
                 });
               }
-              setCurrentSoundType(randomType);
+              setCurrentSoundType(selectedType);
             }
           }
         });
@@ -164,7 +225,7 @@ export default function AmbientSoundManager() {
         }
       });
     };
-  }, [location.pathname, currentSoundIndex, generatedSounds, currentSoundType, userInteracted]);
+  }, [location.pathname, currentSoundIndex, generatedSounds, currentSoundType, userInteracted, userMood]);
 
   return null;
 }

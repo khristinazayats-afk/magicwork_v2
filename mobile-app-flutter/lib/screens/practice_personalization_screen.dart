@@ -314,7 +314,7 @@ class _PracticePersonalizationScreenState
                                       });
                                     }
                                   },
-                                  fillColor: MaterialStateProperty.all(
+                                  fillColor: WidgetStateProperty.all(
                                     isSelected ? Colors.white : const Color(0xFF1e2d2e),
                                   ),
                                 ),
@@ -422,7 +422,15 @@ class _PracticePersonalizationScreenState
                           _includeAmbientSound = value;
                         });
                       },
-                      activeColor: const Color(0xFF1e2d2e),
+                      trackColor: WidgetStateProperty.resolveWith<Color?>(
+                        (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return const Color(0xFF1e2d2e);
+                          }
+                          return null;
+                        },
+                      ),
+                      thumbColor: WidgetStateProperty.all<Color>(Colors.white),
                     ),
                   ],
                 ),

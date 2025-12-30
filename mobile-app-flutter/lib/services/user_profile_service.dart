@@ -149,6 +149,41 @@ class UserProfileService {
     }
   }
 
+  /// Save user's mood selection (for ambient sound personalization)
+  Future<bool> saveMood(String userId, String moodId) async {
+    try {
+      await _supabase
+          .from('user_profiles')
+          .update({
+            'current_mood': moodId,
+            'mood_updated_at': DateTime.now().toIso8601String(),
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('user_id', userId);
+
+      return true;
+    } catch (e) {
+      print('Error saving mood: $e');
+      return false;
+    }
+  }
+
+  /// Get user's current mood
+  Future<String?> getMood(String userId) async {
+    try {
+      final response = await _supabase
+          .from('user_profiles')
+          .select('current_mood')
+          .eq('user_id', userId)
+          .single();
+
+      return response['current_mood'] as String?;
+    } catch (e) {
+      print('Error getting mood: $e');
+      return null;
+    }
+  }
+
   /// Mark profile setup as completed
   Future<bool> completeProfileSetup(String userId) async {
     try {

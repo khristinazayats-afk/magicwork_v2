@@ -13,6 +13,7 @@ import 'providers/user_profile_provider.dart';
 import 'widgets/analytics_navigation_observer.dart';
 import 'widgets/ambient_sound_manager.dart';
 import 'screens/splash_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'screens/greeting_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
@@ -133,6 +134,14 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/splash',
       builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: '/onboarding',
+      builder: (context, state) => OnboardingScreen(
+        onComplete: () {
+          context.go('/feed');
+        },
+      ),
     ),
     GoRoute(
       path: '/greeting',
