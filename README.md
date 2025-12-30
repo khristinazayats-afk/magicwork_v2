@@ -5,11 +5,19 @@ A minimalist mobile web app that replaces anxious scrolling with moments of shar
 ## 🚀 Quick Start
 
 ```bash
+# Install dependencies
 npm install
+
+# Generate all visual assets (images, badges, previews)
+npm run generate:all
+
+# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) on your mobile device or browser.
+Open [http://localhost:4000](http://localhost:4000) on your mobile device or browser.
+
+**📖 First time setup?** See [STARTUP_GUIDE.md](./STARTUP_GUIDE.md) for detailed instructions.
 
 ## 🎯 What's Built
 
