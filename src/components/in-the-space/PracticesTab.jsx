@@ -79,7 +79,14 @@ export default function PracticesTab({
         emotionalState,
         durationSeconds: practiceDuration || 0,
       });
+      
       // 1. Generate meditation script
+      console.log('[Generation] Starting practice generation with:', {
+        emotionalState,
+        durationMinutes: practiceDuration / 60,
+        intent: selectedIntent
+      });
+      
       const response = await fetch('/api/generate-practice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -90,11 +97,20 @@ export default function PracticesTab({
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to generate practice');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Generation failed (${response.status})`);
+      }
 
       const data = await response.json();
+      if (!data.content) {
+        throw new Error('No practice content generated');
+      }
+      
       setGeneratedScript(data.content);
-      // Generate preview image (guided meditation thumbnail)
+      console.log('[Generation] ✓ Practice script generated');
+      
+      // Generate preview image (guided meditation thumbnail) - non-blocking
       try {
         const previewRes = await fetch('/api/generate-preview', {
           method: 'POST',
@@ -104,12 +120,13 @@ export default function PracticesTab({
         if (previewRes.ok) {
           const previewData = await previewRes.json();
           setPreviewImageUrl(previewData.imageUrl || null);
+          console.log('[Generation] ✓ Preview image generated');
         }
       } catch (e) {
-        console.log('Preview image generation skipped:', e);
+        console.log('[Generation] Preview image generation skipped:', e.message);
       }
       
-      // 2. Generate cinematic AI Journey (Start & End stages)
+      // 2. Generate cinematic AI Journey (Start & End stages) - non-blocking
       setIsGeneratingVideo(true);
       
       const generateStage = (stage) => 
@@ -122,7 +139,10 @@ export default function PracticesTab({
             spaceName: station?.name,
             stage
           }),
-        }).then(res => res.ok ? res.json() : null);
+        }).then(res => res.ok ? res.json() : null).catch(e => {
+          console.log(`[Generation] Video ${stage} generation failed:`, e.message);
+          return null;
+        });
 
       // Call both in parallel
       Promise.all([generateStage('start'), generateStage('end')])
@@ -132,7 +152,7 @@ export default function PracticesTab({
             end: endData?.videoUrl || null
           };
           
-          console.log('[AI] Generated visual journey videos:', newVideos);
+          console.log('[Generation] ✓ Visual journey videos generated:', newVideos);
           setJourneyVideos(newVideos);
           // Set initial background to start stage or library fallback
           setActiveBackgroundUrl(newVideos.start || libraryVideoUrl || null);
@@ -142,10 +162,9 @@ export default function PracticesTab({
             onVideoGenerated(newVideos);
           }
         })
-        .catch(err => console.error('Journey generation error:', err))
         .finally(() => setIsGeneratingVideo(false));
 
-      // 3. Generate voice narration
+      // 3. Generate voice narration - non-blocking
       setIsGeneratingVoice(true);
       try {
         const voiceResponse = await fetch('/api/generate-voice', {
@@ -162,10 +181,13 @@ export default function PracticesTab({
           const url = URL.createObjectURL(blob);
           setNarrationUrl(url);
           narrationAudioRef.current.src = url;
-          narrationAudioRef.current.play().catch(e => console.log('Narration autoplay blocked:', e));
+          narrationAudioRef.current.play().catch(e => console.log('[Generation] Narration autoplay blocked:', e));
+          console.log('[Generation] ✓ Voice narration generated');
+        } else {
+          console.log('[Generation] Voice generation failed:', voiceResponse.status);
         }
       } catch (voiceErr) {
-        console.error('Voice generation error:', voiceErr);
+        console.log('[Generation] Voice generation error:', voiceErr.message);
       } finally {
         setIsGeneratingVoice(false);
       }
@@ -194,9 +216,11 @@ export default function PracticesTab({
       }, 1000);
 
     } catch (err) {
-      console.error('Generation error:', err);
-      setError('Something went wrong. Please try again.');
+      console.error('[Generation] ✗ Error:', err);
+      const errorMsg = err.message || 'Something went wrong during generation';
+      setError(`Generation failed: ${errorMsg}. Please try again.`);
       setFlowFlowStep('intent');
+      setIsGenerating(false);
     } finally {
       setIsGenerating(false);
     }

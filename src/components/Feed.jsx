@@ -211,11 +211,27 @@ export default function Feed({ onBack }) {
             {/* Quick Practice Suggestions */}
             <QuickPracticeSuggestions 
               onSelectSuggestion={(suggestion) => {
-                // Find the matching space or use the first one as fallback
-                const spaceIndex = spaces.findIndex(s => 
-                  s.name.toLowerCase().includes(suggestion.intent?.toLowerCase()) ||
-                  suggestion.title?.toLowerCase().includes(s.name.toLowerCase())
-                ) || 0;
+                // Find the matching space by exact name match first, then fallback to intent matching
+                let spaceIndex = 0;
+                
+                // Try exact name match with spaceName field
+                if (suggestion.spaceName) {
+                  spaceIndex = spaces.findIndex(s => s.name === suggestion.spaceName);
+                }
+                
+                // If not found, try matching by intent
+                if (spaceIndex === -1) {
+                  spaceIndex = spaces.findIndex(s => 
+                    s.name.toLowerCase().includes(suggestion.intent?.toLowerCase().replace(/_/g, ' ')) ||
+                    suggestion.intent?.toLowerCase().includes(s.name.toLowerCase().replace(/ /g, '_'))
+                  );
+                }
+                
+                // Fallback to index 0 if still not found
+                if (spaceIndex === -1) {
+                  spaceIndex = 0;
+                }
+                
                 handleJoin(spaceIndex);
               }}
             />

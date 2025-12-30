@@ -237,6 +237,11 @@ export default function PracticeCard({ station, isActive, hasInteracted, showFir
       setHeartsSent(0);
       setShowPracticeOptions(false);
       
+      // Auto-play ambient sound for this station
+      requestAnimationFrame(() => {
+        playStation(station);
+      });
+      
       // Show new tabbed interface
       setShowTabs(true);
     } catch (error) {
