@@ -121,6 +121,14 @@ Return only the meditation script content, without any additional formatting or 
       if (!hfResponse.ok) {
         const errorText = await hfResponse.text();
         console.error('HF Inference Providers error:', hfResponse.status, errorText);
+        
+        // Try OpenAI fallback if HF fails
+        const openaiKey = process.env.OPENAI_API_KEY;
+        if (openaiKey && hfResponse.status === 401) {
+          console.log('[generate-practice] Falling back to OpenAI...');
+          return generateWithOpenAI(req, res, prompt, emotionalState, durationMinutes, intent, wordsPerMinute, totalWords);
+        }
+        
         throw new Error(`HF Inference Providers error: ${hfResponse.status} - ${errorText.substring(0, 200)}`);
       }
 
@@ -175,6 +183,85 @@ Return only the meditation script content, without any additional formatting or 
       error: 'Server error',
       message: outerError.message || 'Unknown error',
       timestamp: new Date().toISOString()
+    });
+  }
+}
+
+// OpenAI fallback for when HF is unavailable
+async function generateWithOpenAI(req, res, prompt, emotionalState, durationMinutes, intent, wordsPerMinute, totalWords) {
+  const openaiKey = process.env.OPENAI_API_KEY;
+  if (!openaiKey) {
+    return res.status(500).json({
+      error: 'Failed to generate practice content',
+      message: 'Both HF and OpenAI API keys are unavailable',
+      provider: 'none'
+    });
+  }
+
+  try {
+    const openaiResponse = await fetch(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openaiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert meditation teacher who creates personalized, accessible, and supportive guided meditation scripts. Your scripts are warm, clear, and help people find calm and presence.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          max_tokens: Math.floor(totalWords * 1.5),
+          temperature: 0.7,
+          top_p: 0.9
+        }),
+      }
+    );
+
+    if (!openaiResponse.ok) {
+      const errorText = await openaiResponse.text();
+      console.error('OpenAI error:', openaiResponse.status, errorText);
+      throw new Error(`OpenAI error: ${openaiResponse.status}`);
+    }
+
+    const openaiData = await openaiResponse.json();
+    
+    let generatedContent = '';
+    if (openaiData.choices && openaiData.choices[0]?.message?.content) {
+      generatedContent = openaiData.choices[0].message.content;
+    } else {
+      throw new Error('Unexpected OpenAI response format');
+    }
+
+    generatedContent = generatedContent.trim();
+
+    if (!generatedContent) {
+      return res.status(500).json({ error: 'Failed to generate content' });
+    }
+
+    return res.status(200).json({
+      content: generatedContent,
+      emotionalState,
+      durationMinutes,
+      wordsPerMinute,
+      estimatedWords: totalWords,
+      provider: 'openai_fallback',
+      model: 'gpt-4o-mini'
+    });
+  } catch (error) {
+    console.error('OpenAI fallback error:', error);
+    return res.status(500).json({
+      error: 'Failed to generate practice content',
+      message: error.message,
+      provider: 'openai_fallback'
     });
   }
 }
