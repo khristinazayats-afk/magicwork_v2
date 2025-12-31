@@ -8,15 +8,3 @@ api/audio-metadata.js
 api/feed.js
 api/ingest.js
 api/presign.js
-
-# Keep these essential functions:
-# - api/events.js (used by usePostEvent)
-# - api/progress.js (used by useProgress)
-# - api/content-assets.js (used by useContentSet)
-# - api/content-sets.js (may be used)
-# - api/generate-practice.js (AI content generation)
-# - api/generate-recommendations.js (recommendations)
-# - api/generate-voice.js (text-to-speech)
-# - api/generate-preview.js (image generation)
-# - api/generate-video.js (video generation)
-# - api/test-env.js (debugging)
