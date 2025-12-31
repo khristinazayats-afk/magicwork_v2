@@ -30,7 +30,7 @@ export default function SignupScreen() {
             is_trial: isTrial,
             trial_limit_seconds: 420, // 7 minutes
           },
-          emailRedirectTo: `${window.location.origin}/login`,
+          emailRedirectTo: `${window.location.origin}/email-verified`,
         },
       });
 

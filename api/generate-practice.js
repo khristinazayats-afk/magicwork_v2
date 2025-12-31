@@ -5,14 +5,13 @@
 export const config = { runtime: 'nodejs' };
 
 /**
- * Generate meditation practice scripts using Hugging Face Inference API
+ * Generate meditation practice scripts using Hugging Face Inference Providers
  * 
  * Available LLM models:
- * - "meta-llama/Meta-Llama-3.1-8B-Instruct" - Fast, high quality (current)
+ * - "meta-llama/Llama-3.1-8B-Instruct" - Fast, high quality (current)
  * - "mistralai/Mistral-7B-Instruct-v0.2" - Alternative option
- * - "google/flan-t5-xxl" - Good for structured outputs
  * 
- * Documentation: https://huggingface.co/docs/api-inference/index
+ * Documentation: https://huggingface.co/docs/inference-providers/
  */
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -77,72 +76,92 @@ ${intentGuidance ? `- ${intentGuidance}\n` : ''}- Include natural pauses and mom
 
 Return only the meditation script content, without any additional formatting or explanation.`;
 
-    // Use Llama 3.1-8B via Inference Providers (cheapest routing)
-    const modelId = 'meta-llama/Llama-3.1-8B-Instruct:cheapest';
+    // Use Llama 3.1-8B via Inference Providers
+    const modelId = 'meta-llama/Llama-3.1-8B-Instruct';
     
-    const hfResponse = await fetch(
-      'https://router.huggingface.co/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${hfApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: modelId,
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an expert meditation teacher who creates personalized, accessible, and supportive guided meditation scripts. Your scripts are warm, clear, and help people find calm and presence.'
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          max_tokens: Math.floor(totalWords * 1.5),
-          temperature: 0.7,
-          top_p: 0.9
-        }),
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
+    try {
+      const hfResponse = await fetch(
+        'https://router.huggingface.co/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${hfApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          signal: controller.signal,
+          body: JSON.stringify({
+            model: modelId,
+            messages: [
+              {
+                role: 'system',
+                content: 'You are an expert meditation teacher who creates personalized, accessible, and supportive guided meditation scripts. Your scripts are warm, clear, and help people find calm and presence.'
+              },
+              {
+                role: 'user',
+                content: prompt
+              }
+            ],
+            max_tokens: Math.floor(totalWords * 1.5),
+            temperature: 0.7,
+            top_p: 0.9
+          }),
+        }
+      );
+
+      clearTimeout(timeout);
+
+      if (!hfResponse.ok) {
+        const errorText = await hfResponse.text();
+        console.error('HF Inference Providers error:', hfResponse.status, errorText);
+        throw new Error(`HF Inference Providers error: ${hfResponse.status} - ${errorText.substring(0, 200)}`);
+
+      const hfData = await hfResponse.json();
+      
+      // Extract content from OpenAI-compatible response format
+      let generatedContent = '';
+      if (hfData.choices && hfData.choices[0]?.message?.content) {
+        generatedContent = hfData.choices[0].message.content;
+      } else {
+        console.error('Unexpected Inference Providers response format:', hfData);
+        throw new Error('Unexpected response format from Inference Providers');
       }
-    );
 
-    if (!hfResponse.ok) {
-      const errorText = await hfResponse.text();
-      console.error('HF Inference Providers error:', hfResponse.status, errorText);
-      throw new Error(`HF Inference Providers error: ${hfResponse.status}`);
+      // Clean up any remaining formatting
+      generatedContent = generatedContent.trim();
+
+      if (!generatedContent) {
+        return res.status(500).json({ error: 'Failed to generate content' });
+      }
+
+      return res.status(200).json({
+        content: generatedContent,
+        emotionalState,
+        durationMinutes,
+        wordsPerMinute,
+        estimatedWords: totalWords,
+        provider: 'huggingface',
+        model: modelId
+      });
+    } catch (error) {
+      clearTimeout(timeout);
+      
+      if (error.name === 'AbortError') {
+        console.error('HF request timeout after 30 seconds');
+        return res.status(504).json({
+          error: 'Generation timeout',
+          message: 'The model took too long to respond. Please try again.'
+        });
+      }
+      
+      console.error('Error generating practice content:', error);
+      return res.status(500).json({
+        error: 'Failed to generate practice content',
+        message: error.message
+      });
     }
-
-    const hfData = await hfResponse.json();
-    
-    // Extract content from OpenAI-compatible response format
-    let generatedContent = '';
-    if (hfData.choices && hfData.choices[0]?.message?.content) {
-      generatedContent = hfData.choices[0].message.content;
-    } else {
-      console.error('Unexpected Inference Providers response format:', hfData);
-      throw new Error('Unexpected response format from Inference Providers');
-    }
-
-    // Clean up any remaining formatting
-    generatedContent = generatedContent.trim();
-
-    if (!generatedContent) {
-      return res.status(500).json({ error: 'Failed to generate content' });
-    }
-
-    return res.status(200).json({
-      content: generatedContent,
-      emotionalState,
-      durationMinutes,
-      wordsPerMinute,
-      estimatedWords: totalWords,
-      provider: 'huggingface',
-      model: modelId
-    });
-
-  } catch (error) {
-    console.error('Error generating practice content:', error);
     return res.status(500).json({
       error: 'Failed to generate practice content',
       message: error.message

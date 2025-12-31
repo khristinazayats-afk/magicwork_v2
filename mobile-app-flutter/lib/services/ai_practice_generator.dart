@@ -31,12 +31,34 @@ class AIPracticeGenerator {
           'voice': voice,
           'pace': pace,
         },
+        options: Options(
+          timeout: const Duration(seconds: 45), // Allow longer timeout for HF
+        ),
       );
 
-      final content = response.data['content'] as String?;
-      return content;
+      if (response.statusCode == 200) {
+        final content = response.data['content'] as String?;
+        if (content != null && content.isNotEmpty) {
+          print('✓ Practice content generated successfully');
+          return content;
+        }
+      }
+      
+      print('⚠ Unexpected response from server: ${response.statusCode}');
+      return null;
+    } on DioException catch (dioError) {
+      if (dioError.type == DioExceptionType.connectionTimeout) {
+        print('✗ Connection timeout - server took too long to respond');
+      } else if (dioError.type == DioExceptionType.receiveTimeout) {
+        print('✗ Receive timeout - response took too long');
+      } else if (dioError.response != null) {
+        print('✗ Server error ${dioError.response?.statusCode}: ${dioError.response?.data}');
+      } else {
+        print('✗ Error generating practice content: ${dioError.message}');
+      }
+      return null;
     } catch (e) {
-      print('Error generating practice content: $e');
+      print('✗ Unexpected error generating practice content: $e');
       return null;
     }
   }

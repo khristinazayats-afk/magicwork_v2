@@ -135,7 +135,7 @@ async function generateRecommendations(history, currentContext) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'meta-llama/Llama-3.1-8B-Instruct:cheapest',
+        model: 'meta-llama/Llama-3.1-8B-Instruct',
         messages: [
           {
             role: 'system',

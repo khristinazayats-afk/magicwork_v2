@@ -28,6 +28,7 @@ import AllContentAssetsTest from './components/AllContentAssetsTest';
 import GreetingScreen from './components/screens/GreetingScreen';
 import LoginScreen from './components/auth/LoginScreen';
 import SignupScreen from './components/auth/SignupScreen';
+import EmailVerifiedScreen from './components/auth/EmailVerifiedScreen';
 import ForgotPasswordScreen from './components/auth/ForgotPasswordScreen';
 import ProfileSetupScreen from './components/screens/ProfileSetupScreen';
 import WhatToExpectScreen from './components/screens/WhatToExpectScreen';
@@ -121,6 +122,7 @@ function AppContent() {
         <Route path="/greeting" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/signup" element={<Navigate to="/login" replace />} />
+        <Route path="/email-verified" element={<EmailVerifiedScreen />} />
         <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
         
         {/* V2 Routes - New Design */}

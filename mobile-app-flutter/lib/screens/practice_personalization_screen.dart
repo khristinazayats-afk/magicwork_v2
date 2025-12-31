@@ -96,7 +96,7 @@ class _PracticePersonalizationScreenState
 
       if (practiceContent == null || practiceContent.isEmpty) {
         setState(() {
-          _errorMessage = 'Failed to generate practice content. Please try again.';
+          _errorMessage = 'Failed to generate practice content. Please check your connection and try again.';
           _isGenerating = false;
         });
         return;
@@ -120,9 +120,10 @@ class _PracticePersonalizationScreenState
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Error generating practice: ${e.toString()}';
+        _errorMessage = 'Error generating practice: ${e.toString()}\n\nPlease try again or contact support if the problem persists.';
         _isGenerating = false;
       });
+      print('Practice generation error: $e');
     }
   }
 

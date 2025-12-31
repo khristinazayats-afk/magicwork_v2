@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
 class AppTheme {
+  // Color constants
+  static const Color primaryColor = AppColors.primary;
+  static const Color secondaryColor = AppColors.secondary;
+  static const Color backgroundColor = AppColors.background;
+  static const Color errorColor = AppColors.error;
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,

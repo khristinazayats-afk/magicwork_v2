@@ -10,6 +10,8 @@ import 'providers/auth_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/analytics_provider.dart';
 import 'providers/user_profile_provider.dart';
+import 'providers/subscription_provider.dart';
+import 'services/fcm_service.dart';
 import 'widgets/analytics_navigation_observer.dart';
 import 'widgets/ambient_sound_manager.dart';
 import 'screens/splash_screen.dart';
@@ -28,6 +30,8 @@ import 'screens/intent_selection_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/user_account_screen.dart';
 import 'screens/what_to_expect_screen.dart';
+import 'screens/paywall_screen.dart';
+import 'screens/notification_settings_screen.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
@@ -73,19 +77,31 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
             ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
             ChangeNotifierProvider(create: (_) => UserProfileProvider()),
+            ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
           ],
-          child: Consumer4<ThemeProvider, AuthProvider, AnalyticsProvider, UserProfileProvider>(
-            builder: (context, themeProvider, authProvider, analyticsProvider, profileProvider, _) {
-              // Initialize analytics when user is authenticated
+          child: Consumer5<ThemeProvider, AuthProvider, AnalyticsProvider, UserProfileProvider, SubscriptionProvider>(
+            builder: (context, themeProvider, authProvider, analyticsProvider, profileProvider, subscriptionProvider, _) {
+              // Initialize services when user is authenticated
               final currentUser = authProvider.user;
-              if (currentUser != null && !analyticsProvider.isInitialized) {
+              if (currentUser != null) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (context.mounted) {
                     try {
-                      analyticsProvider.initialize(currentUser.id);
+                      // Initialize analytics
+                      if (!analyticsProvider.isInitialized) {
+                        analyticsProvider.initialize(currentUser.id);
+                      }
+                      
+                      // Load user profile
                       profileProvider.loadProfile(currentUser.id);
+                      
+                      // Initialize subscriptions
+                      subscriptionProvider.initialize(currentUser.id);
+                      
+                      // Initialize push notifications
+                      PushNotificationService().initialize();
                     } catch (e) {
-                      print('Error initializing analytics/profile: $e');
+                      print('Error initializing services: $e');
                     }
                   }
                 });
@@ -201,6 +217,14 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/what-to-expect',
       builder: (context, state) => const WhatToExpectScreen(),
+    ),
+    GoRoute(
+      path: '/paywall',
+      builder: (context, state) => const PaywallScreen(),
+    ),
+    GoRoute(
+      path: '/notification-settings',
+      builder: (context, state) => const NotificationSettingsScreen(),
     ),
   ],
 );
