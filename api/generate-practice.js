@@ -14,6 +14,9 @@ export const config = { runtime: 'nodejs' };
  * Documentation: https://huggingface.co/docs/inference-providers/
  */
 export default async function handler(req, res) {
+  // Debug: Log that we're in the handler
+  console.log('[generate-practice] Handler invoked, method:', req.method);
+  
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -23,6 +26,8 @@ export default async function handler(req, res) {
 
   try {
     const { emotionalState, durationMinutes, intent } = req.body;
+    
+    console.log('[generate-practice] Request received:', { emotionalState, durationMinutes, intent });
 
     if (!emotionalState || typeof emotionalState !== 'string') {
       return res.status(400).json({ error: 'emotionalState is required and must be a string' });
@@ -159,12 +164,16 @@ Return only the meditation script content, without any additional formatting or 
       console.error('Error generating practice content:', error);
       return res.status(500).json({
         error: 'Failed to generate practice content',
-        message: error.message
+        message: error.message,
+        provider: 'huggingface'
       });
     }
+  } catch (outerError) {
+    console.error('Fatal error in generate-practice handler:', outerError);
     return res.status(500).json({
-      error: 'Failed to generate practice content',
-      message: error.message
+      error: 'Server error',
+      message: outerError.message || 'Unknown error',
+      timestamp: new Date().toISOString()
     });
   }
 }
