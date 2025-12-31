@@ -76,7 +76,7 @@ ${intentGuidance ? `- ${intentGuidance}\n` : ''}- Include natural pauses and mom
 
 Return only the meditation script content, without any additional formatting or explanation.`;
 
-    // Use Llama 3.1-8B via Inference Providers
+    // Use Llama 3.1-8B via Inference Providers (updated: 2025-12-31)
     const modelId = 'meta-llama/Llama-3.1-8B-Instruct';
     
     const controller = new AbortController();
