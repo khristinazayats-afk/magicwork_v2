@@ -3,10 +3,11 @@
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "ignoreCommand": "git diff --quiet HEAD~ HEAD -- . ':!dist'",
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/$1.js"
+      "destination": "/api/$1"
     },
     {
       "source": "/(.*)",
