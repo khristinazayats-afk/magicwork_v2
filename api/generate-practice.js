@@ -122,6 +122,7 @@ Return only the meditation script content, without any additional formatting or 
         const errorText = await hfResponse.text();
         console.error('HF Inference Providers error:', hfResponse.status, errorText);
         throw new Error(`HF Inference Providers error: ${hfResponse.status} - ${errorText.substring(0, 200)}`);
+      }
 
       const hfData = await hfResponse.json();
       
