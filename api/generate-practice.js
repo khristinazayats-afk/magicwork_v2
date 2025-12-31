@@ -122,11 +122,11 @@ Return only the meditation script content, without any additional formatting or 
         const errorText = await hfResponse.text();
         console.error('HF Inference Providers error:', hfResponse.status, errorText);
         
-        // Try OpenAI fallback if HF fails
-        const openaiKey = process.env.OPENAI_API_KEY;
-        if (openaiKey && hfResponse.status === 401) {
-          console.log('[generate-practice] Falling back to OpenAI...');
-          return generateWithOpenAI(req, res, prompt, emotionalState, durationMinutes, intent, wordsPerMinute, totalWords);
+        // Try OpenAI fallback if HF fails (especially on auth errors)
+        if (hfResponse.status === 401 && process.env.OPENAI_API_KEY) {
+          console.log('[generate-practice] HF auth failed (401), trying OpenAI fallback...');
+          await generateWithOpenAI(req, res, prompt, emotionalState, durationMinutes, intent, wordsPerMinute, totalWords);
+          return;  // Response already sent by fallback function
         }
         
         throw new Error(`HF Inference Providers error: ${hfResponse.status} - ${errorText.substring(0, 200)}`);
