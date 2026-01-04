@@ -85,6 +85,9 @@ export default function MinimalPracticeScreen({
 
   return (
     <div className="fixed inset-0 z-50 bg-[#fcf8f2] flex flex-col">
+      {/* Hidden audio element */}
+      <audio ref={audioRef} />
+      
       {/* Video Background */}
       {videoUrl && !assetsLoading && (
         <video
