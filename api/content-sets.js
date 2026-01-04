@@ -8,6 +8,8 @@
  * - GET /api/content-sets/:id - Get specific content set by ID
  */
 
+export const config = { runtime: 'nodejs' };
+
 import { sql } from './db/client.js';
 
 /**

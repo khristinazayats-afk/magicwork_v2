@@ -9,6 +9,8 @@
  * - GET /api/content-assets/space/:space - Get assets for a specific space
  */
 
+export const config = { runtime: 'nodejs' };
+
 import { sql } from './db/client.js';
 
 // Check if database is configured
