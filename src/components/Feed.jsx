@@ -4,6 +4,7 @@ import SettingsBottomSheet from './SettingsBottomSheet';
 import HomeScreenSummary from './HomeScreenSummary';
 import ProfileScreen from './ProfileScreen';
 import PracticeCard from './PracticeCard';
+import MinimalPracticeScreen from './MinimalPracticeScreen';
 import ProgressStats from './ProgressStats';
 import QuickPracticeSuggestions from './QuickPracticeSuggestions';
 import stationsData from '../data/stations.json';
@@ -299,23 +300,12 @@ export default function Feed({ onBack }) {
         </div>
       </div>
       
-      {/* Desktop/Grid PracticeCard Overlay - shown when card clicked */}
+      {/* Minimal Practice Screen - shown when practice is selected */}
       {activeSpaceIndex !== null && (
-        <div className="hidden md:block fixed inset-0 z-50">
-          <PracticeCard
-            station={spaces[activeSpaceIndex]}
-            isActive={true}
-            hasInteracted={true}
-            showFirstTimeHint={false}
-            swipeHintReady={true}
-            onBack={handleLeave}
-            currentIndex={activeSpaceIndex + 1}
-            totalPractices={spaces.length}
-            onJoin={() => handleJoin(activeSpaceIndex)}
-            onLeave={handleLeave}
-            isCurrentlyActive={true}
-          />
-        </div>
+        <MinimalPracticeScreen
+          station={spaces[activeSpaceIndex]}
+          onBack={handleLeave}
+        />
       )}
       
       <SettingsBottomSheet isOpen={showSettings} onClose={() => setShowSettings(false)} />
