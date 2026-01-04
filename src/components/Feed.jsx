@@ -210,7 +210,7 @@ export default function Feed({ onBack }) {
 
             {/* Quick Practice Suggestions */}
             <QuickPracticeSuggestions 
-              onSelectSuggestion={(suggestion) => {
+              onSelectPractice={(suggestion) => {
                 // Find the matching space by exact name match first, then fallback to intent matching
                 let spaceIndex = 0;
                 
@@ -238,11 +238,17 @@ export default function Feed({ onBack }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 content-auto">
               {spaces.map((space, index) => (
-                <motion.div
+                <motion.button
                   key={`grid-${space.name}-${index}`}
+                  type="button"
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => handleJoin(index)}
-                  className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end hover:scale-[1.02] transition-transform duration-150 will-change-transform content-auto"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleJoin(index);
+                  }}
+                  className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end hover:scale-[1.02] transition-transform duration-150 will-change-transform content-auto text-left"
+                  style={{ touchAction: 'manipulation' }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-[#1e2d2e]/5 group-hover:from-white/20 transition-all" />
                   <div className="relative z-10">
@@ -257,7 +263,7 @@ export default function Feed({ onBack }) {
                       </span>
                     </div>
                   </div>
-                </motion.div>
+                </motion.button>
               ))}
             </div>
           </div>
