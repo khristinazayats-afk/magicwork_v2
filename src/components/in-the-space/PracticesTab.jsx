@@ -331,13 +331,18 @@ export default function PracticesTab({
 
           <div className="space-y-4">
             {/* AI Custom Practice Card */}
-            <motion.div
+            <motion.button
+              type="button"
               whileTap={{ scale: 0.98 }}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[PracticesTab] AI Custom Practice button clicked');
                 setActivePracticeId('ai_custom');
                 setFlowFlowStep('emotional_checkin');
               }}
-              className="bg-[#1e2d2e] text-white rounded-2xl p-6 shadow-lg cursor-pointer border border-white/10"
+              className="w-full bg-[#1e2d2e] text-white rounded-2xl p-6 shadow-lg cursor-pointer border border-white/10 text-left"
+              style={{ touchAction: 'manipulation' }}
             >
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl">✨</span>
@@ -351,7 +356,7 @@ export default function PracticesTab({
               <div className="text-xs font-hanken bg-white/20 px-3 py-1 rounded-full inline-block">
                 Custom Duration
               </div>
-            </motion.div>
+            </motion.button>
 
             {/* Live-only: Static practice lists removed */}
           </div>
