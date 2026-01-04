@@ -9,6 +9,7 @@ export default function MinimalPracticeScreen({
 }) {
   const [timeRemaining, setTimeRemaining] = useState(600); // 10 minutes default
   const [isRunning, setIsRunning] = useState(true);
+  const [showHeader, setShowHeader] = useState(true);
   const intervalRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -103,9 +104,23 @@ export default function MinimalPracticeScreen({
       )}
 
       {/* Content */}
-      <div className="relative z-10 flex-1 flex flex-col">
+      <div 
+        className="relative z-10 flex-1 flex flex-col"
+        onClick={(e) => {
+          // Only toggle if clicking on the content area, not on buttons
+          if (e.target === e.currentTarget || e.target.closest('.guidance-text')) {
+            setShowHeader(prev => !prev);
+          }
+        }}
+      >
         {/* Header with Back Button and Timer */}
-        <div className="flex items-center justify-between p-6" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.5rem)' }}>
+        <motion.div 
+          className="flex items-center justify-between p-6" 
+          style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.5rem)' }}
+          initial={{ opacity: 1, y: 0 }}
+          animate={{ opacity: showHeader ? 1 : 0, y: showHeader ? 0 : -20 }}
+          transition={{ duration: 0.3 }}
+        >
           <button
             onClick={handleBack}
             className="p-2 rounded-full hover:bg-white/20 transition-colors"
@@ -137,10 +152,10 @@ export default function MinimalPracticeScreen({
 
           {/* Spacer for symmetry */}
           <div className="w-10" />
-        </div>
+        </motion.div>
 
         {/* Guidance Text - Centered */}
-        <div className="flex-1 flex items-center justify-center px-6 pb-32">
+        <div className="flex-1 flex items-center justify-center px-6 pb-32 guidance-text" style={{ cursor: 'pointer' }}>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
