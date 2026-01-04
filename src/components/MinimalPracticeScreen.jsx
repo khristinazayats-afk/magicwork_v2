@@ -5,6 +5,7 @@ import { useLocalAudio } from '../hooks/useLocalAudio';
 
 export default function MinimalPracticeScreen({ 
   station, 
+  practice,
   onBack 
 }) {
   const [timeRemaining, setTimeRemaining] = useState(600); // 10 minutes default
@@ -18,7 +19,30 @@ export default function MinimalPracticeScreen({
 
   // Fetch video content for this space
   const { contentSet, loading: assetsLoading } = useContentSet(station?.name);
-  const videoUrl = contentSet?.visual?.cdn_url || null;
+  
+  // For predefined practices, randomly select from available videos for variety
+  // For custom practices, use the primary video
+  const getVideoUrl = () => {
+    if (!contentSet) return null;
+    
+    // If custom practice, use primary video
+    if (practice?.type === 'custom') {
+      return contentSet.visual?.cdn_url || null;
+    }
+    
+    // For predefined practices, randomly select from available videos
+    const videos = contentSet.visuals || [];
+    if (videos.length > 0) {
+      // Use practice index to seed selection for consistency
+      const practiceIndex = practice?.index || 0;
+      const selectedVideo = videos[practiceIndex % videos.length];
+      return selectedVideo?.cdn_url || contentSet.visual?.cdn_url || null;
+    }
+    
+    return contentSet.visual?.cdn_url || null;
+  };
+  
+  const videoUrl = getVideoUrl();
 
   // Timer countdown
   useEffect(() => {
@@ -59,8 +83,19 @@ export default function MinimalPracticeScreen({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Guidance text based on space
+  // Guidance text based on practice type
   const getGuidance = () => {
+    // For predefined practices, use the practice description
+    if (practice?.type === 'preconfigured' && practice?.description) {
+      return practice.description;
+    }
+    
+    // For custom practices, use generated content or default
+    if (practice?.type === 'custom' && practice?.guidance) {
+      return practice.guidance;
+    }
+    
+    // Fallback to space-based guidance
     const guidance = {
       'Slow Morning': 'Find a comfortable position. Close your eyes if it feels right. Breathe naturally and notice the gentle rhythm of your breath.',
       'Gentle De-Stress': 'Allow your body to soften. Release any tension you\'re holding. Let each breath carry away stress and tension.',
@@ -73,6 +108,15 @@ export default function MinimalPracticeScreen({
     };
     return guidance[station?.name] || 'Take a moment to be present. Breathe naturally and allow yourself to settle into this practice.';
   };
+
+  // Parse duration from practice
+  useEffect(() => {
+    if (practice?.duration) {
+      const durationStr = practice.duration;
+      const minutes = parseInt(durationStr) || 10; // Default to 10 minutes
+      setTimeRemaining(minutes * 60);
+    }
+  }, [practice]);
 
   const handleBack = () => {
     // Stop audio

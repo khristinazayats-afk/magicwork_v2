@@ -5,6 +5,8 @@ import HomeScreenSummary from './HomeScreenSummary';
 import ProfileScreen from './ProfileScreen';
 import PracticeCard from './PracticeCard';
 import MinimalPracticeScreen from './MinimalPracticeScreen';
+import PracticeOptions from './PracticeOptions';
+import EmotionalStateFlow from './EmotionalStateFlow';
 import ProgressStats from './ProgressStats';
 import QuickPracticeSuggestions from './QuickPracticeSuggestions';
 import stationsData from '../data/stations.json';
@@ -20,6 +22,8 @@ export default function Feed({ onBack }) {
   const [showSettings, setShowSettings] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [activeSpaceIndex, setActiveSpaceIndex] = useState(null);
+  const [selectedPractice, setSelectedPractice] = useState(null);
+  const [showPracticeSelection, setShowPracticeSelection] = useState(false);
   const [swipeHintReady] = useState(true);
   const [isAdminDesktop, setIsAdminDesktop] = useState(false);
   
@@ -111,10 +115,19 @@ export default function Feed({ onBack }) {
 
   const handleJoin = (normalizedIndex) => {
     setActiveSpaceIndex(normalizedIndex);
+    setShowPracticeSelection(true);
+    setSelectedPractice(null);
   };
 
   const handleLeave = () => {
     setActiveSpaceIndex(null);
+    setShowPracticeSelection(false);
+    setSelectedPractice(null);
+  };
+
+  const handlePracticeSelect = (practice) => {
+    setSelectedPractice(practice);
+    setShowPracticeSelection(false);
   };
 
   // Create infinite scroll by tripling the spaces array
@@ -300,11 +313,96 @@ export default function Feed({ onBack }) {
         </div>
       </div>
       
+      {/* Practice Selection Screen - 3 predefined + 1 custom */}
+      {activeSpaceIndex !== null && showPracticeSelection && (
+        <div className="fixed inset-0 z-50 bg-[#fcf8f2] flex flex-col overflow-y-auto">
+          <div className="p-6" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.5rem)' }}>
+            <button
+              onClick={handleLeave}
+              className="mb-6 p-2 rounded-full hover:bg-white/20 transition-colors"
+              aria-label="Back"
+            >
+              <svg 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path 
+                  d="M15 18l-6-6 6-6" 
+                  stroke="#1e2d2e" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <h1 className="font-hanken font-bold text-3xl text-[#1e2d2e] mb-2">
+              {spaces[activeSpaceIndex]?.name}
+            </h1>
+            <p className="text-[#1e2d2e]/60 font-hanken mb-8">
+              Choose a practice or create your own
+            </p>
+            <PracticeOptions
+              spaceName={spaces[activeSpaceIndex]?.name}
+              onSelectPractice={handlePracticeSelect}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Emotional State Flow - for custom practices */}
+      {activeSpaceIndex !== null && selectedPractice?.type === 'custom' && !showPracticeSelection && !selectedPractice?.generated && (
+        <EmotionalStateFlow
+          station={spaces[activeSpaceIndex]}
+          onComplete={async (flowData) => {
+            // Generate custom practice
+            try {
+              const response = await fetch('/api/generate-practice', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  emotionalState: flowData.currentState,
+                  durationMinutes: flowData.duration / 60,
+                  intent: flowData.intent,
+                  spaceName: flowData.station
+                }),
+              });
+
+              if (response.ok) {
+                const data = await response.json();
+                setSelectedPractice({
+                  ...flowData,
+                  generated: true,
+                  guidance: data.content,
+                  type: 'custom'
+                });
+              } else {
+                console.error('Failed to generate practice');
+                handleLeave();
+              }
+            } catch (err) {
+              console.error('Error generating practice:', err);
+              handleLeave();
+            }
+          }}
+          onBack={() => {
+            setSelectedPractice(null);
+            setShowPracticeSelection(true);
+          }}
+        />
+      )}
+
       {/* Minimal Practice Screen - shown when practice is selected */}
-      {activeSpaceIndex !== null && (
+      {activeSpaceIndex !== null && selectedPractice && !showPracticeSelection && (selectedPractice?.type === 'preconfigured' || selectedPractice?.generated) && (
         <MinimalPracticeScreen
           station={spaces[activeSpaceIndex]}
-          onBack={handleLeave}
+          practice={selectedPractice}
+          onBack={() => {
+            setSelectedPractice(null);
+            setShowPracticeSelection(true);
+          }}
         />
       )}
       
