@@ -380,7 +380,10 @@ export default function Feed({ onBack }) {
                   ...flowData,
                   generated: true,
                   guidance: data.content,
-                  type: 'custom'
+                  type: 'custom',
+                  emotionalState: flowData.currentState,
+                  intent: flowData.intent,
+                  voicePreference: flowData.voicePreference || 'female'
                 });
               } else {
                 console.error('Failed to generate practice');

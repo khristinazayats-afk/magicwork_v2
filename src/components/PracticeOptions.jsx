@@ -196,7 +196,12 @@ export default function PracticeOptions({ spaceName, onSelectPractice }) {
       onSelectPractice({
         type: 'preconfigured',
         index,
-        ...meditations[index]
+        ...meditations[index],
+        // Default voice preference (user can change in practice screen)
+        voicePreference: 'female',
+        // Default emotional state for predefined practices
+        emotionalState: 'neutral',
+        intent: 'reduce_stress'
       });
     }, 300);
   };
@@ -206,7 +211,9 @@ export default function PracticeOptions({ spaceName, onSelectPractice }) {
       type: 'custom',
       title: 'Your Custom Practice',
       duration: '∞',
-      description: 'Create exactly what you need'
+      description: 'Create exactly what you need',
+      // Will be set during emotional state flow
+      voicePreference: 'female'
     });
   };
 

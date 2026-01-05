@@ -21,7 +21,15 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { text, voice = 'default' } = req.body;
+    const { 
+      text, 
+      voice = 'default',
+      emotionalState = 'neutral',
+      intent = 'reduce_stress',
+      tone = 'warm',
+      pace = 'slow',
+      stability = 0.8
+    } = req.body;
 
     if (!text) {
       return res.status(400).json({ error: 'Text is required' });
@@ -33,12 +41,12 @@ export default async function handler(req, res) {
     
     // Prefer ElevenLabs for best quality meditation voice
     if (elevenlabsApiKey) {
-      return await generateWithElevenLabs(elevenlabsApiKey, text, voice, res);
+      return await generateWithElevenLabs(elevenlabsApiKey, text, voice, emotionalState, intent, tone, pace, stability, res);
     }
     
     // Fallback to OpenAI TTS
     if (openaiApiKey) {
-      return await generateWithOpenAI(openaiApiKey, text, voice, res);
+      return await generateWithOpenAI(openaiApiKey, text, voice, emotionalState, intent, tone, pace, stability, res);
     }
     
     if (!hfApiKey) {
@@ -98,17 +106,40 @@ export default async function handler(req, res) {
 }
 
 // ElevenLabs TTS generation (primary - best quality for meditation)
-async function generateWithElevenLabs(apiKey, text, voice, res) {
+async function generateWithElevenLabs(apiKey, text, voice, emotionalState, intent, tone, pace, stability, res) {
   try {
-    // ElevenLabs voice IDs optimized for meditation
-    const voiceMap = {
+    // ElevenLabs voice IDs - Male and Female voices
+    const maleVoices = {
       'default': 'pNInz6obpgDQGcFmaJgB', // Adam - calm, soothing
-      'calm': 'pNInz6obpgDQGcFmaJgB',    // Adam
-      'warm': 'EXAVITQu4vr4xnSDxMaL',    // Sarah - warm, gentle
-      'clear': 'ErXwobaYiN019PkySvjV'    // Antoni - clear, professional
+      'clear': 'ErXwobaYiN019PkySvjV',    // Antoni - clear, professional
+      'grounding': 'pNInz6obpgDQGcFmaJgB', // Adam - grounding
+      'energetic': 'ErXwobaYiN019PkySvjV',  // Antoni - energetic
+      'gentle': 'pNInz6obpgDQGcFmaJgB'     // Adam - gentle
     };
     
-    const selectedVoiceId = voiceMap[voice] || voiceMap['default'];
+    const femaleVoices = {
+      'default': 'EXAVITQu4vr4xnSDxMaL', // Sarah - warm, gentle
+      'warm': 'EXAVITQu4vr4xnSDxMaL',     // Sarah
+      'calm': '21m00Tcm4TlvDq8ikWAM',     // Rachel - calm, soothing
+      'soothing': '21m00Tcm4TlvDq8ikWAM', // Rachel - very soothing
+      'very_calm': '21m00Tcm4TlvDq8ikWAM', // Rachel - extremely calm
+      'extremely_calm': '21m00Tcm4TlvDq8ikWAM', // Rachel - extremely calm
+      'balanced': 'EXAVITQu4vr4xnSDxMaL'   // Sarah - balanced
+    };
+    
+    // Select voice based on gender preference
+    const isMale = voice === 'clear' || voice === 'male';
+    const voiceMap = isMale ? maleVoices : femaleVoices;
+    const selectedVoiceId = voiceMap[tone] || voiceMap['default'];
+    
+    // Adjust pace based on emotional state and intent
+    let speed = 1.0;
+    if (pace === 'very_slow') speed = 0.85;
+    else if (pace === 'slow') speed = 0.9;
+    else if (pace === 'moderate') speed = 0.95;
+    
+    // Adjust stability based on emotional state (more anxious = more stable voice)
+    const adjustedStability = Math.min(0.98, Math.max(0.7, stability));
     
     const elevenlabsResponse = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}`,
@@ -122,9 +153,9 @@ async function generateWithElevenLabs(apiKey, text, voice, res) {
           text: text,
           model_id: 'eleven_multilingual_v2',
           voice_settings: {
-            stability: 0.75,        // Higher stability for meditation
-            similarity_boost: 0.8,  // Natural voice quality
-            style: 0.3,             // Subtle expression
+            stability: adjustedStability,  // Dynamic based on emotional state
+            similarity_boost: 0.8,        // Natural voice quality
+            style: tone === 'energetic' ? 0.5 : 0.3, // More expression for energy, subtle for calm
             use_speaker_boost: true
           }
         }),
@@ -150,16 +181,37 @@ async function generateWithElevenLabs(apiKey, text, voice, res) {
 }
 
 // OpenAI TTS generation (fallback - good quality, fast)
-async function generateWithOpenAI(apiKey, text, voice, res) {
+async function generateWithOpenAI(apiKey, text, voice, emotionalState, intent, tone, pace, stability, res) {
   try {
-    const voiceMap = {
-      'default': 'shimmer',
-      'calm': 'shimmer',
-      'warm': 'nova',
-      'clear': 'alloy'
+    // OpenAI voices - Male and Female
+    const maleVoices = {
+      'default': 'alloy',
+      'clear': 'alloy',
+      'grounding': 'alloy',
+      'energetic': 'echo',
+      'gentle': 'alloy'
     };
     
-    const selectedVoice = voiceMap[voice] || 'shimmer';
+    const femaleVoices = {
+      'default': 'shimmer',
+      'warm': 'nova',
+      'calm': 'shimmer',
+      'soothing': 'shimmer',
+      'very_calm': 'shimmer',
+      'extremely_calm': 'shimmer',
+      'balanced': 'nova'
+    };
+    
+    // Select voice based on gender preference
+    const isMale = voice === 'clear' || voice === 'male';
+    const voiceMap = isMale ? maleVoices : femaleVoices;
+    const selectedVoice = voiceMap[tone] || voiceMap['default'];
+    
+    // Adjust speed based on pace
+    let speed = 1.0;
+    if (pace === 'very_slow') speed = 0.85;
+    else if (pace === 'slow') speed = 0.9;
+    else if (pace === 'moderate') speed = 0.95;
     
     const openaiResponse = await fetch(
       'https://api.openai.com/v1/audio/speech',
@@ -173,7 +225,7 @@ async function generateWithOpenAI(apiKey, text, voice, res) {
           model: 'tts-1',
           input: text,
           voice: selectedVoice,
-          speed: 0.9 // Slightly slower for meditation
+          speed: speed // Dynamic speed based on emotional state and intent
         }),
       }
     );
