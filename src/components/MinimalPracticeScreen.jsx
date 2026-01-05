@@ -193,20 +193,24 @@ export default function MinimalPracticeScreen({
 
   // Generate voice narration
   useEffect(() => {
+    if (!practice || narrationUrl) return; // Don't regenerate if already exists
+    
     const generateNarration = async () => {
       const guidanceText = getGuidance();
-      if (!guidanceText || narrationUrl) return; // Don't regenerate if already exists
+      if (!guidanceText) return;
       
       setIsGeneratingVoice(true);
       try {
         const voiceAttrs = getVoiceAttributes();
+        // Use selectedVoice if user has changed it, otherwise use computed attributes
+        const voiceGender = selectedVoice || voiceAttrs.gender;
         
         const response = await fetch('/api/generate-voice', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             text: guidanceText,
-            voice: voiceAttrs.gender === 'male' ? 'clear' : 'warm',
+            voice: voiceGender === 'male' ? 'clear' : 'warm',
             emotionalState: practice?.emotionalState || practice?.currentState,
             intent: practice?.intent || practice?.selectedIntent,
             tone: voiceAttrs.tone,
@@ -239,10 +243,7 @@ export default function MinimalPracticeScreen({
       }
     };
 
-    // Generate narration when practice starts
-    if (practice && !narrationUrl) {
-      generateNarration();
-    }
+    generateNarration();
 
     // Cleanup on unmount
     return () => {
@@ -254,7 +255,7 @@ export default function MinimalPracticeScreen({
         narrationAudioRef.current.src = '';
       }
     };
-  }, [practice, narrationUrl]); // Include narrationUrl to prevent regeneration
+  }, [practice]); // Only depend on practice, not narrationUrl to allow regeneration
 
   // Handle voice selection change
   const handleVoiceChange = async (gender) => {
