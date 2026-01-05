@@ -345,7 +345,15 @@ export default function MinimalPracticeScreen({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#fcf8f2] flex flex-col">
+    <div 
+      className="fixed inset-0 z-50 bg-[#fcf8f2] flex flex-col"
+      style={{
+        height: '100dvh', // Dynamic viewport height for mobile
+        WebkitOverflowScrolling: 'touch',
+        touchAction: 'pan-y', // Allow vertical scrolling if needed
+        overscrollBehavior: 'contain'
+      }}
+    >
       {/* Hidden audio elements */}
       <audio ref={audioRef} />
       <audio ref={narrationAudioRef} />
@@ -373,13 +381,17 @@ export default function MinimalPracticeScreen({
             setShowHeader(prev => !prev);
           }
         }}
+        style={{ touchAction: 'manipulation' }} // Optimize touch interactions
       >
         {/* Header with Back Button, Timer, and Voice Controls */}
         <AnimatePresence>
           {showHeader && (
             <motion.div 
-              className="flex items-center justify-between p-6 absolute top-0 left-0 right-0 z-20" 
-              style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.5rem)' }}
+              className="flex items-center justify-between p-4 md:p-6 absolute top-0 left-0 right-0 z-20" 
+              style={{ 
+                paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
+                paddingBottom: 'env(safe-area-inset-bottom, 0px)'
+              }}
               initial={{ opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -387,7 +399,8 @@ export default function MinimalPracticeScreen({
             >
               <button
                 onClick={handleBack}
-                className="p-2 rounded-full hover:bg-white/20 transition-colors flex-shrink-0"
+                className="p-3 md:p-2 rounded-full hover:bg-white/20 active:bg-white/30 transition-colors flex-shrink-0 touch-manipulation"
+                style={{ touchAction: 'manipulation', minWidth: '44px', minHeight: '44px' }} // iOS touch target size
                 aria-label="Back"
               >
                 <svg 
@@ -408,34 +421,36 @@ export default function MinimalPracticeScreen({
               </button>
 
               {/* Timer - Centered */}
-              <div className="text-center flex-1 min-w-0">
-                <div className="font-hanken font-bold text-[#1e2d2e] text-3xl tabular-nums">
+              <div className="text-center flex-1 min-w-0 px-2">
+                <div className="font-hanken font-bold text-[#1e2d2e] text-2xl md:text-3xl tabular-nums">
                   {formatTime(timeRemaining)}
                 </div>
               </div>
 
               {/* Voice Controls - Right side */}
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
                 {/* Voice Selection */}
-                <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm rounded-full p-1 border border-[#1e2d2e]/10">
+                <div className="flex items-center gap-0.5 md:gap-1 bg-white/80 backdrop-blur-sm rounded-full p-0.5 md:p-1 border border-[#1e2d2e]/10">
                   <button
                     onClick={() => handleVoiceChange('female')}
-                    className={`px-3 py-1.5 rounded-full text-xs font-hanken font-semibold transition-all ${
+                    className={`px-2.5 md:px-3 py-2 md:py-1.5 rounded-full text-xs md:text-sm font-hanken font-semibold transition-all active:scale-95 ${
                       selectedVoice === 'female'
                         ? 'bg-[#1e2d2e] text-white'
-                        : 'text-[#1e2d2e]/60 hover:text-[#1e2d2e]'
+                        : 'text-[#1e2d2e]/60 active:text-[#1e2d2e]'
                     }`}
+                    style={{ touchAction: 'manipulation', minWidth: '36px', minHeight: '36px' }}
                     disabled={isGeneratingVoice}
                   >
                     ♀
                   </button>
                   <button
                     onClick={() => handleVoiceChange('male')}
-                    className={`px-3 py-1.5 rounded-full text-xs font-hanken font-semibold transition-all ${
+                    className={`px-2.5 md:px-3 py-2 md:py-1.5 rounded-full text-xs md:text-sm font-hanken font-semibold transition-all active:scale-95 ${
                       selectedVoice === 'male'
                         ? 'bg-[#1e2d2e] text-white'
-                        : 'text-[#1e2d2e]/60 hover:text-[#1e2d2e]'
+                        : 'text-[#1e2d2e]/60 active:text-[#1e2d2e]'
                     }`}
+                    style={{ touchAction: 'manipulation', minWidth: '36px', minHeight: '36px' }}
                     disabled={isGeneratingVoice}
                   >
                     ♂
@@ -446,7 +461,8 @@ export default function MinimalPracticeScreen({
                 {narrationUrl && (
                   <button
                     onClick={toggleNarration}
-                    className="p-2 rounded-full hover:bg-white/20 transition-colors flex-shrink-0"
+                    className="p-3 md:p-2 rounded-full hover:bg-white/20 active:bg-white/30 transition-colors flex-shrink-0 touch-manipulation"
+                    style={{ touchAction: 'manipulation', minWidth: '44px', minHeight: '44px' }}
                     aria-label={isPlayingNarration ? 'Pause narration' : 'Play narration'}
                   >
                     {isGeneratingVoice ? (
@@ -473,10 +489,15 @@ export default function MinimalPracticeScreen({
 
         {/* Guidance Text - Centered */}
         <div 
-          className="flex-1 flex items-center justify-center px-6 pb-32 guidance-text" 
+          className="flex-1 flex items-center justify-center px-4 md:px-6 pb-24 md:pb-32 guidance-text" 
           style={{ 
             cursor: 'pointer',
-            paddingTop: showHeader ? 'calc(env(safe-area-inset-top, 0px) + 5rem)' : 'calc(env(safe-area-inset-top, 0px) + 1rem)'
+            paddingTop: showHeader 
+              ? 'calc(env(safe-area-inset-top, 0px) + 4.5rem)' 
+              : 'calc(env(safe-area-inset-top, 0px) + 1rem)',
+            paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 6rem)',
+            WebkitTapHighlightColor: 'transparent', // Remove tap highlight on mobile
+            touchAction: 'manipulation'
           }}
         >
           <motion.p
@@ -484,7 +505,11 @@ export default function MinimalPracticeScreen({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-hanken text-[#1e2d2e] text-lg md:text-xl leading-relaxed text-center max-w-2xl"
+            className="font-hanken text-[#1e2d2e] text-base md:text-lg lg:text-xl leading-relaxed text-center max-w-2xl px-2"
+            style={{ 
+              userSelect: 'none', // Prevent text selection on mobile
+              WebkitUserSelect: 'none'
+            }}
           >
             {getGuidance()}
           </motion.p>
