@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectJdkTable">
+    <jdk version="2">
+      <name value="21" />
+      <type value="JavaSDK" />
+      <version value="21" />
+      <homePath value="/opt/homebrew/opt/openjdk@21" />
+      <roots>
+        <annotationsPath>
+          <root type="composite">
+            <root type="simple" url="jar://$PROJECT_DIR$/lib/jdk-21_annotations.jar!/" />
+          </root>
+        </annotationsPath>
+        <classPath>
+          <root type="composite" />
+        </classPath>
+        <javadocPath>
+          <root type="composite" />
+        </javadocPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+    </jdk>
+  </component>
+</project>
+
