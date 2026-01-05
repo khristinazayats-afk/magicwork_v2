@@ -5,6 +5,12 @@ allprojects {
     }
 }
 
+subprojects {
+    tasks.withType<JavaCompile>().configureEach {
+        options.release.set(17)
+    }
+}
+
 val newBuildDir: Directory =
     rootProject.layout.buildDirectory
         .dir("../../build")
