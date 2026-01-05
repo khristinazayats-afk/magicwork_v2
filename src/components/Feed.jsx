@@ -114,6 +114,7 @@ export default function Feed({ onBack }) {
   }, [spaces.length]);
 
   const handleJoin = (normalizedIndex) => {
+    console.log('[Feed] handleJoin called with index:', normalizedIndex, 'space:', spaces[normalizedIndex]?.name);
     setActiveSpaceIndex(normalizedIndex);
     setShowPracticeSelection(true);
     setSelectedPractice(null);
@@ -259,6 +260,7 @@ export default function Feed({ onBack }) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    console.log('[Feed] Practice card clicked:', space.name, 'index:', index);
                     handleJoin(index);
                   }}
                   className="bg-white rounded-[32px] p-8 shadow-sm border border-[#1e2d2e]/5 cursor-pointer relative overflow-hidden group h-64 flex flex-col justify-end hover:scale-[1.02] transition-transform duration-150 will-change-transform content-auto text-left"
