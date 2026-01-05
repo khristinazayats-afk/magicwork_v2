@@ -51,7 +51,7 @@ class AmplitudeAnalyticsService {
     if (!_isInitialized) return;
 
     try {
-      await _amplitude.logEvent('Screen Viewed', {
+      await _amplitude.logEvent('Screen Viewed', eventProperties: {
         'screen_name': screenName,
         'timestamp': DateTime.now().toIso8601String(),
       });
@@ -65,7 +65,7 @@ class AmplitudeAnalyticsService {
     if (!_isInitialized) return;
 
     try {
-      await _amplitude.logEvent('Practice Started', {
+      await _amplitude.logEvent('Practice Started', eventProperties: {
         'practice_name': practiceName,
         'duration_minutes': durationMinutes,
         'timestamp': DateTime.now().toIso8601String(),
@@ -85,7 +85,7 @@ class AmplitudeAnalyticsService {
     if (!_isInitialized) return;
 
     try {
-      await _amplitude.logEvent('Practice Completed', {
+      await _amplitude.logEvent('Practice Completed', eventProperties: {
         'practice_name': practiceName,
         'duration_minutes': durationMinutes,
         'mood': mood,
@@ -112,10 +112,10 @@ class AmplitudeAnalyticsService {
       };
 
       if (packageId != null) properties['package_id'] = packageId;
-      if (price != null) properties['price'] = price;
+      if (price != null) properties['price'] = price.toString();
       if (currency != null) properties['currency'] = currency;
 
-      await _amplitude.logEvent('Subscription Event', properties);
+      await _amplitude.logEvent('Subscription Event', eventProperties: properties);
     } catch (e) {
       debugPrint('Error tracking subscription event: $e');
     }
@@ -126,7 +126,7 @@ class AmplitudeAnalyticsService {
     if (!_isInitialized) return;
 
     try {
-      await _amplitude.logEvent('Mood Check In', {
+      await _amplitude.logEvent('Mood Check In', eventProperties: {
         'mood': mood,
         'intent': intent,
         'timestamp': DateTime.now().toIso8601String(),
@@ -149,7 +149,7 @@ class AmplitudeAnalyticsService {
         ...?properties,
       };
 
-      await _amplitude.logEvent('User Engagement', eventProperties);
+      await _amplitude.logEvent('User Engagement', eventProperties: eventProperties);
     } catch (e) {
       debugPrint('Error tracking user engagement: $e');
     }
@@ -160,7 +160,7 @@ class AmplitudeAnalyticsService {
     if (!_isInitialized) return;
 
     try {
-      await _amplitude.logEvent('User Retention', {
+      await _amplitude.logEvent('User Retention', eventProperties: {
         'days_since_install': daysSinceInstall,
         'timestamp': DateTime.now().toIso8601String(),
       });
@@ -174,7 +174,7 @@ class AmplitudeAnalyticsService {
     if (!_isInitialized) return;
 
     try {
-      await _amplitude.logEvent('Error Occurred', {
+      await _amplitude.logEvent('Error Occurred', eventProperties: {
         'error_message': errorMessage,
         'error_type': errorType,
         'timestamp': DateTime.now().toIso8601String(),
@@ -189,9 +189,7 @@ class AmplitudeAnalyticsService {
     if (!_isInitialized) return;
 
     try {
-      for (final entry in properties.entries) {
-        await _amplitude.setUserProperty(entry.key, entry.value);
-      }
+      await _amplitude.setUserProperties(properties);
     } catch (e) {
       debugPrint('Error setting user properties: $e');
     }

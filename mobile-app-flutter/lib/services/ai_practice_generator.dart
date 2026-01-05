@@ -32,7 +32,8 @@ class AIPracticeGenerator {
           'pace': pace,
         },
         options: Options(
-          timeout: const Duration(seconds: 45), // Allow longer timeout for HF
+          sendTimeout: const Duration(seconds: 45),
+          receiveTimeout: const Duration(seconds: 45),
         ),
       );
 

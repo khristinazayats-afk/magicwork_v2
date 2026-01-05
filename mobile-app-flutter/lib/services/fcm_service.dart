@@ -204,9 +204,7 @@ class PushNotificationService {
             presentSound: true,
           ),
         ),
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absolute,
-        androidAllowWhileIdle: true,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       );
 
       debugPrint('Meditation reminder scheduled for: $scheduledTime');

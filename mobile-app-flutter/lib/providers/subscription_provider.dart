@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import '../services/subscription_service.dart';
-import '../services/analytics_service.dart';
+import '../services/amplitude_analytics_service.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
   final SubscriptionService _subscriptionService = SubscriptionService();

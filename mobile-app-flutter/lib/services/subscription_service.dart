@@ -2,11 +2,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter/foundation.dart';
 
 class SubscriptionService {
-  static const String _revenueCatApiKey = String.fromEnvironment(
-    'REVENUECAT_API_KEY',
-    defaultValue: '',
-  );
-
   static const String _apiKeyAndroid = String.fromEnvironment(
     'REVENUECAT_API_KEY_ANDROID',
     defaultValue: '',
@@ -75,8 +70,8 @@ class SubscriptionService {
   /// Purchase a package
   Future<bool> purchasePackage(Package package) async {
     try {
-      final customerInfo = await Purchases.purchasePackage(package);
-      _customerInfo = customerInfo;
+      final purchaseResult = await Purchases.purchasePackage(package);
+      _customerInfo = purchaseResult.customerInfo;
 
       debugPrint('Purchase successful: ${package.identifier}');
       return true;
@@ -115,7 +110,7 @@ class SubscriptionService {
   /// Get subscription status
   bool get hasActiveSubscription {
     if (_customerInfo == null) return false;
-    return _customerInfo!.allPurchasedProductIds.isNotEmpty;
+    return _customerInfo!.entitlements.active.isNotEmpty;
   }
 
   /// Fetch current customer info
@@ -130,7 +125,8 @@ class SubscriptionService {
   /// Log in user
   Future<void> logInUser(String userId) async {
     try {
-      _customerInfo = await Purchases.logIn(userId);
+      final logInResult = await Purchases.logIn(userId);
+      _customerInfo = logInResult.customerInfo;
     } catch (e) {
       debugPrint('Error logging in user: $e');
     }

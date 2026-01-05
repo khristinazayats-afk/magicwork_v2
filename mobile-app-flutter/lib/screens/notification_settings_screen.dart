@@ -223,9 +223,9 @@ class _NotificationSettingsScreenState
       );
 
       await _fcmService.scheduleMeditationReminder(
-        'Time for meditation',
-        'Start your daily practice',
-        scheduledTime,
+        title: 'Time for meditation',
+        body: 'Start your daily practice',
+        scheduledTime: scheduledTime,
       );
 
       if (mounted) {

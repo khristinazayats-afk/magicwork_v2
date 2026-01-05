@@ -17,9 +17,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
     super.initState();
     // Track paywall view
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final subscriptionProvider =
-          context.read<SubscriptionProvider>();
-      // Track analytics event
+      // Track analytics event if needed
     });
   }
 
@@ -156,7 +154,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                               subscriptionProvider.error ??
                                   'Purchase failed',
                             ),
-                            isError: true,
+                            backgroundColor: Colors.red,
                           ),
                         );
                       }
@@ -303,17 +301,17 @@ class _PaywallScreenState extends State<PaywallScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              package.product.priceString,
+              package.storeProduct.priceString,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: AppTheme.primaryColor,
               ),
             ),
-            if (package.product.subscriptionPeriod != null) ...[
+            if (package.storeProduct.subscriptionPeriod != null) ...[
               const SizedBox(height: 4),
               Text(
-                'per ${package.product.subscriptionPeriod}',
+                'per ${package.storeProduct.subscriptionPeriod}',
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
