@@ -472,8 +472,15 @@ export default function MinimalPracticeScreen({
         </AnimatePresence>
 
         {/* Guidance Text - Centered */}
-        <div className="flex-1 flex items-center justify-center px-6 pb-32 guidance-text" style={{ cursor: 'pointer' }}>
+        <div 
+          className="flex-1 flex items-center justify-center px-6 pb-32 guidance-text" 
+          style={{ 
+            cursor: 'pointer',
+            paddingTop: showHeader ? 'calc(env(safe-area-inset-top, 0px) + 5rem)' : 'calc(env(safe-area-inset-top, 0px) + 1rem)'
+          }}
+        >
           <motion.p
+            key={getGuidance()}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
