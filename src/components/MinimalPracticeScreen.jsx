@@ -374,97 +374,102 @@ export default function MinimalPracticeScreen({
           }
         }}
       >
-        {/* Header with Back Button and Timer */}
-        <motion.div 
-          className="flex items-center justify-between p-6" 
-          style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.5rem)' }}
-          initial={{ opacity: 1, y: 0 }}
-          animate={{ opacity: showHeader ? 1 : 0, y: showHeader ? 0 : -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <button
-            onClick={handleBack}
-            className="p-2 rounded-full hover:bg-white/20 transition-colors"
-            aria-label="Back"
-          >
-            <svg 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
+        {/* Header with Back Button, Timer, and Voice Controls */}
+        <AnimatePresence>
+          {showHeader && (
+            <motion.div 
+              className="flex items-center justify-between p-6 absolute top-0 left-0 right-0 z-20" 
+              style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.5rem)' }}
+              initial={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              <path 
-                d="M15 18l-6-6 6-6" 
-                stroke="#1e2d2e" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          {/* Timer */}
-          <div className="text-center">
-            <div className="font-hanken font-bold text-[#1e2d2e] text-3xl tabular-nums">
-              {formatTime(timeRemaining)}
-            </div>
-          </div>
-
-          {/* Voice Controls */}
-          <div className="flex items-center gap-2">
-            {/* Voice Selection */}
-            <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm rounded-full p-1 border border-[#1e2d2e]/10">
               <button
-                onClick={() => handleVoiceChange('female')}
-                className={`px-3 py-1.5 rounded-full text-xs font-hanken font-semibold transition-all ${
-                  selectedVoice === 'female'
-                    ? 'bg-[#1e2d2e] text-white'
-                    : 'text-[#1e2d2e]/60 hover:text-[#1e2d2e]'
-                }`}
-                disabled={isGeneratingVoice}
+                onClick={handleBack}
+                className="p-2 rounded-full hover:bg-white/20 transition-colors flex-shrink-0"
+                aria-label="Back"
               >
-                ♀
-              </button>
-              <button
-                onClick={() => handleVoiceChange('male')}
-                className={`px-3 py-1.5 rounded-full text-xs font-hanken font-semibold transition-all ${
-                  selectedVoice === 'male'
-                    ? 'bg-[#1e2d2e] text-white'
-                    : 'text-[#1e2d2e]/60 hover:text-[#1e2d2e]'
-                }`}
-                disabled={isGeneratingVoice}
-              >
-                ♂
-              </button>
-            </div>
-            
-            {/* Narration Play/Pause */}
-            {narrationUrl && (
-              <button
-                onClick={toggleNarration}
-                className="p-2 rounded-full hover:bg-white/20 transition-colors"
-                aria-label={isPlayingNarration ? 'Pause narration' : 'Play narration'}
-              >
-                {isGeneratingVoice ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                    className="w-5 h-5 border-2 border-[#1e2d2e] border-t-transparent rounded-full"
+                <svg 
+                  width="24" 
+                  height="24" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    d="M15 18l-6-6 6-6" 
+                    stroke="#1e2d2e" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
                   />
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    {isPlayingNarration ? (
-                      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" fill="#1e2d2e" />
-                    ) : (
-                      <path d="M8 5v14l11-7z" fill="#1e2d2e" />
-                    )}
-                  </svg>
-                )}
+                </svg>
               </button>
-            )}
-          </div>
-        </motion.div>
+
+              {/* Timer - Centered */}
+              <div className="text-center flex-1 min-w-0">
+                <div className="font-hanken font-bold text-[#1e2d2e] text-3xl tabular-nums">
+                  {formatTime(timeRemaining)}
+                </div>
+              </div>
+
+              {/* Voice Controls - Right side */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {/* Voice Selection */}
+                <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm rounded-full p-1 border border-[#1e2d2e]/10">
+                  <button
+                    onClick={() => handleVoiceChange('female')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-hanken font-semibold transition-all ${
+                      selectedVoice === 'female'
+                        ? 'bg-[#1e2d2e] text-white'
+                        : 'text-[#1e2d2e]/60 hover:text-[#1e2d2e]'
+                    }`}
+                    disabled={isGeneratingVoice}
+                  >
+                    ♀
+                  </button>
+                  <button
+                    onClick={() => handleVoiceChange('male')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-hanken font-semibold transition-all ${
+                      selectedVoice === 'male'
+                        ? 'bg-[#1e2d2e] text-white'
+                        : 'text-[#1e2d2e]/60 hover:text-[#1e2d2e]'
+                    }`}
+                    disabled={isGeneratingVoice}
+                  >
+                    ♂
+                  </button>
+                </div>
+                
+                {/* Narration Play/Pause */}
+                {narrationUrl && (
+                  <button
+                    onClick={toggleNarration}
+                    className="p-2 rounded-full hover:bg-white/20 transition-colors flex-shrink-0"
+                    aria-label={isPlayingNarration ? 'Pause narration' : 'Play narration'}
+                  >
+                    {isGeneratingVoice ? (
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        className="w-5 h-5 border-2 border-[#1e2d2e] border-t-transparent rounded-full"
+                      />
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        {isPlayingNarration ? (
+                          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" fill="#1e2d2e" />
+                        ) : (
+                          <path d="M8 5v14l11-7z" fill="#1e2d2e" />
+                        )}
+                      </svg>
+                    )}
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Guidance Text - Centered */}
         <div className="flex-1 flex items-center justify-center px-6 pb-32 guidance-text" style={{ cursor: 'pointer' }}>
