@@ -284,33 +284,35 @@ export default function Feed({ onBack }) {
         )}
 
         {/* Mobile-only infinite scroll - Hidden on desktop */}
-        <div className="md:hidden">
-          {infiniteSpaces.map((space, index) => {
-            const normalizedIndex = index % spaces.length;
-            return (
-              <div 
-                key={`${space.name}-${index}`} 
-                className="snap-start snap-always w-full flex-shrink-0 min-h-screen" 
-                style={{ margin: 0, padding: 0 }}
-              >
-                <PracticeCard
-                  station={space}
-                  isActive={index === spaces.length}
-                  hasInteracted={true}
-                  showFirstTimeHint={false}
-                  swipeHintReady={swipeHintReady}
-                  key={`card-${index}`}
-                  onBack={handleLeave}
-                  currentIndex={(normalizedIndex) + 1}
-                  totalPractices={spaces.length}
-                  onJoin={() => handleJoin(normalizedIndex)}
-                  onLeave={handleLeave}
-                  isCurrentlyActive={activeSpaceIndex === normalizedIndex}
-                />
-              </div>
-            );
-          })}
-        </div>
+        {activeSpaceIndex === null && (
+          <div className="md:hidden">
+            {infiniteSpaces.map((space, index) => {
+              const normalizedIndex = index % spaces.length;
+              return (
+                <div 
+                  key={`${space.name}-${index}`} 
+                  className="snap-start snap-always w-full flex-shrink-0 min-h-screen" 
+                  style={{ margin: 0, padding: 0 }}
+                >
+                  <PracticeCard
+                    station={space}
+                    isActive={index === spaces.length}
+                    hasInteracted={true}
+                    showFirstTimeHint={false}
+                    swipeHintReady={swipeHintReady}
+                    key={`card-${index}`}
+                    onBack={handleLeave}
+                    currentIndex={(normalizedIndex) + 1}
+                    totalPractices={spaces.length}
+                    onJoin={() => handleJoin(normalizedIndex)}
+                    onLeave={handleLeave}
+                    isCurrentlyActive={false}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       
       {/* Practice Selection Screen - 3 predefined + 1 custom */}
