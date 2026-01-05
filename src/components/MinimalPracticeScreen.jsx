@@ -11,13 +11,73 @@ export default function MinimalPracticeScreen({
   const [timeRemaining, setTimeRemaining] = useState(600); // 10 minutes default
   const [isRunning, setIsRunning] = useState(true);
   const [showHeader, setShowHeader] = useState(true);
-  const [selectedVoice, setSelectedVoice] = useState(() => {
-    // Initialize voice based on practice attributes
+  // Get voice attributes helper (moved before state initialization)
+  const getVoiceAttributes = () => {
     const emotionalState = practice?.emotionalState || practice?.currentState || 'neutral';
     const intent = practice?.intent || practice?.selectedIntent || 'reduce_stress';
-    // Default: female for calming, male for focus/energy
-    if (intent === 'improve_focus' || intent === 'boost_energy') return 'male';
-    return practice?.voicePreference || 'female';
+    
+    // Voice selection based on journey: from current state to desired state
+    const voiceMap = {
+      // Calm/Neutral states → Any intent: Warm, soothing voices
+      calm: {
+        reduce_stress: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.8 },
+        improve_focus: { gender: 'male', tone: 'clear', pace: 'moderate', stability: 0.75 },
+        better_sleep: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.85 },
+        boost_energy: { gender: 'male', tone: 'energetic', pace: 'moderate', stability: 0.7 },
+        emotional_balance: { gender: 'female', tone: 'balanced', pace: 'slow', stability: 0.8 },
+        self_compassion: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.85 }
+      },
+      neutral: {
+        reduce_stress: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.8 },
+        improve_focus: { gender: 'male', tone: 'clear', pace: 'moderate', stability: 0.75 },
+        better_sleep: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.85 },
+        boost_energy: { gender: 'male', tone: 'energetic', pace: 'moderate', stability: 0.7 },
+        emotional_balance: { gender: 'female', tone: 'balanced', pace: 'slow', stability: 0.8 },
+        self_compassion: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.85 }
+      },
+      // Anxious states → Calming intents: Very soothing, slower
+      slightly_anxious: {
+        reduce_stress: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.9 },
+        improve_focus: { gender: 'male', tone: 'grounding', pace: 'slow', stability: 0.85 },
+        better_sleep: { gender: 'female', tone: 'soothing', pace: 'very_slow', stability: 0.9 },
+        boost_energy: { gender: 'male', tone: 'gentle', pace: 'slow', stability: 0.85 },
+        emotional_balance: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.9 },
+        self_compassion: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.9 }
+      },
+      anxious: {
+        reduce_stress: { gender: 'female', tone: 'very_calm', pace: 'very_slow', stability: 0.95 },
+        improve_focus: { gender: 'male', tone: 'grounding', pace: 'slow', stability: 0.9 },
+        better_sleep: { gender: 'female', tone: 'soothing', pace: 'very_slow', stability: 0.95 },
+        boost_energy: { gender: 'male', tone: 'gentle', pace: 'slow', stability: 0.9 },
+        emotional_balance: { gender: 'female', tone: 'very_calm', pace: 'very_slow', stability: 0.95 },
+        self_compassion: { gender: 'female', tone: 'warm', pace: 'very_slow', stability: 0.95 }
+      },
+      very_anxious: {
+        reduce_stress: { gender: 'female', tone: 'extremely_calm', pace: 'very_slow', stability: 0.98 },
+        improve_focus: { gender: 'male', tone: 'grounding', pace: 'very_slow', stability: 0.95 },
+        better_sleep: { gender: 'female', tone: 'soothing', pace: 'very_slow', stability: 0.98 },
+        boost_energy: { gender: 'male', tone: 'gentle', pace: 'very_slow', stability: 0.95 },
+        emotional_balance: { gender: 'female', tone: 'extremely_calm', pace: 'very_slow', stability: 0.98 },
+        self_compassion: { gender: 'female', tone: 'warm', pace: 'very_slow', stability: 0.98 }
+      }
+    };
+    
+    const stateMap = voiceMap[emotionalState] || voiceMap.neutral;
+    const attributes = stateMap[intent] || stateMap.reduce_stress;
+    
+    // Override with user's selected voice preference if available
+    if (practice?.voicePreference) {
+      attributes.gender = practice.voicePreference;
+    }
+    
+    return attributes;
+  };
+
+  const [selectedVoice, setSelectedVoice] = useState(() => {
+    // Initialize voice based on practice attributes
+    if (!practice) return 'female';
+    const voiceAttrs = getVoiceAttributes();
+    return practice?.voicePreference || voiceAttrs.gender || 'female';
   });
   const [narrationUrl, setNarrationUrl] = useState(null);
   const [isGeneratingVoice, setIsGeneratingVoice] = useState(false);
@@ -130,67 +190,6 @@ export default function MinimalPracticeScreen({
     }
   }, [practice]);
 
-  // Get voice attributes based on emotional state and intent
-  const getVoiceAttributes = () => {
-    const emotionalState = practice?.emotionalState || practice?.currentState || 'neutral';
-    const intent = practice?.intent || practice?.selectedIntent || 'reduce_stress';
-    
-    // Voice selection based on journey: from current state to desired state
-    const voiceMap = {
-      // Calm/Neutral states → Any intent: Warm, soothing voices
-      calm: {
-        reduce_stress: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.8 },
-        improve_focus: { gender: 'male', tone: 'clear', pace: 'moderate', stability: 0.75 },
-        better_sleep: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.85 },
-        boost_energy: { gender: 'male', tone: 'energetic', pace: 'moderate', stability: 0.7 },
-        emotional_balance: { gender: 'female', tone: 'balanced', pace: 'slow', stability: 0.8 },
-        self_compassion: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.85 }
-      },
-      neutral: {
-        reduce_stress: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.8 },
-        improve_focus: { gender: 'male', tone: 'clear', pace: 'moderate', stability: 0.75 },
-        better_sleep: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.85 },
-        boost_energy: { gender: 'male', tone: 'energetic', pace: 'moderate', stability: 0.7 },
-        emotional_balance: { gender: 'female', tone: 'balanced', pace: 'slow', stability: 0.8 },
-        self_compassion: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.85 }
-      },
-      // Anxious states → Calming intents: Very soothing, slower
-      slightly_anxious: {
-        reduce_stress: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.9 },
-        improve_focus: { gender: 'male', tone: 'grounding', pace: 'slow', stability: 0.85 },
-        better_sleep: { gender: 'female', tone: 'soothing', pace: 'very_slow', stability: 0.9 },
-        boost_energy: { gender: 'male', tone: 'gentle', pace: 'slow', stability: 0.85 },
-        emotional_balance: { gender: 'female', tone: 'calm', pace: 'slow', stability: 0.9 },
-        self_compassion: { gender: 'female', tone: 'warm', pace: 'slow', stability: 0.9 }
-      },
-      anxious: {
-        reduce_stress: { gender: 'female', tone: 'very_calm', pace: 'very_slow', stability: 0.95 },
-        improve_focus: { gender: 'male', tone: 'grounding', pace: 'slow', stability: 0.9 },
-        better_sleep: { gender: 'female', tone: 'soothing', pace: 'very_slow', stability: 0.95 },
-        boost_energy: { gender: 'male', tone: 'gentle', pace: 'slow', stability: 0.9 },
-        emotional_balance: { gender: 'female', tone: 'very_calm', pace: 'very_slow', stability: 0.95 },
-        self_compassion: { gender: 'female', tone: 'warm', pace: 'very_slow', stability: 0.95 }
-      },
-      very_anxious: {
-        reduce_stress: { gender: 'female', tone: 'extremely_calm', pace: 'very_slow', stability: 0.98 },
-        improve_focus: { gender: 'male', tone: 'grounding', pace: 'very_slow', stability: 0.95 },
-        better_sleep: { gender: 'female', tone: 'soothing', pace: 'very_slow', stability: 0.98 },
-        boost_energy: { gender: 'male', tone: 'gentle', pace: 'very_slow', stability: 0.95 },
-        emotional_balance: { gender: 'female', tone: 'extremely_calm', pace: 'very_slow', stability: 0.98 },
-        self_compassion: { gender: 'female', tone: 'warm', pace: 'very_slow', stability: 0.98 }
-      }
-    };
-    
-    const stateMap = voiceMap[emotionalState] || voiceMap.neutral;
-    const attributes = stateMap[intent] || stateMap.reduce_stress;
-    
-    // Override with user's selected voice preference if available
-    if (practice?.voicePreference) {
-      attributes.gender = practice.voicePreference;
-    }
-    
-    return attributes;
-  };
 
   // Generate voice narration
   useEffect(() => {
