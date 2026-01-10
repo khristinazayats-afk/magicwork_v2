@@ -11,7 +11,7 @@
 
 export const config = { runtime: 'nodejs' };
 
-import { sql } from './db/client.js';
+import { sql } from '../lib/db/client.js';
 
 // Check if database is configured
 function checkDatabaseConfig() {

@@ -1,7 +1,7 @@
 // @ts-nocheck
 // POST /api/events - Record a gamification event
-import { sql } from './db/client.js';
-import { LP_VALUES, DAILY_CAPS, MILESTONES } from './config/gamification.js';
+import { sql } from '../lib/db/client.js';
+import { LP_VALUES, DAILY_CAPS, MILESTONES } from '../lib/config/gamification.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -161,7 +161,7 @@ async function checkMilestones(userId, lifetimeDays, consecutiveDays) {
   `;
   const grantedIds = new Set(grantedResult.rows.map(r => r.milestone_id));
 
-  const { MILESTONES } = await import('./config/gamification.js');
+  const { MILESTONES } = await import('../lib/config/gamification.js');
   const eligible = MILESTONES.filter(m => 
     !grantedIds.has(m.id) &&
     lifetimeDays >= m.lifetime_days &&

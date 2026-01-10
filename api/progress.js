@@ -1,7 +1,7 @@
 // @ts-nocheck
 // GET /api/progress - Get user progress data
-import { sql } from './db/client.js';
-import { DAILY_LP_TARGET } from './config/gamification.js';
+import { sql } from '../lib/db/client.js';
+import { DAILY_LP_TARGET } from '../lib/config/gamification.js';
 
 export const config = { runtime: 'nodejs' };
 

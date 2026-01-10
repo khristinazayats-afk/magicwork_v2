@@ -2,7 +2,7 @@
 // POST /api/generate-recommendations - AI-powered personalized practice recommendations
 // Analyzes user's meditation history and generates intelligent suggestions
 
-import { sql } from './db/client.js';
+import { sql } from '../lib/db/client.js';
 
 export const config = { runtime: 'nodejs', maxDuration: 30 };
 

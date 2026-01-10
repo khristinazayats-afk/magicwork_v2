@@ -1,6 +1,6 @@
 // @ts-nocheck
 // GET /api/analytics-summary - Aggregate user analytics for recommendations
-import { sql } from './db/client.js';
+import { sql } from '../lib/db/client.js';
 
 export const config = { runtime: 'nodejs' };
 
