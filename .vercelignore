@@ -8,8 +8,3 @@ api/audio-metadata.js
 api/feed.js
 api/ingest.js
 api/presign.js
-
-# Exclude broken/incomplete API files (no default handler export)
-# These need to be fixed to have proper default handlers or moved to subdirectories
-api/notifications.js
-api/subscriptions.js
